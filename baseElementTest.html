@@ -69,8 +69,10 @@ function b2( element ) {
     var base = document.createElement( "base-element" );
     base.innerHTML = "<content></content>";
     root.appendChild( base );
+    // root.innerHTML = "<span><content></content><span>";
+    // a( root.childNodes[0] );
 }
-b2.prototype = Object.create( HTMLElement.prototype );
+b2.prototype = Object.create( a.prototype );
 b2.prototype.readyCallback = function() {
     b2( this );
 };

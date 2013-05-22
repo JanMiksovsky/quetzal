@@ -6,4 +6,4 @@ test "QuetzalElement2: class with <super>", ->
   div = document.createElement "div"
   div.textContent = "Alice"
   new EmphaticGreet div
-  renderEqual div, "<div>Hello, *Alice*.</div>"
+  renderEqual div, "<span>Hello, *Alice*.</span>"

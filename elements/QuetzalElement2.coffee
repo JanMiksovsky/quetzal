@@ -12,7 +12,7 @@ class window.QuetzalElement2 extends HTMLElement
       root.innerHTML = elementClass::template
       for superElement in root.querySelectorAll "super"
         baseClass = elementClass.__super__.constructor
-        upgraded = document.createElement "div"
+        upgraded = document.createElement "span"
         upgraded.innerHTML = superElement.innerHTML
         new baseClass upgraded
         superElement.parentNode.replaceChild upgraded, superElement

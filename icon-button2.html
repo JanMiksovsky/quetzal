@@ -1,0 +1,32 @@
+<element name="icon-button" extends="q-button" constructor="IconButton" attributes="icon">
+
+<link rel="import" href="q-button.html">
+
+<template>
+    <style>
+    @host {
+        * {
+            font-weight: bold;
+        }
+    }
+    </style>
+
+    <span id="main">
+        <!-- <img src="{{icon}}"/> -->
+        (icon) <content></content>
+    </span>
+
+</template>
+
+<script>
+Polymer.register( this, {
+    icon: "resources/document_alt_stroke_12x16.png",
+    ready: function() {
+        // Create base class instance and stick ourselves in it.
+        debugger;
+        console.log( this.$.main );
+    }
+});
+</script>
+
+</element>

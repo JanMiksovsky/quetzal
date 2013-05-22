@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<style>
+body,
+button,
+input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+}
+
+body {
+    margin: 0.5in;
+}
+</style>
+
+<script>
+function page( element ) {
+    var root = element.webkitCreateShadowRoot();
+    root.innerHTML = '<style> div { border: 1px blue solid; } </style>' +
+        '<h1>PAGE TITLE</h1>' +
+        '<div><content select="h3"></content></div>' +
+        '<content select="p"></content>';
+}
+
+function cookiePage( element ) {
+    var root = element.webkitCreateShadowRoot();
+    root.innerHTML = '<style> div.main { border: 1px red solid; } ' +
+        '</style>' +
+        '<div class="main">' +
+        '<p>I love cookies</p>' +
+        '<content select="h3"></content>' +
+        '<content select="p"></content>' +
+        '</div>';
+    page(root.querySelector('div.main'));
+}
+
+function QuetzalButton( element ) {
+    var root = element.webkitCreateShadowRoot();
+    root.innerHTML = "<style>@host { div { display: inline-block; } } button { padding: 1em; }</style><button><content></content></button>";
+    root.applyAuthorStyles = true;
+}
+
+function IconButton( element ) {
+    var root = element.webkitCreateShadowRoot();
+    root.innerHTML = "<div><img src='resources/document_alt_stroke_12x16.png'> <content></content></div>";
+    var wrapper = root.childNodes[0];
+    QuetzalButton( wrapper );
+}
+
+function createComponents() {
+    var elements = document.querySelectorAll( "[is]" );
+    Array.prototype.forEach.call( elements, function( element ) {
+        className = element.attributes.is.nodeValue;
+        elementClass = window[ className ];
+        new elementClass( element );
+    });
+}
+
+window.addEventListener( "load", function() {
+    createComponents();
+});
+</script>
+
+</head>
+
+<body>
+<!-- <div is="cookiePage">
+    <h3>This is awesome</h3>
+    <p>Awesome is awesome, what else it could be?</p>
+</div>
+-->
+<div>
+    <div is="QuetzalButton">QuetzalButton</div>
+    <div is="IconButton">IconButton</div>
+</div>
+</body>
+
+</html>

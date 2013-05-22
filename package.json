@@ -1,0 +1,12 @@
+{
+    "name": "quetzal",
+    "title": "Quetzal",
+    "description": "Ready-to-use custom elements, including base classes and samples",
+    "version": "0.0.1",
+    "devDependencies": {
+        "grunt": "~0.4",
+        "grunt-contrib-coffee": "~0.6",
+        "grunt-contrib-less": "~0.5",
+        "sort-dependencies": "*"
+    }
+}

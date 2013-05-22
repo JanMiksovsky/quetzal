@@ -1,0 +1,20 @@
+<element name="base-element">
+<template>
+    <style>
+    * {
+        color: blue;
+    }
+
+    @host {
+        * {
+            color: red;
+        }
+    }
+    </style>
+    <span>Hello</span>
+    <content></content>
+</template>
+<script>
+Polymer.register( this );
+</script>
+</element>

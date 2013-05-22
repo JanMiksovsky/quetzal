@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>Subclass styling</title>
+
+<script src="../../tools/polymer/polymer.js"></script>
+
+<element name="base-element">
+<template>
+    <style>
+    @host {
+        * {
+            color: red;
+        }
+    }
+    </style>
+    <content></content>
+</template>
+<script>
+Polymer.register( this );
+</script>
+</element>
+
+<element name="sub-element" extends="base-element">
+<template>
+    <style>
+    @host {
+        * {
+            font-weight: bold;
+        }
+    }
+    </style>
+    <shadow></shadow>
+</template>
+<script>
+Polymer.register( this );
+</script>
+</element>
+
+</head>
+
+<body>
+    <span>I'm plain.</span>
+    <base-element>I'm red.</base-element>
+    <sub-element>I should be red and bold.</sub-element>
+</body>
+
+</html>

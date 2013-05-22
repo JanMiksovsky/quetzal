@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>Quetzal</title>
+
+<script src="../../tools/polymer/platform/platform.js" debug="true"></script>
+<script src="elements/elements.js"></script>
+
+<style>
+body,
+button,
+input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+}
+
+body {
+    margin: 0.5in;
+}
+</style>
+
+<script>
+// window.addEventListener( "load", function() {
+//     list = document.querySelector( "#list" );
+//     list.elementClass = QuetzalButton;
+//     list.items = [ "One", "Two", "Three" ];
+// });
+</script>
+
+</head>
+
+<body>
+
+<h1 style="color: green; vertical-align: top;">
+    <img style="height: 60px; width: 60px;" src="quetzal.png"/>Quetzal
+</h1>
+
+<lorem-pixel></lorem-pixel>
+<p>
+    <quetzal-element>quetzal</quetzal-element>
+    <quetzal-button>quetzal-button</quetzal-button>
+    <icon-button>icon-button</icon-button>
+    <document-icon-button>document-icon-button</document-icon-button>
+</p>
+
+<p>
+    <!-- <div is="LoremPixel"></div> -->
+    <!-- <div is="Quetzal">Quetzal</div> -->
+    <div is="quetzal-button">QuetzalButton with "is"</div>
+    <!-- <div is="IconButton" icon="resources/document_alt_stroke_12x16.png">IconButton</div> -->
+    <!-- <div is="DocumentIconButton">DocumentIconButton</div> -->
+</p>
+
+ <!-- <div is="List" id="list"></div> -->
+
+</body>
+
+</html>

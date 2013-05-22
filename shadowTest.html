@@ -27,7 +27,7 @@ function a( element ) {
 function b( element ) {
     a( element );
     var root = element.webkitCreateShadowRoot();
-    root.innerHTML = "<shadow></shadow><span>B<content></content>B</span>";
+    root.innerHTML = "<shadow></shadow>";
     root.applyAuthorStyles = true;
     // var wrapper = root.childNodes[0];
     // a( wrapper );

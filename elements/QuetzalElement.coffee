@@ -48,34 +48,40 @@ class window.QuetzalElement extends HTMLDivElement
 
     elementClass = @constructor
 
-    # Make element become an "instanceof" the desired class.
-    element.__proto__ = elementClass::
+    unless element instanceof elementClass
+      # Make element become an "instanceof" the desired class.
+      element.__proto__ = elementClass::
 
-    root = element.webkitCreateShadowRoot()
+    # TODO: restore styling
+    # if elementClass::hasOwnProperty "style"
+    #   style = document.createElement "style"
+    #   if elementClass::hasOwnProperty "style"
+    #     style.innerHTML = elementClass::style
+    #   root.appendChild style
 
-    if elementClass::hasOwnProperty "style"
-      style = document.createElement "style"
-      if elementClass::hasOwnProperty "style"
-        style.innerHTML = elementClass::style
-      root.appendChild style
+    # REVIEW: Always create div? Parse HTML and create document fragment?
+    if elementClass::hasOwnProperty "template"
 
-    wrapper = document.createElement "div"
-    wrapper.innerHTML = if elementClass::hasOwnProperty "template"
-      elementClass::template
+      root = element.webkitCreateShadowRoot()
+      wrapper = document.createElement "div"
+      wrapper.innerHTML = elementClass::template
+      root.appendChild wrapper
+      root.applyAuthorStyles = true
+
+      subelementsWithIds = wrapper.querySelectorAll "[id]"
+      for subelement in subelementsWithIds
+        element.$[ subelement.id ] = subelement
+
     else
-      "<content></content>"
-    root.appendChild wrapper
-    root.applyAuthorStyles = true
-
-    subelementsWithIds = wrapper.querySelectorAll "[id]"
-    for subelement in subelementsWithIds
-      element.$[ subelement.id ] = subelement
+      # Degenerate, no need for wrapper.
+      wrapper = null
 
     baseClass = elementClass.__super__.constructor
     if baseClass is QuetzalElement or baseClass.prototype instanceof QuetzalElement
-      wrapper.classList.add "#{baseClass.name}", "wrapper"
-      baseInstance = new baseClass wrapper
-    @_wrappers[ elementClass.name ] = wrapper
+      wrapper?.classList.add "#{baseClass.name}", "wrapper"
+      baseElement = wrapper ? element
+      new baseClass baseElement
+    element._wrappers[ elementClass.name ] = wrapper
 
     for key, value of elementClass::inherited
       element[ key ] = value

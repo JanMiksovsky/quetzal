@@ -21,6 +21,16 @@ window.renderEqual = ( element, expected ) ->
   actual = element.impl.innerHTML
   equal actual, expected
 
+test "QuetzalElement: degenerate subclass", ->
+  class Foo extends QuetzalElement
+  div = document.createElement "div"
+  new Foo div
+  div.textContent = "Hello"
+  ok div instanceof Foo
+  ok div instanceof QuetzalElement
+  ok div instanceof HTMLDivElement
+  renderEqual div, "Hello"
+
 test "QuetzalElement: minimal element class", ->
   div = document.createElement "div"
   div.textContent = "Hello"
@@ -36,13 +46,13 @@ test "QuetzalElement: simple subclass", ->
   ok greet instanceof Greet
   ok greet instanceof QuetzalElement
   ok greet instanceof HTMLDivElement
-  renderEqual div, "<div class=\"QuetzalElement wrapper\"><div>Hello, Alice.</div></div>"
+  renderEqual div, "<div class=\"QuetzalElement wrapper\">Hello, Alice.</div>"
 
 test "QuetzalElement: sub-subclass", ->
   div = document.createElement "div"
   div.textContent = "Bob"
   emphatic = new EmphaticGreet div
-  renderEqual div, "<div class=\"Greet wrapper\"><div class=\"QuetzalElement wrapper\"><div>Hello, *Bob*.</div></div></div>"
+  renderEqual div, "<div class=\"Greet wrapper\"><div class=\"QuetzalElement wrapper\">Hello, *Bob*.</div></div>"
 
 test "QuetzalElement: set inherited base class property", ->
   class Foo extends QuetzalElement

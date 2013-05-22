@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<script src="../../tools/polymer/platform/platform.js" debug="true"></script>
+
+<style>
+body,
+button,
+input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+}
+
+body {
+    margin: 0.5in;
+}
+</style>
+
+<script>
+function BaseElement( element ) {
+    var root = element.webkitCreateShadowRoot();
+    root.innerHTML = "(Base:<content></content>)";
+}
+BaseElement.prototype = Object.create( HTMLElement.prototype );
+BaseElement.prototype.readyCallback = function() {
+    BaseElement( this );
+};
+document.register( "base-element", { prototype: BaseElement.prototype });
+
+function a( element ) {
+    var root = element.webkitCreateShadowRoot();
+    root.innerHTML = "<span>A<content></content>A</span>";
+}
+a.prototype = Object.create( HTMLElement.prototype );
+a.prototype.readyCallback = function() {
+    a( this );
+};
+document.register( "a-element", { prototype: a.prototype });
+
+function b( element ) {
+    var root = element.webkitCreateShadowRoot();
+    root.innerHTML = "<span>B<content></content>B</span>";
+    var wrapper = root.childNodes[0];
+    a( wrapper );
+}
+b.prototype = Object.create( a.prototype );
+b.prototype.readyCallback = function() {
+    b( this );
+};
+document.register( "b-element", { prototype: b.prototype });
+
+function c( element ) {
+    var root = element.webkitCreateShadowRoot();
+    root.innerHTML = "<span>C<content></content>C</span>";
+    var wrapper = root.childNodes[0];
+    b( wrapper );
+}
+c.prototype = Object.create( b.prototype );
+c.prototype.readyCallback = function() {
+    c( this );
+};
+document.register( "c-element", { prototype: c.prototype });
+
+function b2( element ) {
+    var root = element.webkitCreateShadowRoot();
+    var base = document.createElement( "base-element" );
+    base.innerHTML = "<content></content>";
+    root.appendChild( base );
+}
+b2.prototype = Object.create( HTMLElement.prototype );
+b2.prototype.readyCallback = function() {
+    b2( this );
+};
+document.register( "b2-element", { prototype: b2.prototype });
+</script>
+
+</head>
+
+<body>
+    <a-element>a</a-element>
+    <b-element>b</b-element>
+    <b2-element>b2</b2-element>
+</body>
+
+</html>

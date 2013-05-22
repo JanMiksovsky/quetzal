@@ -5,16 +5,6 @@ These rely on Polymer's ShadowDOMPolyfill to compose light DOM and shadow DOM
 together for inspection purposes.
 ###
 
-class Greet extends QuetzalElement
-  template: """
-    Hello, <content></content>.
-  """
-
-class EmphaticGreet extends Greet
-  template: """
-    *<content></content>*
-  """
-
 window.renderEqual = ( element, expected ) ->
   renderer = ShadowDOMPolyfill.getRendererForHost element
   renderer.render()
@@ -34,24 +24,34 @@ test "QuetzalElement: degenerate subclass", ->
 test "QuetzalElement: minimal element class", ->
   div = document.createElement "div"
   div.textContent = "Hello"
-  q = new QuetzalElement div
-  ok q instanceof QuetzalElement
-  ok q instanceof HTMLDivElement
+  new QuetzalElement div
+  ok div instanceof QuetzalElement
+  ok div instanceof HTMLDivElement
   renderEqual div, "Hello"
 
 test "QuetzalElement: simple subclass", ->
+  class Greet extends QuetzalElement
+    template: "Hello, <content></content>."
   div = document.createElement "div"
   div.textContent = "Alice"
-  greet = new Greet div
-  ok greet instanceof Greet
-  ok greet instanceof QuetzalElement
-  ok greet instanceof HTMLDivElement
+  new Greet div
+  ok div instanceof Greet
+  ok div instanceof QuetzalElement
+  ok div instanceof HTMLDivElement
   renderEqual div, "<div class=\"QuetzalElement wrapper\">Hello, Alice.</div>"
 
 test "QuetzalElement: sub-subclass", ->
+  class Greet extends QuetzalElement
+    template: "Hello, <content></content>."
+  class EmphaticGreet extends Greet
+    template: "*<content></content>*"
   div = document.createElement "div"
   div.textContent = "Bob"
-  emphatic = new EmphaticGreet div
+  new EmphaticGreet div
+  ok div instanceof EmphaticGreet
+  ok div instanceof Greet
+  ok div instanceof QuetzalElement
+  ok div instanceof HTMLDivElement
   renderEqual div, "<div class=\"Greet wrapper\"><div class=\"QuetzalElement wrapper\">Hello, *Bob*.</div></div>"
 
 test "QuetzalElement: set inherited base class property", ->
@@ -63,15 +63,15 @@ test "QuetzalElement: set inherited base class property", ->
     inherited:
       message: "Hello"
   div = document.createElement "div"
-  bar = new Bar div
+  new Bar div
   equal div._message, "Hello"
 
 test "QuetzalElement: element reference", ->
   class Foo extends QuetzalElement
     template: "<span id='message'>Hello</span>"
   div = document.createElement "div"
-  foo = new Foo div
-  equal foo.$.message.textContent, "Hello"
+  new Foo div
+  equal div.$.message.textContent, "Hello"
 
 test "QuetzalElement: alias", ->
   class Foo extends QuetzalElement
@@ -79,7 +79,7 @@ test "QuetzalElement: alias", ->
     @alias "message", "$.message.innerHTML", ( message ) ->
       @_messageSet = true
   div = document.createElement "div"
-  foo = new Foo div
+  new Foo div
   equal div.message, "Hello"
   ok not div._messageSet
   div.message = "Goodbye"
@@ -91,7 +91,7 @@ test "QuetzalElement: property", ->
     @property "message", ( message ) ->
       @_messageSet = true
   div = document.createElement "div"
-  foo = new Foo div
+  new Foo div
   equal div.message, undefined
   ok not div._messageSet
   div.message = "Hello"
@@ -104,7 +104,7 @@ test "QuetzalElement: ready method", ->
       @_readyCalled = true
     _readyCalled: false
   div = document.createElement "div"
-  foo = new Foo div
+  new Foo div
   ok div._readyCalled
 
 test "QuetzalElement: tagForClass", ->
@@ -119,9 +119,9 @@ test "QuetzalElement: @register", ->
   equal registration.ctor, window.FooBar
   equal registration.prototype, window.FooBar.prototype
   div = document.createElement "div"
-  fooBar = new window.FooBar div
-  ok fooBar instanceof FooBar # original class
-  ok fooBar instanceof window.FooBar # registered (munged) class
+  new window.FooBar div
+  ok div instanceof FooBar # original class
+  ok div instanceof window.FooBar # registered (munged) class
   window.FooBar = null # Reset for other unit tests
 
 test "QuetzalElement: instantiate element", ->

@@ -44,6 +44,7 @@ Base Quetzal element class
 ###
 class window.QuetzalElement extends HTMLDivElement
 
+  # REVIEW: Change this so that it's a static function (invoked without "new")?
   constructor: ( element ) ->
 
     elementClass = @constructor
@@ -88,6 +89,8 @@ class window.QuetzalElement extends HTMLDivElement
 
     if elementClass::hasOwnProperty "ready"
       element.ready()
+
+    return element
 
   # Holds element references.
   $: {}

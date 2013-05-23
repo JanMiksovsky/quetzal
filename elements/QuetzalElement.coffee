@@ -99,7 +99,7 @@ class window.QuetzalElement extends HTMLDivElement
       @[ key ] = value
 
   readyCallback: ->
-    # REVIEW: Why does Polymer just invoke ready?
+    # REVIEW: Why does Polymer just invoke readyCallback?
     @ready()
 
   # Figure out which class in the hierarchy defines a template, so we can figure

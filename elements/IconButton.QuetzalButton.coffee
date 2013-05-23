@@ -2,17 +2,21 @@ class window.IconButton extends QuetzalButton
 
   style: """
     @host {
-      * {
-        color: red;
-        font-weight: bold;
+      div {
+        display: inline-block;
       }
+    }
+    span {
+      font-weight: bold;
     }
   """
 
   template: """
     <super>
       <img id="icon"/>
-      <content></content>
+      <span>
+        <content></content>
+      </span>
     </super>
   """
 

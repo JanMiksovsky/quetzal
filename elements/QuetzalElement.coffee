@@ -44,14 +44,18 @@ Base Quetzal element class
 ###
 class window.QuetzalElement extends HTMLDivElement
 
-  # REVIEW: Change this so that it's a static function (invoked without "new")?
-  constructor: ( element ) ->
+  # Holds element references.
+  $: {}
+
+  @tagForClass: ( classFn ) ->
+    regexWords = /[A-Z][a-z]*/g
+    words = classFn.name.match regexWords
+    lowercaseWords = ( word.toLowerCase() for word in words )
+    lowercaseWords.join "-"
+
+  ready: ->
 
     elementClass = @constructor
-
-    unless element instanceof elementClass
-      # Make element become an "instanceof" the desired class.
-      element.__proto__ = elementClass::
 
     # TODO: restore styling
     # if elementClass::hasOwnProperty "style"
@@ -82,27 +86,17 @@ class window.QuetzalElement extends HTMLDivElement
       wrapper?.classList.add "#{baseClass.name}", "wrapper"
       baseElement = wrapper ? element
       new baseClass baseElement
-    element._wrappers[ elementClass.name ] = wrapper
+    @_wrappers[ elementClass.name ] = wrapper
 
     for key, value of elementClass::inherited
-      element[ key ] = value
+      @[ key ] = value
 
-    if elementClass::hasOwnProperty "ready"
-      element.ready()
-
-    return element
-
-  # Holds element references.
-  $: {}
-
-  @tagForClass: ( classFn ) ->
-    regexWords = /[A-Z][a-z]*/g
-    words = classFn.name.match regexWords
-    lowercaseWords = ( word.toLowerCase() for word in words )
-    lowercaseWords.join "-"
+    # if elementClass::hasOwnProperty "ready"
+    #   @ready()
 
   readyCallback: ->
-    new @constructor @
+    # REVIEW: Why does Polymer just invoke ready?
+    @ready()
 
   wrapper: ( elementClass ) ->
     @_wrappers[ elementClass.name ]
@@ -116,6 +110,12 @@ class window.QuetzalElement extends HTMLDivElement
 
 ###
 Allow registration of Quetzal element classes with browser.
+
+This defines a window global with the class' name. If the class is already
+global, this will *redefine* the global class to point to the registered class.
+When using Polymer's document.register() polyfill, the registered class is a
+munged version of the original. Assertions about instanceof should remain true
+even after munging, however.
 ###
 Function::register = ->
   originalClass = @

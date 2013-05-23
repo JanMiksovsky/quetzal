@@ -11,6 +11,20 @@ window.renderEqual = ( element, expected ) ->
   actual = element.impl.innerHTML
   equal actual, expected
 
+test "QuetzalElement: instantiate with constructor", ->
+  element = new QuetzalElement()
+  ok element instanceof QuetzalElement
+  ok element instanceof HTMLDivElement
+  element.innerHTML = "Hello"
+  renderEqual element, "Hello"
+
+test "QuetzalElement: instantiate with createElement", ->
+  element = document.createElement "quetzal-element"
+  ok element instanceof QuetzalElement
+  ok element instanceof HTMLDivElement
+  element.innerHTML = "Hello"
+  renderEqual element, "Hello"
+
 test "QuetzalElement: degenerate subclass", ->
   class Foo extends QuetzalElement
   div = document.createElement "div"
@@ -24,7 +38,7 @@ test "QuetzalElement: degenerate subclass", ->
 test "QuetzalElement: minimal element class", ->
   div = document.createElement "div"
   div.textContent = "Hello"
-  new QuetzalElement div
+  result = new QuetzalElement div
   ok div instanceof QuetzalElement
   ok div instanceof HTMLDivElement
   renderEqual div, "Hello"
@@ -124,7 +138,7 @@ test "QuetzalElement: @register", ->
   ok div instanceof window.FooBar # registered (munged) class
   window.FooBar = null # Reset for other unit tests
 
-test "QuetzalElement: instantiate element", ->
+test "QuetzalElement: instantiate registered class", ->
   class FooBar extends QuetzalElement
     @register()
   fooBar = document.createElement "foo-bar"

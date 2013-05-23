@@ -77,35 +77,23 @@ class window.QuetzalElement extends HTMLDivElement
     #     style.innerHTML = elementClass::style
     #   root.appendChild style
 
-    # REVIEW: Always create div? Parse HTML and create document fragment?
     if elementClass::hasOwnProperty "template"
-
       root = @webkitCreateShadowRoot()
-      wrapper = document.createElement "div"
-      wrapper.innerHTML = elementClass::template
-      root.appendChild wrapper
-      root.applyAuthorStyles = true
-
-      subelementsWithIds = wrapper.querySelectorAll "[id]"
-      for subelement in subelementsWithIds
+      root.innerHTML = elementClass::template
+      for superElement in root.querySelectorAll "super"
+        baseClass = elementClass.__super__.constructor
+        superInstance = new baseClass()
+        superInstance.innerHTML = superElement.innerHTML
+        superElement.parentNode.replaceChild superInstance, superElement
+        for { name, value } in superElement.attributes
+          @[ name ] = value
+      for subelement in root.querySelectorAll "[id]"
         @$[ subelement.id ] = subelement
 
-    else
-      # Degenerate, no need for wrapper.
-      wrapper = null
-
-    baseClass = elementClass.__super__.constructor
-    if baseClass is QuetzalElement or baseClass.prototype instanceof QuetzalElement
-      wrapper?.classList.add "#{baseClass.name}", "wrapper"
-      baseElement = wrapper ? @
-      new baseClass baseElement
-    @_wrappers[ elementClass.name ] = wrapper
+    # @_wrappers[ elementClass.name ] = wrapper
 
     for key, value of elementClass::inherited
       @[ key ] = value
-
-    # if elementClass::hasOwnProperty "ready"
-    #   @ready()
 
   readyCallback: ->
     # REVIEW: Why does Polymer just invoke ready?

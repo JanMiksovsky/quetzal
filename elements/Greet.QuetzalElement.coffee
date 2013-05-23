@@ -1,4 +1,4 @@
-class window.Greet extends QuetzalElement2
+class window.Greet extends QuetzalElement
   template: "Hello, <content></content>."
   @property "punctuation", ( punctuation ) ->
     console?.log "set punctuation: #{punctuation}"

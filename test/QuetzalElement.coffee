@@ -42,21 +42,43 @@ test "QuetzalElement: subclass with simple template", ->
   ok greet instanceof Greet
   ok greet instanceof QuetzalElement
   ok greet instanceof HTMLDivElement
-  renderEqual greet, "<div class=\"QuetzalElement wrapper\">Hello, Alice.</div>"
+  renderEqual greet, "Hello, Alice."
 
 test "QuetzalElement: sub-subclass", ->
   class Greet extends QuetzalElement
     template: "Hello, <content></content>."
+  class SubGreet extends Greet
+  subGreet = new SubGreet()
+  subGreet.textContent = "Bob"
+  ok subGreet instanceof SubGreet
+  ok subGreet instanceof Greet
+  ok subGreet instanceof QuetzalElement
+  ok subGreet instanceof HTMLDivElement
+  renderEqual subGreet, "Hello, Bob."
+
+test "QuetzalElement: sub-subclass with <super>", ->
+  class Greet extends QuetzalElement
+    template: "Hello, <content></content>."
   class EmphaticGreet extends Greet
-    template: "*<content></content>*"
-  div = document.createElement "div"
-  div.textContent = "Bob"
-  new EmphaticGreet div
-  ok div instanceof EmphaticGreet
-  ok div instanceof Greet
-  ok div instanceof QuetzalElement
-  ok div instanceof HTMLDivElement
-  renderEqual div, "<div class=\"Greet wrapper\"><div class=\"QuetzalElement wrapper\">Hello, *Bob*.</div></div>"
+    template: "<super>*<content></content>*</super>"
+  emphatic = new EmphaticGreet()
+  emphatic.textContent = "Bob"
+  ok emphatic instanceof EmphaticGreet
+  ok emphatic instanceof Greet
+  ok emphatic instanceof QuetzalElement
+  ok emphatic instanceof HTMLDivElement
+  renderEqual emphatic, "<div>Hello, *Bob*.</div>"
+
+test "QuetzalElement: <super> with attribute sets property on super element", ->
+  class Foo extends QuetzalElement
+    @property "message", ( message ) ->
+      this._message = message
+  class Bar extends Foo
+    template: """"
+      <super message="Hello"></super>
+    """
+  bar = new Bar()
+  equal bar._message, "Hello"
 
 test "QuetzalElement: set inherited base class property", ->
   class Foo extends QuetzalElement
@@ -66,50 +88,48 @@ test "QuetzalElement: set inherited base class property", ->
   class Bar extends Foo
     inherited:
       message: "Hello"
-  div = document.createElement "div"
-  new Bar div
-  equal div._message, "Hello"
+  bar = new Bar()
+  equal bar._message, "Hello"
 
 test "QuetzalElement: element reference", ->
   class Foo extends QuetzalElement
     template: "<span id='message'>Hello</span>"
-  div = document.createElement "div"
-  new Foo div
-  equal div.$.message.textContent, "Hello"
+  foo = new Foo()
+  equal foo.$.message.textContent, "Hello"
 
 test "QuetzalElement: alias", ->
   class Foo extends QuetzalElement
     template: "<span id='message'>Hello</span>"
     @alias "message", "$.message.innerHTML", ( message ) ->
       @_messageSet = true
-  div = document.createElement "div"
-  new Foo div
-  equal div.message, "Hello"
-  ok not div._messageSet
-  div.message = "Goodbye"
-  equal div.$.message.innerHTML, "Goodbye"
-  ok div._messageSet
+  foo = new Foo()
+  equal foo.message, "Hello"
+  ok not foo._messageSet
+  foo.message = "Goodbye"
+  equal foo.$.message.innerHTML, "Goodbye"
+  ok foo._messageSet
 
 test "QuetzalElement: property", ->
   class Foo extends QuetzalElement
     @property "message", ( message ) ->
       @_messageSet = true
-  div = document.createElement "div"
-  new Foo div
-  equal div.message, undefined
-  ok not div._messageSet
-  div.message = "Hello"
-  equal div._properties.message, "Hello"
-  ok div._messageSet
+  foo = new Foo()
+  equal foo.message, undefined
+  ok not foo._messageSet
+  foo.message = "Hello"
+  equal foo._properties.message, "Hello"
+  ok foo._messageSet
 
 test "QuetzalElement: ready method", ->
   class Foo extends QuetzalElement
+    template: "Hello, world."
     ready: ->
+      super
       @_readyCalled = true
     _readyCalled: false
-  div = document.createElement "div"
-  new Foo div
-  ok div._readyCalled
+  foo = new Foo()
+  ok foo._readyCalled
+  renderEqual foo, "Hello, world."
 
 test "QuetzalElement: tagForClass", ->
   class FooBar
@@ -122,15 +142,7 @@ test "QuetzalElement: @register", ->
   ok registration?
   equal registration.ctor, window.FooBar
   equal registration.prototype, window.FooBar.prototype
-  div = document.createElement "div"
-  new window.FooBar div
-  ok div instanceof FooBar # original class
-  ok div instanceof window.FooBar # registered (munged) class
-  window.FooBar = null # Reset for other unit tests
-
-test "QuetzalElement: instantiate registered class", ->
-  class FooBar extends QuetzalElement
-    @register()
   fooBar = document.createElement "foo-bar"
-  ok fooBar instanceof FooBar
-
+  ok fooBar instanceof FooBar # original class
+  ok fooBar instanceof window.FooBar # registered (munged) class
+  window.FooBar = null # Reset for other unit tests

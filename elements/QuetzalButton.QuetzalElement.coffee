@@ -1,10 +1,6 @@
 class window.QuetzalButton extends QuetzalElement
 
   style: """
-    .wrapper {
-      display: inline-block;
-    }
-
     @host {
       div {
         display: inline-block;
@@ -23,16 +19,4 @@ class window.QuetzalButton extends QuetzalElement
     </button>
   """
 
-  # template: [
-  #   button:
-  #     content: []
-  # ]
-
-  ready: ->
-    console?.log "QuetzalButton: ready"
-
   @register()
-
-# window.QuetzalButton = document.register "quetzal-button",
-#   prototype: QuetzalButton::
-#   extends: "div"

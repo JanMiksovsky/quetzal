@@ -72,17 +72,15 @@ class window.QuetzalElement extends HTMLDivElement
 
     # Holds "private" properties referenced by @property.
     @_properties = {}
-    
-    # TODO: restore styling
-    # if elementClass::hasOwnProperty "style"
-    #   style = document.createElement "style"
-    #   if elementClass::hasOwnProperty "style"
-    #     style.innerHTML = elementClass::style
-    #   root.appendChild style
 
-    if @template?
+    if elementClass::hasOwnProperty "style"
+      style = "<style>#{elementClass::style}</style>"
+
+    if style? or @template?
       root = @webkitCreateShadowRoot()
-      root.innerHTML = @template
+      innerHTML = style ? ""
+      innerHTML += @template ? ""
+      root.innerHTML = innerHTML
       superElement = root.querySelector "super"
       if superElement?
         classDefiningTemplate = @_classDefiningTemplate elementClass
@@ -96,11 +94,6 @@ class window.QuetzalElement extends HTMLDivElement
           @[ name ] = value
       for subelement in root.querySelectorAll "[id]"
         @$[ subelement.id ] = subelement
-    # else if elementClass isnt QuetzalElement
-    #   root = @webkitCreateShadowRoot()
-    #   root.appendChild document.createElement "shadow"
-
-    # @_wrappers[ elementClass.name ] = wrapper
 
     for key, value of elementClass::inherited
       @[ key ] = value
@@ -108,9 +101,6 @@ class window.QuetzalElement extends HTMLDivElement
   readyCallback: ->
     # REVIEW: Why does Polymer just invoke ready?
     @ready()
-
-  wrapper: ( elementClass ) ->
-    @_wrappers[ elementClass.name ]
 
   # Figure out which class in the hierarchy defines a template, so we can figure
   # out which class <super> refers to.

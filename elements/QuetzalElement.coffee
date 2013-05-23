@@ -77,11 +77,15 @@ class window.QuetzalElement extends HTMLDivElement
     #     style.innerHTML = elementClass::style
     #   root.appendChild style
 
-    if elementClass::hasOwnProperty "template"
+    if @template?
       root = @webkitCreateShadowRoot()
-      root.innerHTML = elementClass::template
-      for superElement in root.querySelectorAll "super"
-        baseClass = elementClass.__super__.constructor
+      root.innerHTML = @template
+      superElement = root.querySelector "super"
+      if superElement?
+        classDefiningTemplate = @_classDefiningTemplate elementClass
+        baseClass = classDefiningTemplate.__super__.constructor
+        unless baseClass?
+          throw "Used <super> in #{classDefiningTemplate.name}, but couldn't find superclass."
         superInstance = new baseClass()
         superInstance.innerHTML = superElement.innerHTML
         superElement.parentNode.replaceChild superInstance, superElement
@@ -89,6 +93,9 @@ class window.QuetzalElement extends HTMLDivElement
           @[ name ] = value
       for subelement in root.querySelectorAll "[id]"
         @$[ subelement.id ] = subelement
+    # else if elementClass isnt QuetzalElement
+    #   root = @webkitCreateShadowRoot()
+    #   root.appendChild document.createElement "shadow"
 
     # @_wrappers[ elementClass.name ] = wrapper
 
@@ -101,6 +108,15 @@ class window.QuetzalElement extends HTMLDivElement
 
   wrapper: ( elementClass ) ->
     @_wrappers[ elementClass.name ]
+
+  # Figure out which class in the hierarchy defines a template, so we can figure
+  # out which class <super> refers to.
+  _classDefiningTemplate: ( elementClass ) ->
+    while elementClass?
+      if elementClass::hasOwnProperty "template"
+        return elementClass
+      elementClass = elementClass.__super__?.constructor
+    null
 
   # Holds "private" properties referenced by @property.
   _properties: {}

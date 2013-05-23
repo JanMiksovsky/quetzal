@@ -16,3 +16,7 @@ class window.QuetzalElement2 extends HTMLElement
         upgraded.innerHTML = superElement.innerHTML
         new baseClass upgraded
         superElement.parentNode.replaceChild upgraded, superElement
+        for { name, value } in superElement.attributes
+          element[ name ] = value
+
+  _properties: {}

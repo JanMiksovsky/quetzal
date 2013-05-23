@@ -7,3 +7,15 @@ test "QuetzalElement2: class with <super>", ->
   div.textContent = "Alice"
   new EmphaticGreet div
   renderEqual div, "<span>Hello, *Alice*.</span>"
+
+test "QuetzalElement2: <super> with attribute sets property on super element", ->
+  class Foo extends QuetzalElement2
+    @property "message", ( message ) ->
+      this._message = message
+  class Bar extends Foo
+    template: """"
+      <super message="Hello"></super>
+    """
+  div = document.createElement "div"
+  new Bar div
+  equal div._message, "Hello"

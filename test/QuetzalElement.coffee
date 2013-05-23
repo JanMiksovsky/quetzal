@@ -93,9 +93,9 @@ test "QuetzalElement: set inherited base class property", ->
 
 test "QuetzalElement: element reference", ->
   class Foo extends QuetzalElement
-    template: "<span id='message'>Hello</span>"
+    template: "<span id='message'></span>"
   foo = new Foo()
-  equal foo.$.message.textContent, "Hello"
+  equal foo.$.message, foo.webkitShadowRoot.querySelector "#message"
 
 test "QuetzalElement: alias", ->
   class Foo extends QuetzalElement

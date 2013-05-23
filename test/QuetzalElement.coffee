@@ -94,8 +94,18 @@ test "QuetzalElement: set inherited base class property", ->
 test "QuetzalElement: element reference", ->
   class Foo extends QuetzalElement
     template: "<span id='message'></span>"
-  foo = new Foo()
-  equal foo.$.message, foo.webkitShadowRoot.querySelector "#message"
+  foo1 = new Foo()
+  foo2 = new Foo()
+  equal foo1.$.message, foo1.webkitShadowRoot.querySelector "#message"
+  equal foo2.$.message, foo2.webkitShadowRoot.querySelector "#message"
+
+test "QuetzalElement: element reference on base class available to subclass", ->
+  class Foo extends QuetzalElement
+    template: "<span id='message'>Hello</span>"
+  class Bar extends Foo
+    template: "<super><content></content></super>"
+  bar = new Bar()
+  equal bar.$.message?.textContent, "Hello"
 
 test "QuetzalElement: alias", ->
   class Foo extends QuetzalElement

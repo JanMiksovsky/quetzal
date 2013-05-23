@@ -57,9 +57,6 @@ class window.QuetzalElement extends HTMLDivElement
 
     return element
 
-  # Holds element references.
-  $: {}
-
   @tagForClass: ( classFn ) ->
     regexWords = /[A-Z][a-z]*/g
     words = classFn.name.match regexWords
@@ -70,8 +67,9 @@ class window.QuetzalElement extends HTMLDivElement
 
     elementClass = @constructor
 
-    # Holds "private" properties referenced by @property.
-    @_properties = {}
+    # Initialize per-element data.
+    @$ = {}             # Holds element references.
+    @_properties = {}   # "private" properties referenced by @property.
 
     if elementClass::hasOwnProperty "style"
       style = "<style>#{elementClass::style}</style>"
@@ -98,6 +96,9 @@ class window.QuetzalElement extends HTMLDivElement
           superInstance.classList.add baseClass.name
         superInstance.innerHTML = superElement.innerHTML
         superElement.parentNode.replaceChild superInstance, superElement
+        # Acquire super-instance's per-element data as if it were our own.
+        @$ = superInstance.$
+        @_properties = superInstance._properties
         for { name, value } in superElement.attributes
           @[ name ] = value
       for subelement in root.querySelectorAll "[id]"

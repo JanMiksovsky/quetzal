@@ -87,7 +87,15 @@ class window.QuetzalElement extends HTMLDivElement
         baseClass = classDefiningTemplate.__super__.constructor
         unless baseClass?
           throw "Used <super> in #{classDefiningTemplate.name}, but couldn't find superclass."
-        superInstance = new baseClass()
+        tag = QuetzalElement.tagForClass baseClass
+        if CustomElements.registry[ tag ]?
+          # Create super instance as named element
+          superInstance = document.createElement tag
+        else
+          # Not registered; invoke constructor directly, add class name as a
+          # CSS class to simplify debugging.
+          superInstance = new baseClass()
+          superInstance.classList.add baseClass.name
         superInstance.innerHTML = superElement.innerHTML
         superElement.parentNode.replaceChild superInstance, superElement
         for { name, value } in superElement.attributes

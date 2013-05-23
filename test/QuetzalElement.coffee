@@ -67,7 +67,7 @@ test "QuetzalElement: sub-subclass with <super>", ->
   ok emphatic instanceof Greet
   ok emphatic instanceof QuetzalElement
   ok emphatic instanceof HTMLDivElement
-  renderEqual emphatic, "<div>Hello, *Bob*.</div>"
+  renderEqual emphatic, "<div class=\"Greet\">Hello, *Bob*.</div>"
 
 test "QuetzalElement: <super> with attribute sets property on super element", ->
   class Foo extends QuetzalElement
@@ -112,7 +112,6 @@ test "QuetzalElement: alias", ->
 test "QuetzalElement: property", ->
   class Foo extends QuetzalElement
     @property "message", ( message ) ->
-      console?.log "#{@_messageSet}"
       @_messageSet = true
   foo = new Foo()
   equal foo.message, undefined
@@ -146,4 +145,17 @@ test "QuetzalElement: @register", ->
   fooBar = document.createElement "foo-bar"
   ok fooBar instanceof FooBar # original class
   ok fooBar instanceof window.FooBar # registered (munged) class
-  window.FooBar = null # Reset for other unit tests
+  delete window.FooBar
+  delete CustomElements.registry.FooBar
+
+test "QuetzalElement: subclass with registered superclass creates super-instance as named element", ->
+  class FooBar extends QuetzalElement
+    template: "<content></content>"
+    @register()
+  class SubClass extends FooBar
+    template: "<super><content></content></super>"
+  element = new SubClass()
+  element.textContent = "Hello"
+  renderEqual element, "<foo-bar>Hello</foo-bar>"
+  delete window.FooBar
+  delete CustomElements.registry.FooBar

@@ -5,7 +5,5 @@ class window.Greet extends QuetzalElement2
 
 class window.EmphaticGreet extends Greet
   template: """
-    <super punctuation='!'>
-      *<content></content>*
-    </super>
+    <super punctuation='!'>*<content></content>*</super>
   """

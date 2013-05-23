@@ -112,10 +112,11 @@ test "QuetzalElement: alias", ->
 test "QuetzalElement: property", ->
   class Foo extends QuetzalElement
     @property "message", ( message ) ->
+      console?.log "#{@_messageSet}"
       @_messageSet = true
   foo = new Foo()
   equal foo.message, undefined
-  ok not foo._messageSet
+  ok not foo._messageSet?
   foo.message = "Hello"
   equal foo._properties.message, "Hello"
   ok foo._messageSet

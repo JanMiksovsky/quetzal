@@ -70,6 +70,9 @@ class window.QuetzalElement extends HTMLDivElement
 
     elementClass = @constructor
 
+    # Holds "private" properties referenced by @property.
+    @_properties = {}
+    
     # TODO: restore styling
     # if elementClass::hasOwnProperty "style"
     #   style = document.createElement "style"
@@ -117,9 +120,6 @@ class window.QuetzalElement extends HTMLDivElement
         return elementClass
       elementClass = elementClass.__super__?.constructor
     null
-
-  # Holds "private" properties referenced by @property.
-  _properties: {}
 
   # Holds wrapper for each class.
   _wrappers: {}

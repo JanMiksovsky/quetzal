@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<script src="../../tools/polymer/platform/platform.js" debug="true" shadow="polyfill"></script>
+
+<style>
+body,
+button,
+input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+}
+
+body {
+    margin: 0.5in;
+}
+</style>
+
+<script>
+(function() {
+  var __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  window.InheritanceTest = (function(_super) {
+    __extends(InheritanceTest, _super);
+
+    function InheritanceTest() {
+      var div, prototype;
+
+      prototype = this.__proto__;
+      div = document.createElement("div");
+      div.__proto__ = prototype;
+      return div;
+    }
+
+    return InheritanceTest;
+
+  })(HTMLDivElement);
+
+}).call(this);
+
+window.addEventListener( "load", function() {
+    var element = new InheritanceTest();
+    element.innerHTML = "I look okay with native Shadow DOM, but not with shadow='polyfill'";
+    document.body.appendChild( element );
+});
+</script>
+
+</head>
+
+<body>
+  <div>If things are working, you'll see a line below here:</div>
+</body>
+
+</html>

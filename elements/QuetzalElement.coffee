@@ -44,6 +44,19 @@ Base Quetzal element class
 ###
 class window.QuetzalElement extends HTMLDivElement
 
+  # This constructor is only used with Quetzal element classes which are not
+  # registered via Polymer's document.register().
+  constructor: ->
+    # Create a basic div and turn it into an instanceof the present class.
+    prototype = @.__proto__
+    element = document.createElement "div"
+    element.__proto__ = prototype
+
+    # Now do our own setup.
+    element.ready()
+
+    return element
+
   # Holds element references.
   $: {}
 
@@ -67,7 +80,7 @@ class window.QuetzalElement extends HTMLDivElement
     # REVIEW: Always create div? Parse HTML and create document fragment?
     if elementClass::hasOwnProperty "template"
 
-      root = element.webkitCreateShadowRoot()
+      root = @webkitCreateShadowRoot()
       wrapper = document.createElement "div"
       wrapper.innerHTML = elementClass::template
       root.appendChild wrapper
@@ -75,7 +88,7 @@ class window.QuetzalElement extends HTMLDivElement
 
       subelementsWithIds = wrapper.querySelectorAll "[id]"
       for subelement in subelementsWithIds
-        element.$[ subelement.id ] = subelement
+        @$[ subelement.id ] = subelement
 
     else
       # Degenerate, no need for wrapper.
@@ -84,7 +97,7 @@ class window.QuetzalElement extends HTMLDivElement
     baseClass = elementClass.__super__.constructor
     if baseClass is QuetzalElement or baseClass.prototype instanceof QuetzalElement
       wrapper?.classList.add "#{baseClass.name}", "wrapper"
-      baseElement = wrapper ? element
+      baseElement = wrapper ? @
       new baseClass baseElement
     @_wrappers[ elementClass.name ] = wrapper
 

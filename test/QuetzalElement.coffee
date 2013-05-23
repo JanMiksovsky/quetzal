@@ -27,32 +27,22 @@ test "QuetzalElement: instantiate with createElement", ->
 
 test "QuetzalElement: degenerate subclass", ->
   class Foo extends QuetzalElement
-  div = document.createElement "div"
-  new Foo div
-  div.textContent = "Hello"
-  ok div instanceof Foo
-  ok div instanceof QuetzalElement
-  ok div instanceof HTMLDivElement
-  renderEqual div, "Hello"
+  foo = new Foo()
+  foo.textContent = "Hello"
+  ok foo instanceof Foo
+  ok foo instanceof QuetzalElement
+  ok foo instanceof HTMLDivElement
+  renderEqual foo, "Hello"
 
-test "QuetzalElement: minimal element class", ->
-  div = document.createElement "div"
-  div.textContent = "Hello"
-  result = new QuetzalElement div
-  ok div instanceof QuetzalElement
-  ok div instanceof HTMLDivElement
-  renderEqual div, "Hello"
-
-test "QuetzalElement: simple subclass", ->
+test "QuetzalElement: subclass with simple template", ->
   class Greet extends QuetzalElement
     template: "Hello, <content></content>."
-  div = document.createElement "div"
-  div.textContent = "Alice"
-  new Greet div
-  ok div instanceof Greet
-  ok div instanceof QuetzalElement
-  ok div instanceof HTMLDivElement
-  renderEqual div, "<div class=\"QuetzalElement wrapper\">Hello, Alice.</div>"
+  greet = new Greet()
+  greet.textContent = "Alice"
+  ok greet instanceof Greet
+  ok greet instanceof QuetzalElement
+  ok greet instanceof HTMLDivElement
+  renderEqual greet, "<div class=\"QuetzalElement wrapper\">Hello, Alice.</div>"
 
 test "QuetzalElement: sub-subclass", ->
   class Greet extends QuetzalElement

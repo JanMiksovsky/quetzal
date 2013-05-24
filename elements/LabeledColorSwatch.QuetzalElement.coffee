@@ -14,11 +14,8 @@ class LabeledColorSwatch extends QuetzalElement
 
   ready: ->
     super()
-    observer = new MutationObserver => @_updateColor()
-    observer.observe @,
-      characterData: true
-      childList: true
-      subtree: true
+    @addEventListener "contentChanged", ( event ) =>
+      @_updateColor()
     @_updateColor()
 
   _updateColor: ->

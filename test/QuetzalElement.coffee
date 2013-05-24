@@ -205,3 +205,16 @@ test "QuetzalElement: template for one class hosts instance of another class", -
   delete window.GreetElement
   delete CustomElements.registry[ "greet-element" ]
 
+asyncTest "QuetzalElement: contentChanged event", ->
+  expect 2
+  class Foo extends QuetzalElement
+    ready: ->
+      super()
+      @addEventListener "contentChanged", ( event ) =>
+        equal @textContent, "Hello"
+        start()
+  foo = new Foo()
+  equal foo.textContent, ""
+  fixture = document.querySelector "#qunit-fixture"
+  fixture.appendChild foo
+  foo.textContent = "Hello"

@@ -57,6 +57,8 @@ class window.QuetzalElement extends HTMLDivElement
 
     return element
 
+  # Trigger the given handler whenever the element's light DOM content changes.
+
   ready: ->
 
     elementClass = @constructor
@@ -67,6 +69,15 @@ class window.QuetzalElement extends HTMLDivElement
 
     if elementClass::hasOwnProperty "style"
       style = "<style>#{elementClass::style}</style>"
+
+    observer = new MutationObserver =>
+      event = document.createEvent "CustomEvent"
+      event.initCustomEvent "contentChanged", false, false, null
+      @dispatchEvent event
+    observer.observe @,
+      characterData: true
+      childList: true
+      subtree: true
 
     if style? or @template?
       root = @webkitCreateShadowRoot()

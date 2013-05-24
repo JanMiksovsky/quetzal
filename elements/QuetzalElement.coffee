@@ -70,6 +70,9 @@ class window.QuetzalElement extends HTMLDivElement
     if elementClass::hasOwnProperty "style"
       style = "<style>#{elementClass::style}</style>"
 
+    # Wire up the contentChanged event.
+    # REVIEW: The class should have some way of indicating it actually wants
+    # to consume this event so we don't create unnecessary observers.
     observer = new MutationObserver =>
       event = document.createEvent "CustomEvent"
       event.initCustomEvent "contentChanged", false, false, null
@@ -80,6 +83,7 @@ class window.QuetzalElement extends HTMLDivElement
       subtree: true
 
     if style? or @template?
+      # Create the shadow DOM and populate it.
       root = @webkitCreateShadowRoot()
       innerHTML = style ? ""
       innerHTML += @template ? ""
@@ -136,9 +140,6 @@ class window.QuetzalElement extends HTMLDivElement
         return elementClass
       elementClass = elementClass.__super__?.constructor
     null
-
-  # Holds wrapper for each class.
-  _wrappers: {}
 
 
 ###

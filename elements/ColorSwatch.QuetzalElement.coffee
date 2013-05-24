@@ -29,7 +29,7 @@ class ColorSwatch extends QuetzalElement
 
   # The color to show as a swatch.
   # TODO: Replace with @getterSetter
-  @getter "color", -> @_swatchColor
+  @getter "color", -> @$.swatch.style.backgroundColor
   @setter "color", ( color ) ->
 
     # To determine whether the color is valid, we first apply white, then the

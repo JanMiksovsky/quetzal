@@ -115,6 +115,7 @@ class window.QuetzalElement extends HTMLDivElement
     # Wire up the contentChanged event.
     # REVIEW: The class should have some way of indicating it actually wants
     # to consume this event so we don't create unnecessary observers.
+    # TODO: How to stop listening?
     observer = new MutationObserver =>
       event = document.createEvent "CustomEvent"
       event.initCustomEvent "contentChanged", false, false, null

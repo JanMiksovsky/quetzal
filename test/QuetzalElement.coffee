@@ -193,3 +193,15 @@ test "QuetzalElement: subclass with registered superclass creates super-instance
   renderEqual element, "<foo-bar>Hello</foo-bar>"
   delete window.FooBar
   delete CustomElements.registry.FooBar
+
+test "QuetzalElement: template for one class hosts instance of another class", ->
+  class GreetElement extends QuetzalElement
+    template: "Hello, <content></content>."
+    @register()
+  class GreetHost extends QuetzalElement
+    template: "<greet-element>Alice</greet-element>"
+  greetHost = new GreetHost()
+  renderEqual greetHost, "<greet-element>Hello, Alice.</greet-element>"
+  delete window.GreetElement
+  delete CustomElements.registry[ "greet-element" ]
+

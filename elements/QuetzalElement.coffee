@@ -73,6 +73,7 @@ class window.QuetzalElement extends HTMLDivElement
       innerHTML = style ? ""
       innerHTML += @template ? ""
       root.innerHTML = innerHTML
+      CustomElements.upgradeAll root
       superElement = root.querySelector "super"
       if superElement?
         classDefiningTemplate = @_classDefiningTemplate elementClass

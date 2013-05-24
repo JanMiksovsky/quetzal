@@ -57,7 +57,49 @@ class window.QuetzalElement extends HTMLDivElement
 
     return element
 
-  # Trigger the given handler whenever the element's light DOM content changes.
+  # Return a new instance of a class supplied as one of the following:
+  # * a string name of a global JavaScript class: "FooElement"
+  # * a string name of an element class: "foo-element", "div", etc.
+  # * a JavaScript class: FooElement
+  @create: ( elementClass ) ->
+    if elementClass instanceof Function
+      # An actual JavaScript class
+      classFn = elementClass
+    else if typeof elementClass == "string"
+      # Either the name of an element or a JavaScript class.
+      if CustomElements.registry[ elementClass ]?
+        # Registered element class
+        tag = elementClass
+      else if elementClass.indexOf( "-" ) >= 0
+        if CustomElements.registry[ elementClass ]?
+          # Element class name with hyphen
+          tag = elementClass
+      else if window[ elementClass ]?
+        # Name of a global JavaScript class
+        classFn = window[ elementClass ]
+      else
+        # Assume its an element class
+        tag = elementClass
+
+    if classFn?
+      tagForClass = QuetzalElement.tagForClass classFn
+      if CustomElements.registry[ tagForClass ]?
+        # Prefer using the class' registered tag.
+        tag = tagForClass
+
+    if tag?    
+      # Create as named element.
+      newElement = document.createElement tag
+    else if classFn?
+      # Invoke constructor directly.
+      newElement = new classFn()
+      if classFn.name?.length > 0
+        # Add class name as a CSS class to simplify debugging.
+        newElement.classList.add classFn.name
+    else
+      throw "QuetzalElement.create(): invalid class"
+
+    newElement
 
   ready: ->
 
@@ -95,17 +137,7 @@ class window.QuetzalElement extends HTMLDivElement
         baseClass = classDefiningTemplate.__super__.constructor
         unless baseClass?
           throw "Used <super> in #{classDefiningTemplate.name}, but couldn't find superclass."
-        tag = QuetzalElement.tagForClass baseClass
-        if CustomElements.registry[ tag ]?
-          # Create super instance as named element
-          superInstance = document.createElement tag
-        else
-          # Not registered; invoke constructor directly, add class name as a
-          # CSS class to simplify debugging.
-          superInstance = new baseClass()
-          superInstance.classList.add baseClass.name
-        superInstance.innerHTML = superElement.innerHTML
-        superElement.parentNode.replaceChild superInstance, superElement
+        superInstance = QuetzalElement.transmute superElement, baseClass
         # Acquire super-instance's per-element data as if it were our own.
         @$ = superInstance.$
         @_properties = superInstance._properties
@@ -127,10 +159,25 @@ class window.QuetzalElement extends HTMLDivElement
     @ready()
 
   @tagForClass: ( classFn ) ->
+    return null unless classFn.name
     regexWords = /[A-Z][a-z]*/g
     words = classFn.name.match regexWords
     lowercaseWords = ( word.toLowerCase() for word in words )
     lowercaseWords.join "-"
+
+  # Replace the element with a new one of the indicated class, moving the
+  # existing element's content over to the new element. Return the new element.
+  @transmute: ( oldElement, newClass ) ->
+    newElement = QuetzalElement.create newClass
+    # Move the content to the new element.
+    while oldElement.childNodes.length > 0
+      newElement.appendChild oldElement.childNodes[0]
+    # Swap the new element in for the old one.
+    oldElement.parentNode.replaceChild newElement, oldElement
+    newElement
+
+  transmute: ( newClass ) ->
+    QuetzalElement.transmute @, newClass
 
   # Figure out which class in the hierarchy defines a template, so we can figure
   # out which class <super> refers to.

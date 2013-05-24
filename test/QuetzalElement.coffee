@@ -11,6 +11,12 @@ window.renderEqual = ( element, expected ) ->
   actual = element.impl.innerHTML
   equal actual, expected
 
+deregister = ( classFn ) ->
+  className = classFn.name
+  tagName = QuetzalElement.tagForClass classFn
+  delete window[ className ]
+  delete CustomElements.registry[ tagName ]
+
 test "QuetzalElement: instantiate with constructor", ->
   element = new QuetzalElement()
   ok element instanceof QuetzalElement
@@ -162,8 +168,7 @@ test "QuetzalElement: @register", ->
   ok fooBar instanceof FooBar # original class
   ok fooBar instanceof window.FooBar # registered (munged) class
   ok readyCalled
-  delete window.FooBar
-  delete CustomElements.registry[ "foo-bar" ]
+  deregister FooBar
 
 test "QuetzalElement: element of registered class sets property in markup", ->
   ok not window.FooBar?
@@ -179,8 +184,7 @@ test "QuetzalElement: element of registered class sets property in markup", ->
   ok fooBar instanceof window.FooBar
   ok fooBar._messageSet
   equal fooBar.message, "Hello"
-  delete window.FooBar
-  delete CustomElements.registry[ "foo-bar" ]
+  deregister FooBar
 
 test "QuetzalElement: subclass with registered superclass creates super-instance as named element", ->
   class FooBar extends QuetzalElement
@@ -191,8 +195,7 @@ test "QuetzalElement: subclass with registered superclass creates super-instance
   element = new SubClass()
   element.textContent = "Hello"
   renderEqual element, "<foo-bar>Hello</foo-bar>"
-  delete window.FooBar
-  delete CustomElements.registry.FooBar
+  deregister FooBar
 
 test "QuetzalElement: template for one class hosts instance of another class", ->
   class GreetElement extends QuetzalElement
@@ -202,8 +205,7 @@ test "QuetzalElement: template for one class hosts instance of another class", -
     template: "<greet-element>Alice</greet-element>"
   greetHost = new GreetHost()
   renderEqual greetHost, "<greet-element>Hello, Alice.</greet-element>"
-  delete window.GreetElement
-  delete CustomElements.registry[ "greet-element" ]
+  deregister GreetElement
 
 asyncTest "QuetzalElement: contentChanged event", ->
   expect 2
@@ -218,3 +220,29 @@ asyncTest "QuetzalElement: contentChanged event", ->
   fixture = document.querySelector "#qunit-fixture"
   fixture.appendChild foo
   foo.textContent = "Hello"
+
+test "QuetzalElement: create", ->
+  div = QuetzalElement.create "div"
+  ok div instanceof HTMLDivElement
+  ok not ( div instanceof QuetzalElement )
+  class FooElement extends QuetzalElement
+    template: "Foo: <content></content>"
+  foo = QuetzalElement.create FooElement
+  foo.textContent = "Hello"
+  ok foo instanceof FooElement
+  renderEqual foo, "Foo: Hello"
+  throws =>
+    QuetzalElement.create "foo-element" # Class not registered; should fail.
+  class BarElement extends QuetzalElement
+    template: "Bar: <content></content>"
+    @register()
+  bar1 = QuetzalElement.create "bar-element"
+  bar1.textContent = "One"
+  ok bar1 instanceof window.BarElement
+  renderEqual bar1, "Bar: One"
+  bar2 = QuetzalElement.create "BarElement"
+  bar2.textContent = "Two"
+  ok bar2 instanceof window.BarElement
+  renderEqual bar2, "Bar: Two"
+  deregister FooElement
+  deregister BarElement

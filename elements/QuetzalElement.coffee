@@ -57,12 +57,6 @@ class window.QuetzalElement extends HTMLDivElement
 
     return element
 
-  @tagForClass: ( classFn ) ->
-    regexWords = /[A-Z][a-z]*/g
-    words = classFn.name.match regexWords
-    lowercaseWords = ( word.toLowerCase() for word in words )
-    lowercaseWords.join "-"
-
   ready: ->
 
     elementClass = @constructor
@@ -107,9 +101,18 @@ class window.QuetzalElement extends HTMLDivElement
     for key, value of elementClass::inherited
       @[ key ] = value
 
+    for { key, value } in @.attributes
+      @[ key ] = value
+
   readyCallback: ->
     # REVIEW: Why does Polymer just invoke readyCallback?
     @ready()
+
+  @tagForClass: ( classFn ) ->
+    regexWords = /[A-Z][a-z]*/g
+    words = classFn.name.match regexWords
+    lowercaseWords = ( word.toLowerCase() for word in words )
+    lowercaseWords.join "-"
 
   # Figure out which class in the hierarchy defines a template, so we can figure
   # out which class <super> refers to.

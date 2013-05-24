@@ -146,7 +146,13 @@ test "QuetzalElement: tagForClass", ->
   equal QuetzalElement.tagForClass( FooBar ), "foo-bar"
 
 test "QuetzalElement: @register", ->
-  class FooBar extends HTMLDivElement
+  ok not window.FooBar?
+  ok not CustomElements.registry[ "foo-bar" ]?
+  readyCalled = false
+  class FooBar extends QuetzalElement
+    ready: ->
+      super()
+      readyCalled = true
     @register()
   registration = CustomElements.registry[ "foo-bar" ]
   ok registration?
@@ -155,8 +161,28 @@ test "QuetzalElement: @register", ->
   fooBar = document.createElement "foo-bar"
   ok fooBar instanceof FooBar # original class
   ok fooBar instanceof window.FooBar # registered (munged) class
+  ok readyCalled
   delete window.FooBar
-  delete CustomElements.registry.FooBar
+  delete CustomElements.registry[ "foo-bar" ]
+
+test "QuetzalElement: element of registered class sets property in markup", ->
+  ok not window.FooBar?
+  ok not CustomElements.registry[ "foo-bar" ]?
+  class FooBar extends QuetzalElement
+    ready: ->
+      super()
+      debugger
+    @property "message", ( message ) ->
+      @_messageSet = true
+    @register()
+  div = document.createElement "div"
+  div.innerHTML = "<foo-bar message='Hello'></foo-bar>"
+  fooBar = div.childNodes[0]
+  ok fooBar instanceof window.FooBar
+  ok fooBar._messageSet
+  equal fooBar.message, "Hello"
+  delete window.FooBar
+  delete CustomElements.registry[ "foo-bar" ]
 
 test "QuetzalElement: subclass with registered superclass creates super-instance as named element", ->
   class FooBar extends QuetzalElement

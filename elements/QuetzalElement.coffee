@@ -98,11 +98,13 @@ class window.QuetzalElement extends HTMLDivElement
       for subelement in root.querySelectorAll "[id]"
         @$[ subelement.id ] = subelement
 
+    # Set inherited properties defined by base class(es).
     for key, value of elementClass::inherited
       @[ key ] = value
 
-    for { key, value } in @.attributes
-      @[ key ] = value
+    # Extract properties from the element attributes.
+    for { name, value } in @.attributes
+      @[ name ] = value
 
   readyCallback: ->
     # REVIEW: Why does Polymer just invoke readyCallback?

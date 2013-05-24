@@ -169,15 +169,13 @@ test "QuetzalElement: element of registered class sets property in markup", ->
   ok not window.FooBar?
   ok not CustomElements.registry[ "foo-bar" ]?
   class FooBar extends QuetzalElement
-    ready: ->
-      super()
-      debugger
     @property "message", ( message ) ->
       @_messageSet = true
     @register()
   div = document.createElement "div"
   div.innerHTML = "<foo-bar message='Hello'></foo-bar>"
   fooBar = div.childNodes[0]
+  CustomElements.upgrade fooBar
   ok fooBar instanceof window.FooBar
   ok fooBar._messageSet
   equal fooBar.message, "Hello"

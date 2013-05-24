@@ -4,8 +4,8 @@
 
 <meta charset="utf-8">
 
-<script src="../../tools/polymer/platform/platform.js" debug="true"></script>
-<script src="elements/elements.js"></script>
+<script src="../../../tools/polymer/platform/platform.js" debug="true"></script>
+<script src="../elements/elements.js"></script>
 
 <style>
 body,
@@ -24,7 +24,7 @@ body {
 function foo( element ) {
     var root = element.webkitCreateShadowRoot();
     root.innerHTML = '<style>@host { * { color: red } }</style>' +
-        '<content></content>';
+        '<div><content></content></div>';
 }
 
 function bar( element ) {

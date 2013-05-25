@@ -28,6 +28,21 @@ body {
 //     list.elementClass = QuetzalButton;
 //     list.items = [ "One", "Two", "Three" ];
 // });
+window.addEventListener( "WebComponentsReady", function() {
+    var list = document.querySelector( "#list" );
+    var items = document.querySelector( "#items" );
+    var elements = [];
+    for ( var i = 0; i < items.childNodes.length; i++ ) {
+        var child = items.childNodes[i];
+        if ( !( child instanceof Text ) ) {
+            elements.push( child );
+        }
+    }
+    for ( var i = 0; i < elements.length; i++ ) {
+        list.appendChild( elements[i] );
+    }
+    list._transmuteChildren();
+});
 </script>
 
 </head>
@@ -55,7 +70,20 @@ body {
     <document-icon-button>document-icon-button</document-icon-button>
 </p>
 
-<!-- <div is="List" id="list"></div> -->
+<p>
+<!--     <list-element>
+        <div>Red</div>
+        <div>Blue</div>
+        <div>Green</div>
+    </list-element> -->
+    <list-element id="list" itemclass="labeled-color-swatch"></list-element>
+    <div id="items">
+        <div>Red</div>
+        <div>Blue</div>
+        <div>Green</div>
+    </div>
+</p>
+
 See the <a href="https://github.com/JanMiksovsky/quetzal">Quetzal source</a>
 for details on their construction.
 

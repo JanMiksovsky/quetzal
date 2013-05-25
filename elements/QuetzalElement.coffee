@@ -123,7 +123,7 @@ class window.QuetzalElement extends HTMLDivElement
     observer.observe @,
       characterData: true
       childList: true
-      # subtree: true
+      subtree: true
 
     if style? or @template?
       # Create the shadow DOM and populate it.

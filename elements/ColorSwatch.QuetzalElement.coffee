@@ -39,7 +39,6 @@ class ColorSwatch extends QuetzalElement
     swatchStyle.backgroundColor = "white"
     swatchStyle.backgroundColor = color
     
-    
     colorValid = switch color
       when ""
         false  # Empty color value shows the invalid style.
@@ -51,10 +50,9 @@ class ColorSwatch extends QuetzalElement
         not ( colorValue is "white" or colorValue is "rgb( 255, 255, 255 )" )
     # TODO: Use something like toggleClass
     if colorValid
-      @$.swatch.classList.add "valid"
+      swatch.classList.add "valid"
     else
-      @$.swatch.classList.remove "valid"
-    this
+      swatch.classList.remove "valid"
 
   @getter "valid", -> @$.swatch.classList.contains "valid"
 

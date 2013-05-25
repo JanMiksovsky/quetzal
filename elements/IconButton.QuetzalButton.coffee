@@ -20,12 +20,5 @@ class window.IconButton extends QuetzalButton
     </super>
   """
 
-  # template: [
-  #   img:
-  #     id: "icon"
-  # ,
-  #   content: []
-  # ]
-
   @alias "icon", "$.icon.src"
   @register()

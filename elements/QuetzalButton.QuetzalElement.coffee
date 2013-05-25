@@ -8,7 +8,7 @@ class window.QuetzalButton extends QuetzalElement
       color: inherit; /* Suppress browser's use of special button text color. */
       cursor: default;
       /* cursor: pointer; */ /* Improves consistency */
-      font-size: inherit;
+      font: inherit;
       margin: 0; /* Addresses margins set differently in IE6/7, FF3+, S5, Chrome */
       text-align: left; /* Many more things behave like buttons than want to be center-aligned like a stock button. */
       -webkit-user-select: none;

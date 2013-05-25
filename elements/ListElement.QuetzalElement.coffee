@@ -1,7 +1,8 @@
+# TODO: Rename to something like TransmuteList
 class window.ListElement extends QuetzalElement
 
   @property "itemclass", ( elementClass ) ->
-    # @_transmuteChildren()
+    @_transmuteChildren()
 
   ready: ->
     super()

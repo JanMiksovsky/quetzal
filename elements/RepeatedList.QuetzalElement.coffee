@@ -1,5 +1,13 @@
 class RepeatedList extends QuetzalElement
 
+  style: """
+    @host {
+      * {
+        display: block;
+      }
+    }
+  """
+
   @property "count", -> @_refresh()
 
   @property "increment", -> @_refresh()
@@ -23,17 +31,18 @@ class RepeatedList extends QuetzalElement
     count = parseInt @count
     itemclass = @itemclass
     return unless count? and itemclass?
-    @_emptyShadow()
-    for i in [ 1 .. count ]
+    @_emptyShadowRoot()
+    for i in [ 0 .. count-1 ]
       element = QuetzalElement.create itemclass
       elementContent = @contentForNthElement i
       if @increment
-        elementContent += " #{i}"
-      element.textContent = elementContent
+        elementContent += " #{i + 1}"
+      element.innerHTML = elementContent
       @webkitShadowRoot.appendChild element
 
-  _emptyShadow: ->
-    while @webkitShadowRoot.childNodes[0]?
-      @webkitShadowRoot.childNodes[0].remove()
+  _emptyShadowRoot: ->
+    # Remove everything but the <style> node in the 0th position.
+    while @webkitShadowRoot.childNodes[1]?
+      @webkitShadowRoot.childNodes[1].remove()
 
   @register()

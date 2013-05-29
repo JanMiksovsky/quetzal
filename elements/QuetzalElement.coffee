@@ -101,6 +101,32 @@ class window.QuetzalElement extends HTMLDivElement
 
     newElement
 
+  @parse: ( json ) ->
+    if json instanceof Array
+      fragment = document.createDocumentFragment()
+      for child in json
+        fragment.appendChild @parse child
+      fragment
+    else if typeof json == "string"
+      document.createTextNode json
+    else
+      # Object
+      keys = Object.keys json
+      # TODO: check number of keys
+      tag = keys[ 0 ]
+      element = document.createElement tag
+      properties = json[ tag ]
+      if properties instanceof Array or typeof json[ tag ] == "string" 
+        properties = content: properties
+      for propertyName, propertyValue of properties
+        if propertyName == "content"
+          element.appendChild @parse propertyValue
+        else if typeof propertyValue == "string"
+          element[ propertyName ] = propertyValue
+        else
+          element[ propertyName ] = @parse propertyValue
+      element
+
   ready: ->
 
     elementClass = @constructor

@@ -246,3 +246,36 @@ test "QuetzalElement: create", ->
   renderEqual bar2, "Bar: Two"
   deregister FooElement
   deregister BarElement
+
+test "QuetzalElement: parse empty element", ->
+  element = QuetzalElement.parse
+    div: []
+  equal element.outerHTML, "<div></div>"
+
+test "QuetzalElement: parse element with text content", ->
+  element = QuetzalElement.parse
+    span: "Hello"
+  equal element.outerHTML, "<span>Hello</span>"
+
+test "QuetzalElement: parse element with element array", ->
+  element = QuetzalElement.parse
+    div: [
+      span: "Hello"
+    ,
+      span: "Goodbye"
+    ]
+  equal element.outerHTML, "<div><span>Hello</span><span>Goodbye</span></div>"
+
+test "QuetzalElement: parse element with content psuedo-property", ->
+  element = QuetzalElement.parse
+    div: content: [
+      span: "Hello"
+    ,
+      span: "Goodbye"
+    ]
+  equal element.outerHTML, "<div><span>Hello</span><span>Goodbye</span></div>"
+
+test "QuetzalElement: parse element with attribute", ->
+  element = QuetzalElement.parse
+    input: type: "text"
+  equal element.outerHTML, "<input type=\"text\">"

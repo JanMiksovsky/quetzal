@@ -21,8 +21,8 @@ body {
     margin: 0.5in;
 }
 
-#list > * {
-    display: block;
+demo-tile {
+    margin-right: 1em;
 }
 </style>
 
@@ -34,16 +34,31 @@ body {
     <img style="height: 60px; width: 60px;" src="resources/quetzal.png"/>Quetzal
 </h1>
 
-<p>
+<demo-tile>
+<property name="democlass">color-swatch</property>
+<p>Shows a small square of a CSS color.</p>
 <color-swatch color="OrangeRed"></color-swatch>
+</demo-tile>
+
+<demo-tile>
+<property name="democlass">labeled-color-swatch</property>
+<p>Interprets its content as a CSS color and adds a corresponding swatch
+of color.</p>
 <labeled-color-swatch>LightSeaGreen</labeled-color-swatch>
-</p>
+</demo-tile>
 
-<p>
-    <lorem-pixel></lorem-pixel>
-</p>
+<demo-tile>
+<property name="democlass">lorem-pixel</property>
+<p>Selects a random photo from lorempixel.com.</p>
+<lorem-pixel height="225" width="300"></lorem-pixel>
+</demo-tile>
 
-<p>Create elements with the <markup-tag>markup-tag</markup-tag> tag.</p>
+<demo-tile>
+<property name="democlass">markup-tag</property>
+<p>Formats its contents as an HTML tag.</p>
+Here's a reference to the <markup-tag>script</markup-tag> tag.
+</demo-tile>
+
 <p>
     <quetzal-element>quetzal</quetzal-element>
     <quetzal-button>quetzal-button</quetzal-button>
@@ -51,7 +66,7 @@ body {
     <document-icon-button>document-icon-button</document-icon-button>
 </p>
 
-<repeated-list count="5" itemclass="quetzal-button"></repeated-list>
+<repeat-list count="5" itemclass="quetzal-button"></repeat-list>
 
 <mapped-list itemclass="quetzal-button">
     <span>Red</span>
@@ -62,8 +77,7 @@ body {
 </mapped-list>
 
 <p>
-See the <a href="https://github.com/JanMiksovsky/quetzal">Quetzal source</a>
-for details on their construction.
+<a href="https://github.com/JanMiksovsky/quetzal">Source code</a>
 </p>
 
 </body>

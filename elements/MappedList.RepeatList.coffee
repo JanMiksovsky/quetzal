@@ -1,4 +1,4 @@
-class MappedList extends RepeatedList
+class MappedList extends RepeatList
 
   style: """
     @host {
@@ -7,7 +7,7 @@ class MappedList extends RepeatedList
       }
     }
   """
-  
+
   @getter "count", -> @children?.length
 
   @getter "increment", -> false

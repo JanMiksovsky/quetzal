@@ -1,4 +1,4 @@
-class RepeatedList extends QuetzalElement
+class RepeatList extends QuetzalElement
 
   style: """
     @host {

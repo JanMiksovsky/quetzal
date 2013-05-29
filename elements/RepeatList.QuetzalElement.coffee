@@ -18,7 +18,9 @@ class RepeatList extends QuetzalElement
 
   contentForNthElement: ( index ) ->
     # TODO: Use QuetzalElement helper to turn itemclass into a class.
-    @repeatcontent ? @itemclass?.name ? @itemclass
+    textNode = document.createTextNode()
+    textNode.textContent = @repeatcontent ? @itemclass?.name ? @itemclass
+    textNode
 
   @property "repeatcontent", -> @_refresh()
 
@@ -30,12 +32,24 @@ class RepeatList extends QuetzalElement
     itemclass = @itemclass
     return unless count? and itemclass?
     @_emptyShadowRoot()
-    for i in [ 0 .. count-1 ]
+    for index in [ 0 .. count-1 ]
       element = QuetzalElement.create itemclass
-      elementContent = @contentForNthElement i
+      contentElement = @contentForNthElement index
       if @increment
-        elementContent += " #{i + 1}"
-      element.innerHTML = elementContent
+        contentElement.textContent += " #{index + 1}"
+
+      # child = @.children[ index ]
+      # if child?
+      #   observer = new MutationObserver ( event ) =>
+      #     event = document.createEvent "CustomEvent"
+      #     event.initCustomEvent "contentChanged", false, false, null
+      #     contentElement.dispatchEvent event
+      #   observer.observe child,
+      #     characterData: true
+      #     childList: true
+      #     subtree: true
+
+      element.appendChild contentElement
       @webkitShadowRoot.appendChild element
 
   _emptyShadowRoot: ->

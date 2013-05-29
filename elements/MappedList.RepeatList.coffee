@@ -12,6 +12,13 @@ class MappedList extends RepeatList
   @getter "increment", -> false
 
   contentForNthElement: ( index ) ->
-    "<content select=':nth-child(#{index + 1})'></content>"
+    contentElement = document.createElement "content"
+    contentElement.select = ":nth-child(#{index + 1})"
+    contentElement
+
+  ready: ->
+    super()
+    # @addEventListener "contentChanged", ( event ) =>
+    #   debugger
 
   @register()

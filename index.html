@@ -26,29 +26,6 @@ body {
 }
 </style>
 
-<script>
-// window.addEventListener( "load", function() {
-//     list = document.querySelector( "#list" );
-//     list.elementClass = QuetzalButton;
-//     list.items = [ "One", "Two", "Three" ];
-// });
-// window.addEventListener( "WebComponentsReady", function() {
-//     var list = document.querySelector( "#list" );
-//     var items = document.querySelector( "#items" );
-//     var elements = [];
-//     for ( var i = 0; i < items.childNodes.length; i++ ) {
-//         var child = items.childNodes[i];
-//         if ( !( child instanceof Text ) ) {
-//             elements.push( child );
-//         }
-//     }
-//     for ( var i = 0; i < elements.length; i++ ) {
-//         list.appendChild( elements[i] );
-//     }
-//     list._transmuteChildren();
-// });
-</script>
-
 </head>
 
 <body>
@@ -74,15 +51,25 @@ body {
     <document-icon-button>document-icon-button</document-icon-button>
 </p>
 
-<test-element>
+<repeated-list count="5" itemclass="quetzal-button"></repeated-list>
+
+<mapped-list itemclass="quetzal-button">
+    <div>One</div>
+    <div>Two</div>
+    <div>Three</div>
+    <div>Four</div>
+    <div>Five</div>
+</mapped-list>
+
+<!-- <test-element>
     <div>One</div>
     <div>Two</div>
     <div>Three</div>
     <div>Four</div>
     <div>Five</div>
 </test-element>
-
-<list-element id="list" itemclass="labeled-color-swatch"><div>Red</div><div>Blue</div><div>Green</div></list-element>
+ -->
+<!-- <list-element id="list" itemclass="labeled-color-swatch"><div>Red</div><div>Blue</div><div>Green</div></list-element> -->
 
 See the <a href="https://github.com/JanMiksovsky/quetzal">Quetzal source</a>
 for details on their construction.

@@ -1,10 +1,9 @@
 class MappedList extends RepeatList
 
+  # TODO: Inherit style
   style: """
-    @host {
-      * {
-        display: block;
-      }
+    :not(style) {
+      display: block;
     }
   """
 

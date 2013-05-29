@@ -1,7 +1,7 @@
 class LabeledColorSwatch extends QuetzalElement
 
   style: """
-    *:not(style) {
+    :not(style) {
       display: inline-block;
       /* vertical-align: middle; */
     }

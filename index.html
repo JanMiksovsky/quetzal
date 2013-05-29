@@ -41,6 +41,18 @@ demo-tile {
 </demo-tile>
 
 <demo-tile>
+<property name="democlass">document-icon-button</property>
+<p>Demonstrates how to pre-fill a base class property, in this case an icon.</p>
+<document-icon-button>Open</document-icon-button>
+</demo-tile>
+
+<demo-tile>
+<property name="democlass">icon-button</property>
+<p>A button with an optional icon.</p>
+<icon-button icon="resources/reload_12x14.png">Reload</icon-button>
+</demo-tile>
+
+<demo-tile>
 <property name="democlass">labeled-color-swatch</property>
 <p>Interprets its content as a CSS color and adds a corresponding swatch
 of color.</p>
@@ -54,9 +66,28 @@ of color.</p>
 </demo-tile>
 
 <demo-tile>
+<property name="democlass">mapped-list</property>
+<p>Maps its children to a corresponding set of instances of a desired
+element class.</p>
+<mapped-list itemclass="labeled-color-swatch">
+    <span>Red</span>
+    <span>Blue</span>
+    <span>Green</span>
+</mapped-list>
+</demo-tile>
+
+<demo-tile>
 <property name="democlass">markup-tag</property>
 <p>Formats its contents as an HTML tag.</p>
 Here's a reference to the <markup-tag>script</markup-tag> tag.
+</demo-tile>
+
+<demo-tile>
+<property name="democlass">quetzal-button</property>
+<p>Shows its content inside a simple button. Note: Buttons currently have extra
+padding because (due to a native bug?) their content is not clickable; they can
+only be clicked within their padding.</p>
+<quetzal-button>Button</quetzal-button>
 </demo-tile>
 
 <demo-tile>
@@ -66,40 +97,9 @@ Here's a reference to the <markup-tag>script</markup-tag> tag.
 </demo-tile>
 
 <demo-tile>
-<property name="democlass">quetzal-button</property>
-<p>Shows its content inside a simple button. Note: Buttons currently have extra
-padding because (due to a native bug?) their content is not clickable; they can
-only be clicked within their padding.</p>
-<quetzal-button>quetzal-button</quetzal-button>
-</demo-tile>
-
-<demo-tile>
-<property name="democlass">icon-button</property>
-<p>A button with an optional icon.</p>
-<icon-button icon="resources/reload_12x14.png">icon-button</icon-button>
-</demo-tile>
-
-<demo-tile>
-<property name="democlass">document-icon-button</property>
-<p>Demonstrates how to pre-fill a base class property, in this case an icon.</p>
-<document-icon-button>document-icon-button</document-icon-button>
-</demo-tile>
-
-<demo-tile>
 <property name="democlass">repeat-list</property>
 <p>Creates a certain number of instances of another element class.</p>
 <repeat-list count="3" itemclass="quetzal-button" repeatcontent="Button"></repeat-list>
-</demo-tile>
-
-<demo-tile>
-<property name="democlass">mapped-list</property>
-<p>Maps its children to a corresponding set of instances of a desired
-element class.</p>
-<mapped-list itemclass="quetzal-button">
-    <span>Red</span>
-    <span>Blue</span>
-    <span>Green</span>
-</mapped-list>
 </demo-tile>
 
 <p>

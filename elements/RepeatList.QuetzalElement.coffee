@@ -1,10 +1,8 @@
 class RepeatList extends QuetzalElement
 
   style: """
-    @host {
-      * {
-        display: block;
-      }
+    :not(style) {
+      display: block;
     }
   """
 

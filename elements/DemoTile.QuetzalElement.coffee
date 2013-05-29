@@ -15,8 +15,10 @@ class DemoTile extends QuetzalElement
     }
 
     h3 {
+      border-top: 2px solid gray;
       color: black;
       font-size: 1.2em;
+      padding-top: 0.5em;
     }
   """
 

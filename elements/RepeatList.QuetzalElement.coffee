@@ -20,9 +20,9 @@ class RepeatList extends QuetzalElement
 
   contentForNthElement: ( index ) ->
     # TODO: Use QuetzalElement helper to turn itemclass into a class.
-    @repeatContent ? @itemclass?.name ? @itemclass
+    @repeatcontent ? @itemclass?.name ? @itemclass
 
-  @property "repeatContent", -> @_refresh()
+  @property "repeatcontent", -> @_refresh()
 
   # TODO: Give elements like this one a way to force creation of shadow root.
   template: ""

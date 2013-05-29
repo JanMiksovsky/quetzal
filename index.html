@@ -59,22 +59,48 @@ of color.</p>
 Here's a reference to the <markup-tag>script</markup-tag> tag.
 </demo-tile>
 
-<p>
-    <quetzal-element>quetzal</quetzal-element>
-    <quetzal-button>quetzal-button</quetzal-button>
-    <icon-button icon="resources/reload_12x14.png">icon-button</icon-button>
-    <document-icon-button>document-icon-button</document-icon-button>
-</p>
+<demo-tile>
+<property name="democlass">quetzal-element</property>
+<p>A plain Quetzal element. This currently behaves like a
+<markup-tag>div</markup-tag>.</p>
+</demo-tile>
 
-<repeat-list count="5" itemclass="quetzal-button"></repeat-list>
+<demo-tile>
+<property name="democlass">quetzal-button</property>
+<p>Shows its content inside a simple button. Note: Buttons currently have extra
+padding because (due to a native bug?) their content is not clickable; they can
+only be clicked within their padding.</p>
+<quetzal-button>quetzal-button</quetzal-button>
+</demo-tile>
 
+<demo-tile>
+<property name="democlass">icon-button</property>
+<p>A button with an optional icon.</p>
+<icon-button icon="resources/reload_12x14.png">icon-button</icon-button>
+</demo-tile>
+
+<demo-tile>
+<property name="democlass">document-icon-button</property>
+<p>Demonstrates how to pre-fill a base class property, in this case an icon.</p>
+<document-icon-button>document-icon-button</document-icon-button>
+</demo-tile>
+
+<demo-tile>
+<property name="democlass">repeat-list</property>
+<p>Creates a certain number of instances of another element class.</p>
+<repeat-list count="3" itemclass="quetzal-button" repeatcontent="Button"></repeat-list>
+</demo-tile>
+
+<demo-tile>
+<property name="democlass">mapped-list</property>
+<p>Maps its children to a corresponding set of instances of a desired
+element class.</p>
 <mapped-list itemclass="quetzal-button">
     <span>Red</span>
     <span>Blue</span>
     <span>Green</span>
-    <span>Yellow</span>
-    <span>Orange</span>
 </mapped-list>
+</demo-tile>
 
 <p>
 <a href="https://github.com/JanMiksovsky/quetzal">Source code</a>

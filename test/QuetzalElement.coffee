@@ -279,3 +279,16 @@ test "QuetzalElement: parse element with attribute", ->
   element = QuetzalElement.parse
     input: type: "text"
   equal element.outerHTML, "<input type=\"text\">"
+
+test "QuetzalElement: subclass with simple JSON template", ->
+  class Greet extends QuetzalElement
+    template: [
+      "Hello, "
+    ,
+      content: []
+    ,
+      "."
+    ]
+  greet = new Greet()
+  greet.textContent = "Alice"
+  renderEqual greet, "Hello, Alice."

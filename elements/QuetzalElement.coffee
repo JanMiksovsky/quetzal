@@ -154,24 +154,30 @@ class window.QuetzalElement extends HTMLDivElement
     if style? or @template?
       # Create the shadow DOM and populate it.
       root = @webkitCreateShadowRoot()
-      innerHTML = style ? ""
-      innerHTML += @template ? ""
-      root.innerHTML = innerHTML
-      CustomElements.upgradeAll root
-      superElement = root.querySelector "super"
-      if superElement?
-        classDefiningTemplate = @_classDefiningTemplate elementClass
-        baseClass = classDefiningTemplate.__super__.constructor
-        unless baseClass?
-          throw "Used <super> in #{classDefiningTemplate.name}, but couldn't find superclass."
-        superInstance = QuetzalElement.transmute superElement, baseClass
-        # Acquire super-instance's per-element data as if it were our own.
-        @$ = superInstance.$
-        @_properties = superInstance._properties
-        for { name, value } in superElement.attributes
-          @[ name ] = value
-      for subelement in root.querySelectorAll "[id]"
-        @$[ subelement.id ] = subelement
+      if style?
+        styleElement = document.createElement "style"
+        styleElement.innerHTML = style
+        root.appendChild styleElement
+      if template?
+        if typeof template == "string"
+          root.innerHTML += template
+        else
+          root.appendChild QuetzalElement.parse template
+        CustomElements.upgradeAll root
+        superElement = root.querySelector "super"
+        if superElement?
+          classDefiningTemplate = @_classDefiningTemplate elementClass
+          baseClass = classDefiningTemplate.__super__.constructor
+          unless baseClass?
+            throw "Used <super> in #{classDefiningTemplate.name}, but couldn't find superclass."
+          superInstance = QuetzalElement.transmute superElement, baseClass
+          # Acquire super-instance's per-element data as if it were our own.
+          @$ = superInstance.$
+          @_properties = superInstance._properties
+          for { name, value } in superElement.attributes
+            @[ name ] = value
+        for subelement in root.querySelectorAll "[id]"
+          @$[ subelement.id ] = subelement
 
     # Set inherited properties defined by base class(es).
     for key, value of elementClass::inherited

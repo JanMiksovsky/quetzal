@@ -101,40 +101,44 @@ class window.QuetzalElement extends HTMLDivElement
 
     newElement
 
-  @parse: ( json, baseClass ) ->
+  # Return the element (and children) represented by the given template JSON.
+  # If any occurrence of "super" is found, create an instance of the indicated
+  # element class' superclass.
+  @parse: ( json, elementClass ) ->
     if json instanceof Array
       fragment = document.createDocumentFragment()
       for child in json
-        fragment.appendChild @parse child, baseClass
+        fragment.appendChild @parse child, elementClass
       fragment
     else if typeof json == "string"
       document.createTextNode json
     else
-      # Object
+      # Plain object
       keys = Object.keys json
-      # TODO: check number of keys
-      tag = keys[ 0 ]
-      properties = json[ tag ]
-      # Convert underscores to hyphens (which aren't allowed in plain JSON keys).
-      tag = tag.replace "_", "-"
-      element = if tag == "super"
-        new baseClass()
-      else
-        document.createElement tag
-      if properties instanceof Array or typeof properties == "string" 
-        properties = content: properties
-      for propertyName, propertyValue of properties
-        if propertyName == "content"
-          element.appendChild @parse propertyValue, baseClass
-        else if typeof propertyValue == "string"
-          element[ propertyName ] = propertyValue
+      if keys.length > 0
+        tag = keys[ 0 ]
+        properties = json[ tag ]
+        # Convert underscores to hyphens (which aren't allowed in plain JSON keys).
+        tag = tag.replace "_", "-"
+        element = if tag == "super"
+          @_createSuperInstance elementClass
         else
-          element[ propertyName ] = @parse propertyValue, baseClass
-      element
+          document.createElement tag
+        if properties instanceof Array or typeof properties == "string" 
+          properties = content: properties
+        for propertyName, propertyValue of properties
+          if propertyName == "content"
+            element.appendChild @parse propertyValue, elementClass
+          else if typeof propertyValue == "string"
+            element[ propertyName ] = propertyValue
+          else
+            element[ propertyName ] = @parse propertyValue, elementClass
+        element
+      else
+        # No keys
+        null
 
   ready: ->
-
-    elementClass = @constructor
 
     # Initialize per-element data.
     @$ = {}             # Holds element references.
@@ -153,37 +157,13 @@ class window.QuetzalElement extends HTMLDivElement
       childList: true
       subtree: true
 
-    if @template?
-      # Create the shadow DOM and populate it.
-      root = @webkitCreateShadowRoot()
-      classDefiningTemplate = @_classDefiningTemplate elementClass
-      baseClass = classDefiningTemplate.__super__.constructor
-      if typeof @template == "string"
-        root.innerHTML = @template
-        CustomElements.upgradeAll root
-        superElement = root.querySelector "super"
-        if superElement?
-          unless baseClass?
-            throw "Used <super> in #{classDefiningTemplate.name}, but couldn't find superclass."
-          superInstance = QuetzalElement.transmute superElement, baseClass
-          # Acquire super-instance's per-element data as if it were our own.
-          @$ = superInstance.$
-          @_properties = superInstance._properties
-          for { name, value } in superElement.attributes
-            @[ name ] = value
-      else
-        root.appendChild QuetzalElement.parse @template, baseClass
-        CustomElements.upgradeAll root
-      for subelement in root.querySelectorAll "[id]"
-        @$[ subelement.id ] = subelement
+    @_createShadow @template if @template?
 
     # Set inherited properties defined by base class(es).
-    for key, value of elementClass::inherited
-      @[ key ] = value
+    @[ key ] = value for key, value of @inherited
 
     # Extract properties from the element attributes.
-    for { name, value } in @.attributes
-      @[ name ] = value
+    @[ name ] = value for { name, value } in @.attributes
 
   readyCallback: ->
     # REVIEW: Why does Polymer just invoke readyCallback?
@@ -218,6 +198,41 @@ class window.QuetzalElement extends HTMLDivElement
         return elementClass
       elementClass = elementClass.__super__?.constructor
     null
+
+  # Create the shadow DOM and populate it.
+  _createShadow: ( template ) ->
+    root = @webkitCreateShadowRoot()
+    elementClass = @constructor
+    classDefiningTemplate = @_classDefiningTemplate elementClass
+    if typeof @template == "string"
+      # Markup template
+      root.innerHTML = @template
+      CustomElements.upgradeAll root
+      superElement = root.querySelector "super"
+      if superElement?
+        superInstance = QuetzalElement._createSuperInstance classDefiningTemplate
+        # Move contents
+        while superElement.childNodes[0]?
+          superInstance.appendChild superElement.childNodes[0]
+        # Acquire super-instance's per-element data as if it were our own.
+        @$ = superInstance.$
+        @_properties = superInstance._properties
+        for { name, value } in superElement.attributes
+          @[ name ] = value
+        superElement.parentNode.replaceChild superInstance, superElement
+    else
+      # JSON template
+      root.appendChild QuetzalElement.parse @template, classDefiningTemplate
+      CustomElements.upgradeAll root
+    for subelement in root.querySelectorAll "[id]"
+      @$[ subelement.id ] = subelement
+
+  # Create an instance of the indicated class' superclass.
+  @_createSuperInstance: ( elementClass ) ->
+    baseClass = elementClass.__super__.constructor
+    unless baseClass?
+      throw "The template for #{elementClass.name} uses <super>, but superclass can't be found."
+    QuetzalElement.create baseClass
 
 
 ###

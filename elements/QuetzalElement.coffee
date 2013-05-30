@@ -101,11 +101,11 @@ class window.QuetzalElement extends HTMLDivElement
 
     newElement
 
-  @parse: ( json ) ->
+  @parse: ( json, baseClass ) ->
     if json instanceof Array
       fragment = document.createDocumentFragment()
       for child in json
-        fragment.appendChild @parse child
+        fragment.appendChild @parse child, baseClass
       fragment
     else if typeof json == "string"
       document.createTextNode json
@@ -117,16 +117,19 @@ class window.QuetzalElement extends HTMLDivElement
       properties = json[ tag ]
       # Convert underscores to hyphens (which aren't allowed in plain JSON keys).
       tag = tag.replace "_", "-"
-      element = document.createElement tag
+      element = if tag == "super"
+        new baseClass()
+      else
+        document.createElement tag
       if properties instanceof Array or typeof properties == "string" 
         properties = content: properties
       for propertyName, propertyValue of properties
         if propertyName == "content"
-          element.appendChild @parse propertyValue
+          element.appendChild @parse propertyValue, baseClass
         else if typeof propertyValue == "string"
           element[ propertyName ] = propertyValue
         else
-          element[ propertyName ] = @parse propertyValue
+          element[ propertyName ] = @parse propertyValue, baseClass
       element
 
   ready: ->
@@ -153,23 +156,24 @@ class window.QuetzalElement extends HTMLDivElement
     if @template?
       # Create the shadow DOM and populate it.
       root = @webkitCreateShadowRoot()
+      classDefiningTemplate = @_classDefiningTemplate elementClass
+      baseClass = classDefiningTemplate.__super__.constructor
       if typeof @template == "string"
         root.innerHTML = @template
+        CustomElements.upgradeAll root
+        superElement = root.querySelector "super"
+        if superElement?
+          unless baseClass?
+            throw "Used <super> in #{classDefiningTemplate.name}, but couldn't find superclass."
+          superInstance = QuetzalElement.transmute superElement, baseClass
+          # Acquire super-instance's per-element data as if it were our own.
+          @$ = superInstance.$
+          @_properties = superInstance._properties
+          for { name, value } in superElement.attributes
+            @[ name ] = value
       else
-        root.appendChild QuetzalElement.parse @template
-      CustomElements.upgradeAll root
-      superElement = root.querySelector "super"
-      if superElement?
-        classDefiningTemplate = @_classDefiningTemplate elementClass
-        baseClass = classDefiningTemplate.__super__.constructor
-        unless baseClass?
-          throw "Used <super> in #{classDefiningTemplate.name}, but couldn't find superclass."
-        superInstance = QuetzalElement.transmute superElement, baseClass
-        # Acquire super-instance's per-element data as if it were our own.
-        @$ = superInstance.$
-        @_properties = superInstance._properties
-        for { name, value } in superElement.attributes
-          @[ name ] = value
+        root.appendChild QuetzalElement.parse @template, baseClass
+        CustomElements.upgradeAll root
       for subelement in root.querySelectorAll "[id]"
         @$[ subelement.id ] = subelement
 

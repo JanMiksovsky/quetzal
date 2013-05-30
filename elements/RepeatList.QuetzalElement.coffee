@@ -1,10 +1,11 @@
 class RepeatList extends QuetzalElement
 
-  styles: """
-    :not(style) {
-      display: block;
-    }
-  """
+  template:
+    style: """
+      :not(style) {
+        display: block;
+      }
+    """
 
   @property "count", -> @_refresh()
 
@@ -23,9 +24,6 @@ class RepeatList extends QuetzalElement
     textNode
 
   @property "repeatcontent", -> @_refresh()
-
-  # TODO: Give elements like this one a way to force creation of shadow root.
-  template: []
 
   _refresh: ->
     count = parseInt @count

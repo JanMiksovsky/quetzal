@@ -4,9 +4,8 @@ Placeholder image from LoremPixel.com
 
 class window.LoremPixel extends QuetzalElement
 
-  template: [
+  template:
     img: id: "image"
-  ]
 
   @alias "height", "$.image.height", ( height ) ->
     @_reload()

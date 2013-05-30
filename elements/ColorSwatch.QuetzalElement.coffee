@@ -4,27 +4,28 @@ Shows a block of a CSS color, either a color name or value.
 
 class ColorSwatch extends QuetzalElement
 
-  styles: """
-    @host {
-      * {
-        display: inline-block;
+  template: [
+    style: """
+      @host {
+        * {
+          display: inline-block;
+        }
       }
-    }
 
-    #swatch {
-      box-sizing: border-box;
-      min-height: 1.5em;
-      min-width: 1.5em;
-    }
-    #swatch:not(.valid) {
-      border: 1px solid lightgray;
-    }
-  """
-
-  template:
+      #swatch {
+        box-sizing: border-box;
+        min-height: 1.5em;
+        min-width: 1.5em;
+      }
+      #swatch:not(.valid) {
+        border: 1px solid lightgray;
+      }
+    """
+  ,
     div: id: "swatch", content: [
       content: []
     ]
+  ]
 
   # The color to show as a swatch.
   # TODO: Replace with @getterSetter

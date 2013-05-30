@@ -1,13 +1,13 @@
 class window.SampleJson extends QuetzalElement
 
-  styles:
-    "@host":
-      "*":
-        color: "red"
-      span:
-        font_weight: "bold"
-
-  template: 
+  template: [
+    style:
+      "@host":
+        "*":
+          color: "red"
+        span:
+          fontWeight: "bold"
+  ,
     super: [
       img: src: "{{icon}}"
     ,
@@ -15,5 +15,6 @@ class window.SampleJson extends QuetzalElement
         content: []
       ]
     ]
+  ]
 
   @register()

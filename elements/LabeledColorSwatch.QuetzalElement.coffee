@@ -1,13 +1,12 @@
 class LabeledColorSwatch extends QuetzalElement
 
-  styles: """
-    :not(style) {
-      display: inline-block;
-      /* vertical-align: middle; */
-    }
-  """
-
   template: [
+    style: """
+      :not(style) {
+        display: inline-block;
+      }
+    """
+  ,
     color_swatch: id: "swatch"
   ,
     " "

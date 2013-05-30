@@ -135,9 +135,6 @@ class window.QuetzalElement extends HTMLDivElement
     @$ = {}             # Holds element references.
     @_properties = {}   # "private" properties referenced by @property.
 
-    if elementClass::hasOwnProperty "style"
-      style = "<style>#{elementClass::style}</style>"
-
     # Wire up the contentChanged event.
     # REVIEW: The class should have some way of indicating it actually wants
     # to consume this event so we don't create unnecessary observers.
@@ -151,6 +148,9 @@ class window.QuetzalElement extends HTMLDivElement
       childList: true
       subtree: true
 
+    if elementClass::hasOwnProperty "style"
+      style = elementClass::style
+
     if style? or @template?
       # Create the shadow DOM and populate it.
       root = @webkitCreateShadowRoot()
@@ -158,11 +158,11 @@ class window.QuetzalElement extends HTMLDivElement
         styleElement = document.createElement "style"
         styleElement.innerHTML = style
         root.appendChild styleElement
-      if template?
-        if typeof template == "string"
-          root.innerHTML += template
+      if @template?
+        if typeof @template == "string"
+          root.innerHTML += @template
         else
-          root.appendChild QuetzalElement.parse template
+          root.appendChild QuetzalElement.parse @template
         CustomElements.upgradeAll root
         superElement = root.querySelector "super"
         if superElement?

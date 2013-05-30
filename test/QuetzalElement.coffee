@@ -280,6 +280,13 @@ test "QuetzalElement: parse element with attribute", ->
     input: type: "text"
   equal element.outerHTML, "<input type=\"text\">"
 
+test "QuetzalElement: parse element with attribute and content", ->
+  element = QuetzalElement.parse
+    button:
+      type: "submit"
+      content: "OK"
+  equal element.outerHTML, "<button type=\"submit\">OK</button>"
+
 test "QuetzalElement: subclass with simple JSON template", ->
   class Greet extends QuetzalElement
     template: [

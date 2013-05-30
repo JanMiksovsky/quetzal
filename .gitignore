@@ -1,4 +1,3 @@
 *.sublime-*
-elements/elements.js
 node_modules/
 test/unittests.js

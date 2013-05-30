@@ -25,3 +25,4 @@ class window.LoremPixel extends QuetzalElement
       @$.image.src = "http://lorempixel.com/#{@width}/#{@height}/nature"
 
   @register()
+ 

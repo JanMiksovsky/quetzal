@@ -1,11 +1,11 @@
 class window.SampleJson extends QuetzalElement
 
-  style:
-    "@host":
-      "*":
-        color: "red"
-      span:
-        font_weight: "bold"
+  # style:
+  #   "@host":
+  #     "*":
+  #       color: "red"
+  #     span:
+  #       font_weight: "bold"
 
   template: 
     super: [

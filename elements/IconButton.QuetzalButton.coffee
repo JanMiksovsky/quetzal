@@ -1,11 +1,6 @@
 class window.IconButton extends QuetzalButton
 
   style: """
-    @host {
-      * {
-        color: red;
-      }
-    }
     span {
       font-weight: bold;
     }

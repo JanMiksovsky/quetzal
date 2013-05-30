@@ -113,6 +113,20 @@ test "QuetzalElement: element reference on base class available to subclass", ->
   bar = new Bar()
   equal bar.$.message?.textContent, "Hello"
 
+test "QuetzalElement: class defines style", ->
+  class Foo extends QuetzalElement
+    style: "* { color: red; }"
+    template: "Hello"
+  foo = new Foo()
+  renderEqual foo, "Hello"
+
+test "QuetzalElement: subclass defines neither style nor template", ->
+  class Foo extends QuetzalElement
+    template: "Hello"
+  class Bar extends Foo
+  bar = new Bar()
+  renderEqual bar, "Hello"
+
 test "QuetzalElement: alias", ->
   class Foo extends QuetzalElement
     template: "<span id='message'>Hello</span>"

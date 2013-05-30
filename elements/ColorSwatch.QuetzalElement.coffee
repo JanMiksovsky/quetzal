@@ -4,7 +4,7 @@ Shows a block of a CSS color, either a color name or value.
 
 class ColorSwatch extends QuetzalElement
 
-  style: """
+  styles: """
     @host {
       * {
         display: inline-block;

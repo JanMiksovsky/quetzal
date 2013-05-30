@@ -115,10 +115,10 @@ test "QuetzalElement: element reference on base class available to subclass", ->
 
 test "QuetzalElement: class defines style", ->
   class Foo extends QuetzalElement
-    style: "* { color: red; }"
+    styles: "* { color: red; }"
     template: "Hello"
   foo = new Foo()
-  renderEqual foo, "Hello"
+  renderEqual foo, "<style>* { color: red; }</style>Hello"
 
 test "QuetzalElement: subclass defines neither style nor template", ->
   class Foo extends QuetzalElement

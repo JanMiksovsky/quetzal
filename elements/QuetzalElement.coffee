@@ -150,15 +150,15 @@ class window.QuetzalElement extends HTMLDivElement
       childList: true
       subtree: true
 
-    if elementClass::hasOwnProperty "style"
-      style = elementClass::style
+    if elementClass::hasOwnProperty "styles"
+      styles = elementClass::styles
 
-    if style? or @template?
+    if styles? or @template?
       # Create the shadow DOM and populate it.
       root = @webkitCreateShadowRoot()
-      if style?
+      if styles?
         styleElement = document.createElement "style"
-        styleElement.innerHTML = style
+        styleElement.innerHTML = styles
         root.appendChild styleElement
       if @template?
         if typeof @template == "string"

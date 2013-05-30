@@ -1,7 +1,7 @@
 class MappedList extends RepeatList
 
   # TODO: Inherit style
-  style: """
+  styles: """
     :not(style) {
       display: block;
     }

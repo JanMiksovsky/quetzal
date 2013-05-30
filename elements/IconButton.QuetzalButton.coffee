@@ -1,6 +1,6 @@
 class window.IconButton extends QuetzalButton
 
-  style: """
+  styles: """
     span {
       font-weight: bold;
     }

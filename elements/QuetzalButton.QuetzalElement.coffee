@@ -1,6 +1,6 @@
 class window.QuetzalButton extends QuetzalElement
 
-  style: """
+  styles: """
     button {
       background: none; /* Better to start with no background than a browser-dependent one. */
       border: none; /* Many button styles don't want a border by default. */

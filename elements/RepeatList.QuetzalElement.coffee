@@ -1,6 +1,6 @@
 class RepeatList extends QuetzalElement
 
-  style: """
+  styles: """
     :not(style) {
       display: block;
     }

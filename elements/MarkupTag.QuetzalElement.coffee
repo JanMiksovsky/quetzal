@@ -1,6 +1,6 @@
 class MarkupTag extends QuetzalElement
 
-  style: """
+  styles: """
     @host {
       * {
         font-family: Courier, Courier New, monospace;

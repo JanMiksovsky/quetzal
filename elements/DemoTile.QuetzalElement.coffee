@@ -1,6 +1,6 @@
 class DemoTile extends QuetzalElement
 
-  style: """
+  styles: """
     @host {
       * {
         color: #444;

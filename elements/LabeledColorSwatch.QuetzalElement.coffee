@@ -7,10 +7,13 @@ class LabeledColorSwatch extends QuetzalElement
     }
   """
 
-  template: """
-    <color-swatch id="swatch"></color-swatch>
-    <content></content>
-  """
+  template: [
+    color_swatch: id: "swatch"
+  ,
+    " "
+  ,
+    content: []
+  ]
 
   ready: ->
     super()

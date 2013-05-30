@@ -11,14 +11,16 @@ class window.IconButton extends QuetzalButton
     }
   """
 
-  template: """
-    <super>
-      <img id="icon"/>
-      <span>
-        <content></content>
-      </span>
-    </super>
-  """
+  template:
+    super: [
+      img: id: "icon"
+    ,
+      " "
+    ,
+      span: [
+        content: []
+      ]
+    ]
 
   @alias "icon", "$.icon.src"
   @register()

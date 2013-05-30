@@ -4,6 +4,9 @@ class window.DocumentIconButton extends IconButton
     icon: "resources/document_alt_stroke_12x16.png"
 
   # TODO: Remove need for this
-  template: "<super><content></content></super>"
+  template:
+    super: [
+      content: []
+    ]
 
   @register()

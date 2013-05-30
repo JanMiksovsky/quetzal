@@ -8,6 +8,6 @@ class MarkupTag extends QuetzalElement
     }
   """
 
-  template: "&lt;<content></content>&gt;"
+  template: [ "<" , content: [], ">" ]
 
   @register()

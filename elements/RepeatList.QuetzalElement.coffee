@@ -25,7 +25,7 @@ class RepeatList extends QuetzalElement
   @property "repeatcontent", -> @_refresh()
 
   # TODO: Give elements like this one a way to force creation of shadow root.
-  template: ""
+  template: []
 
   _refresh: ->
     count = parseInt @count

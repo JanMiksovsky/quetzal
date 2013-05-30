@@ -69,10 +69,10 @@ class window.QuetzalButton extends QuetzalElement
     }
   """
 
-  template: """
-    <button>
-      <content></content>
-    </button>
-  """
+  template: [
+    button: [
+      content: []
+    ]
+  ]
 
   @register()

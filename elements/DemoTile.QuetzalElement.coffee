@@ -22,13 +22,15 @@ class DemoTile extends QuetzalElement
     }
   """
 
-  template: """
-    <div id="container">
-      <h3>
-        <markup-tag><content select="property"></content></markup-tag>
-      </h3>
-      <content></content>
-    </div>
-  """
+  template:
+    div: id: "container", content: [
+      h3: [
+        markup_tag: [
+          content: select: "property"
+        ]
+      ]
+    ,
+      content: []
+    ]
 
   @register()

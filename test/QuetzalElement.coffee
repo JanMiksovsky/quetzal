@@ -287,6 +287,11 @@ test "QuetzalElement: parse element with attribute and content", ->
       content: "OK"
   equal element.outerHTML, "<button type=\"submit\">OK</button>"
 
+test "QuetzalElement: parse element with custom element with underscore/hyphen", ->
+  element = QuetzalElement.parse
+    custom_element: "Hello"
+  equal element.outerHTML, "<custom-element>Hello</custom-element>"
+
 test "QuetzalElement: subclass with simple JSON template", ->
   class Greet extends QuetzalElement
     template: [

@@ -21,11 +21,10 @@ class ColorSwatch extends QuetzalElement
     }
   """
 
-  template: """
-    <div id="swatch">
-      <content></content>
-    </div>
-  """
+  template:
+    div: id: "swatch", content: [
+      content: []
+    ]
 
   # The color to show as a swatch.
   # TODO: Replace with @getterSetter

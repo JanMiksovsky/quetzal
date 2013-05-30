@@ -114,9 +114,11 @@ class window.QuetzalElement extends HTMLDivElement
       keys = Object.keys json
       # TODO: check number of keys
       tag = keys[ 0 ]
-      element = document.createElement tag
       properties = json[ tag ]
-      if properties instanceof Array or typeof json[ tag ] == "string" 
+      # Convert underscores to hyphens (which aren't allowed in plain JSON keys).
+      tag = tag.replace "_", "-"
+      element = document.createElement tag
+      if properties instanceof Array or typeof properties == "string" 
         properties = content: properties
       for propertyName, propertyValue of properties
         if propertyName == "content"

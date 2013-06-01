@@ -3,7 +3,7 @@ class window.IconButton extends QuetzalButton
   template: [
     style: """
       @host {
-        :scope {
+        * {
           font-weight: bold;
         }        
       }

@@ -442,9 +442,12 @@ Sugar to allow quick creation of element properties.
       return _ref;
     }
 
-    TestElement.prototype.template = {
-      div: "Stuff goes here"
-    };
+    TestElement.prototype.template = [
+      {
+        content: [],
+        content: []
+      }
+    ];
 
     TestElement.register();
 
@@ -544,7 +547,7 @@ Shows a block of a CSS color, either a color name or value.
 
     DemoTile.prototype.template = [
       {
-        style: "@host {\n  * {\n    color: #444;\n    font-size: 0.9em;\n  }\n}\n\n#container {\n  display: inline-block;\n  width: 300px;\n  vertical-align: top;\n}\n\nh3 {\n  border-top: 2px solid gray;\n  color: black;\n  font-size: 1.2em;\n  padding-top: 0.5em;\n}"
+        style: "@host {\n  * {\n    color: #444;\n    font-size: 0.9em;\n  }\n}\n\n#container {\n  display: inline-block;\n  max-width: 300px;\n  vertical-align: top;\n}\n\nh3 {\n  border-top: 2px solid gray;\n  color: black;\n  font-size: 1.2em;\n  padding-top: 0.5em;\n}\n\n#code {\n  margin: 0;\n  white-space: pre-wrap;\n  word-wrap: break-word;\n}"
       }, {
         div: {
           id: "container",
@@ -555,19 +558,50 @@ Shows a block of a CSS color, either a color name or value.
                   markup_tag: [
                     {
                       content: {
-                        select: "property"
+                        select: "property[name='classname']"
                       }
                     }
                   ]
                 }
               ]
             }, {
-              content: []
+              p: [
+                {
+                  content: {
+                    select: "property[name='description']"
+                  }
+                }
+              ]
+            }, {
+              content: {
+                select: "property[name='demo']"
+              }
+            }, {
+              pre: {
+                id: "code"
+              }
             }
           ]
         }
       }
     ];
+
+    DemoTile.prototype.ready = function() {
+      var _this = this;
+
+      DemoTile.__super__.ready.call(this);
+      this.addEventListener("contentChanged", function(event) {
+        return _this._showDemoCode();
+      });
+      return this._showDemoCode();
+    };
+
+    DemoTile.prototype._showDemoCode = function() {
+      var demo, _ref1;
+
+      demo = this.querySelector("property[name='demo']");
+      return this.$.code.textContent = (_ref1 = demo != null ? demo.innerHTML : void 0) != null ? _ref1 : "";
+    };
 
     DemoTile.register();
 

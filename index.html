@@ -25,6 +25,10 @@ body {
 demo-tile {
     margin-right: 1em;
 }
+
+p {
+    max-width: 800px;
+}
 </style>
 
 </head>
@@ -35,77 +39,106 @@ demo-tile {
     <img style="height: 60px; width: 60px;" src="resources/quetzal.png"/>Quetzal
 </h1>
 
-<demo-tile>
-<property name="democlass">color-swatch</property>
-<p>Shows a small square of a CSS color.</p>
-<color-swatch color="OrangeRed"></color-swatch>
-</demo-tile>
-
-<demo-tile>
-<property name="democlass">document-icon-button</property>
-<p>Demonstrates how to pre-fill a base class property, in this case an icon.</p>
-<document-icon-button>Open</document-icon-button>
-</demo-tile>
-
-<demo-tile>
-<property name="democlass">icon-button</property>
-<p>A button with an optional icon.</p>
-<icon-button icon="resources/reload_12x14.png">Reload</icon-button>
-</demo-tile>
-
-<demo-tile>
-<property name="democlass">labeled-color-swatch</property>
-<p>Interprets its content as a CSS color and adds a corresponding swatch
-of color.</p>
-<labeled-color-swatch>LightSeaGreen</labeled-color-swatch>
-</demo-tile>
-
-<demo-tile>
-<property name="democlass">lorem-pixel</property>
-<p>Selects a random photo from lorempixel.com.</p>
-<lorem-pixel height="225" width="300"></lorem-pixel>
-</demo-tile>
-
-<demo-tile>
-<property name="democlass">mapped-list</property>
-<p>Maps its children to a corresponding set of instances of a desired
-element class.</p>
-<mapped-list itemclass="labeled-color-swatch">
-    <span>Red</span>
-    <span>Blue</span>
-    <span>Green</span>
-</mapped-list>
-</demo-tile>
-
-<demo-tile>
-<property name="democlass">markup-tag</property>
-<p>Formats its contents as an HTML tag.</p>
-Here's a reference to the <markup-tag>script</markup-tag> tag.
-</demo-tile>
-
-<demo-tile>
-<property name="democlass">quetzal-button</property>
-<p>Shows its content inside a simple button. Note: Buttons currently have extra
-padding because (due to a native bug?) their content is not clickable; they can
-only be clicked within their padding.</p>
-<quetzal-button>Button</quetzal-button>
-</demo-tile>
-
-<demo-tile>
-<property name="democlass">quetzal-element</property>
-<p>A plain Quetzal element. This currently behaves like a
-<markup-tag>div</markup-tag>.</p>
-</demo-tile>
-
-<demo-tile>
-<property name="democlass">repeat-list</property>
-<p>Creates a certain number of instances of another element class.</p>
-<repeat-list count="3" itemclass="quetzal-button" repeatcontent="Button"></repeat-list>
-</demo-tile>
-
 <p>
-<a href="https://github.com/JanMiksovsky/quetzal">Source code</a>
+Quetzal is an experimental translation of concepts from the
+<a href="http://quickui.org">QuickUI</a> framework to HTML custom elements.
+This relies on Google's <a href="http://www.polymer-project.org">Polymer</a>
+project to support aspects of custom elements which are not yet supported in
+all browsers. The
+<a href="https://github.com/JanMiksovsky/quetzal">Quetzal source code</a> is
+available on GitHub.
 </p>
+<p>
+A small handful of initial, experimental custom elements created in Quetzal
+appear below. These are translations of some components from the
+<a href="http://quickui.org/catalog">QuickUI Catalog</a>
+</p>
+
+<demo-tile>
+<property name="classname">color-swatch</property>
+<property name="description">Shows a small square of a CSS color.</property>
+<property name="demo">
+<color-swatch color="OrangeRed"></color-swatch>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">document-icon-button</property>
+<property name="description">Demonstrates how to pre-fill a base class property, in this case an icon.</property>
+<property name="demo">
+<document-icon-button>Open</document-icon-button>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">icon-button</property>
+<property name="description">A button with an optional icon.</property>
+<property name="demo">
+<icon-button icon="resources/reload_12x14.png">Reload</icon-button>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">labeled-color-swatch</property>
+<property name="description">Interprets its content as a CSS color and adds a corresponding swatch
+of color.</property>
+<property name="demo">
+<labeled-color-swatch>LightSeaGreen</labeled-color-swatch>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">lorem-pixel</property>
+<property name="description">Selects a random photo from lorempixel.com.</property>
+<property name="demo">
+<lorem-pixel height="225" width="300"></lorem-pixel>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">mapped-list</property>
+<property name="description">Maps its children to a corresponding set of instances of a desired
+element class.</property>
+<property name="demo">
+<mapped-list itemclass="labeled-color-swatch">
+        <span>Red</span>
+        <span>Blue</span>
+        <span>Green</span>
+    </mapped-list>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">markup-tag</property>
+<property name="description">Formats its contents as an HTML tag.</property>
+<property name="demo">
+Here's a reference to the <markup-tag>script</markup-tag> tag.
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-button</property>
+<property name="description">Shows its content inside a simple button. Note: Buttons currently have extra
+padding because (due to a native bug?) their content is not clickable; they can
+only be clicked within their padding.</property>
+<property name="demo">
+<quetzal-button>Button</quetzal-button>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-element</property>
+<property name="description">A plain Quetzal element. This currently behaves like a
+<markup-tag>div</markup-tag>.</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">repeat-list</property>
+<property name="description">Creates a certain number of instances of another element class.</property>
+<property name="demo">
+<repeat-list count="3" itemclass="quetzal-button" repeatcontent="Button"></repeat-list>
+</property>
+</demo-tile>
 
 </body>
 

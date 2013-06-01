@@ -11,7 +11,7 @@ class DemoTile extends QuetzalElement
 
       #container {
         display: inline-block;
-        width: 300px;
+        max-width: 300px;
         vertical-align: top;
       }
 
@@ -21,17 +21,39 @@ class DemoTile extends QuetzalElement
         font-size: 1.2em;
         padding-top: 0.5em;
       }
+
+      #code {
+        margin: 0;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
     """
   ,
     div: id: "container", content: [
       h3: [
         markup_tag: [
-          content: select: "property"
+          content: select: "property[name='classname']"
         ]
       ]
     ,
-      content: []
+      p: [
+        content: select: "property[name='description']"
+      ]
+    ,
+      content: select: "property[name='demo']"
+    ,
+      pre: id: "code"
     ]
   ]
+
+  ready: ->
+    super()
+    @addEventListener "contentChanged", ( event ) =>
+      @_showDemoCode()
+    @_showDemoCode()
+
+  _showDemoCode: ->
+    demo = @querySelector "property[name='demo']"
+    @$.code.textContent = demo?.innerHTML ? ""
 
   @register()

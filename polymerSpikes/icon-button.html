@@ -1,8 +1,9 @@
-<element name="icon-button" extends="q-button" constructor="IconButton" attributes="icon">
+<element name="icon-button" constructor="IconButton" attributes="icon">
 
 <link rel="import" href="q-button.html">
 
 <template>
+
     <style>
     @host {
         * {
@@ -11,14 +12,16 @@
     }
     </style>
 
-    <!-- <img src="{{icon}}"/> -->
-    <content></content>
+    <q-button>
+        <img src="{{icon}}"/>
+        <content></content>
+    </q-button>
 
 </template>
 
 <script>
 Polymer.register( this, {
-    icon: "resources/document_alt_stroke_12x16.png"
+    icon: "../resources/document_alt_stroke_12x16.png"
 });
 </script>
 

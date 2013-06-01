@@ -2,8 +2,10 @@ class window.IconButton extends QuetzalButton
 
   template: [
     style: """
-      span {
-        font-weight: bold;
+      @host {
+        :scope {
+          font-weight: bold;
+        }        
       }
     """
   ,
@@ -12,9 +14,7 @@ class window.IconButton extends QuetzalButton
     ,
       " "
     ,
-      span: [
-        content: []
-      ]
+      content: []
     ]
   ]
 

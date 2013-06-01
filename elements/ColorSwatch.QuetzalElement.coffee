@@ -7,7 +7,7 @@ class ColorSwatch extends QuetzalElement
   template: [
     style: """
       @host {
-        * {
+        :scope {
           display: inline-block;
         }
       }

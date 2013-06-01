@@ -54,6 +54,14 @@ Sugar to allow quick creation of element properties.
     });
   };
 
+  if (Function.prototype.name == null) {
+    Object.defineProperty(Function.prototype, "name", {
+      get: function() {
+        return /function\s+([^\( ]*)/.exec(this.toString())[1];
+      }
+    });
+  }
+
   Function.prototype.property = function(propertyName, sideEffect) {
     return Object.defineProperty(this.prototype, propertyName, {
       enumerable: true,
@@ -444,7 +452,6 @@ Sugar to allow quick creation of element properties.
 
     TestElement.prototype.template = [
       {
-        content: [],
         content: []
       }
     ];
@@ -477,7 +484,7 @@ Shows a block of a CSS color, either a color name or value.
 
     ColorSwatch.prototype.template = [
       {
-        style: "@host {\n  :scope {\n    display: inline-block;\n  }\n}\n\n#swatch {\n  box-sizing: border-box;\n  min-height: 1.5em;\n  min-width: 1.5em;\n}\n#swatch:not(.valid) {\n  border: 1px solid lightgray;\n}"
+        style: "@host {\n  * {\n    display: inline-block;\n  }\n}\n\n#swatch {\n  box-sizing: border-box;\n  min-height: 1.5em;\n  min-width: 1.5em;\n}\n#swatch:not(.valid) {\n  border: 1px solid lightgray;\n}"
       }, {
         div: {
           id: "swatch",
@@ -817,7 +824,7 @@ Placeholder image from LoremPixel.com
 
     MarkupTag.prototype.template = [
       {
-        style: "@host {\n  :scope {\n    font-family: Courier, Courier New, monospace;\n  }\n}"
+        style: "@host {\n  * {\n    font-family: Courier, Courier New, monospace;\n  }\n}"
       }, "<", {
         content: []
       }, ">"
@@ -879,7 +886,7 @@ Placeholder image from LoremPixel.com
 
     IconButton.prototype.template = [
       {
-        style: "@host {\n  :scope {\n    font-weight: bold;\n  }        \n}"
+        style: "@host {\n  * {\n    font-weight: bold;\n  }        \n}"
       }, {
         "super": [
           {

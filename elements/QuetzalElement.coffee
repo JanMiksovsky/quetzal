@@ -27,6 +27,12 @@ Function::alias = ( propertyName, accessChain, sideEffect ) ->
 Function::getter = ( propertyName, get ) ->
   Object.defineProperty @prototype, propertyName, { get, configurable: true, enumerable: true }
 
+# Polyfill for Function.name
+unless Function::name?
+  Object.defineProperty Function::, "name",
+    get: ->
+      /function\s+([^\( ]*)/.exec( @toString() )[1]
+
 Function::property = ( propertyName, sideEffect ) ->
   Object.defineProperty @prototype, propertyName,
     enumerable: true

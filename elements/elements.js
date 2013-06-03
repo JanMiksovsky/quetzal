@@ -411,16 +411,9 @@ An element that covers the entire viewport, typically to swallow clicks.
 
     QuetzalPopup.prototype.template = [
       {
-        style: "#container {\n  position: absolute;\n  z-index: 1;\n}\n\n#container:not(.opened) {\n  display: none;\n}\n\n/* Generic appearance */\n/* &.generic { */\n* {\n  background: white;\n  border: 1px solid rgba(0, 0, 0, 0.2);\n  box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );\n  box-sizing: border-box;\n  padding: .25em;\n  -webkit-user-select: none;\n  user-select: none;\n}"
+        style: "@host {\n\n  * {\n    position: absolute;\n    z-index: 1;\n  }\n\n  *:not(.opened) {\n    display: none;\n  }\n\n  /* Generic appearance */\n  /* &.generic { */\n  * {\n    background: white;\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );\n    box-sizing: border-box;\n    padding: .25em;\n    -webkit-user-select: none;\n    user-select: none;\n  }\n}"
       }, {
-        div: {
-          id: "container",
-          content: [
-            {
-              content: []
-            }
-          ]
-        }
+        content: []
       }
     ];
 
@@ -428,10 +421,7 @@ An element that covers the entire viewport, typically to swallow clicks.
       var _ref1;
 
       QuetzalPopup.__super__.ready.call(this);
-      if ((_ref1 = this.overlayclass) == null) {
-        this.overlayclass = "quetzal-overlay";
-      }
-      return this.$.container.classList.add("foo");
+      return (_ref1 = this.overlayclass) != null ? _ref1 : this.overlayclass = "quetzal-overlay";
     };
 
     QuetzalPopup.prototype.open = function() {
@@ -446,11 +436,11 @@ An element that covers the entire viewport, typically to swallow clicks.
     };
 
     QuetzalPopup.getter("opened", function() {
-      return this.$.container.classList.contains("opened");
+      return this.classList.contains("opened");
     });
 
     QuetzalPopup.setter("opened", function(opened) {
-      return this.$.container.classList.toggle("opened", opened);
+      return this.classList.toggle("opened", opened);
     });
 
     QuetzalPopup.property("overlay");

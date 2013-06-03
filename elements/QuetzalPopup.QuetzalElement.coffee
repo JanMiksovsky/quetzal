@@ -7,31 +7,32 @@ class QuetzalPopup extends QuetzalElement
 
   template: [
     style: """
-      #container {
-        position: absolute;
-        z-index: 1;
-      }
+      @host {
 
-      #container:not(.opened) {
-        display: none;
-      }
+        * {
+          position: absolute;
+          z-index: 1;
+        }
 
-      /* Generic appearance */
-      /* &.generic { */
-      * {
-        background: white;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );
-        box-sizing: border-box;
-        padding: .25em;
-        -webkit-user-select: none;
-        user-select: none;
+        *:not(.opened) {
+          display: none;
+        }
+
+        /* Generic appearance */
+        /* &.generic { */
+        * {
+          background: white;
+          border: 1px solid rgba(0, 0, 0, 0.2);
+          box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );
+          box-sizing: border-box;
+          padding: .25em;
+          -webkit-user-select: none;
+          user-select: none;
+        }
       }
     """
   ,
-    div: id: "container", content: [
-      content: []
-    ]
+    content: []
   ]
 
 #   inherited:
@@ -77,7 +78,6 @@ class QuetzalPopup extends QuetzalElement
   ready: ->
     super()
     @overlayclass ?= "quetzal-overlay"
-    @$.container.classList.add "foo"
   
   # Open the popup (show it). This raises an "opened" event.
   # This has no effect if the popup is already opened.
@@ -97,9 +97,9 @@ class QuetzalPopup extends QuetzalElement
 
   # TODO: Make opened="true" an attribute <-----
 
-  @getter "opened", -> @$.container.classList.contains "opened"
+  @getter "opened", -> @classList.contains "opened"
   @setter "opened", ( opened ) ->
-    @$.container.classList.toggle "opened", opened
+    @classList.toggle "opened", opened
   
   # The overlay element behind the popup absorbing mouse clicks.
   @property "overlay"

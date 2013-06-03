@@ -351,6 +351,120 @@ Sugar to allow quick creation of element properties.
 
 }).call(this);
 
+/*
+An element that covers the entire viewport, typically to swallow clicks.
+*/
+
+
+(function() {
+  var _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  window.QuetzalOverlay = (function(_super) {
+    __extends(QuetzalOverlay, _super);
+
+    function QuetzalOverlay() {
+      _ref = QuetzalOverlay.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    QuetzalOverlay.prototype.template = [
+      {
+        style: "@host {\n  * {\n    background: black;\n    bottom: 0;\n    cursor: default;\n    left: 0;\n    opacity: 0.25;\n    position: fixed;\n    right: 0;\n    top: 0;\n  }\n}"
+      }
+    ];
+
+    QuetzalOverlay.property("target", function(target) {
+      var targetZIndex;
+
+      if (target === null) {
+        return;
+      }
+      targetZIndex = parseInt(target.style.zIndex);
+      if (targetZIndex) {
+        this.style.zIndex = targetZIndex;
+      }
+      return target.parentNode.insertBefore(this, target);
+    });
+
+    QuetzalOverlay.register();
+
+    return QuetzalOverlay;
+
+  })(QuetzalElement);
+
+}).call(this);
+
+(function() {
+  var QuetzalPopup, _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  QuetzalPopup = (function(_super) {
+    __extends(QuetzalPopup, _super);
+
+    function QuetzalPopup() {
+      _ref = QuetzalPopup.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    QuetzalPopup.prototype.template = [
+      {
+        style: "#container {\n  position: absolute;\n  z-index: 1;\n}\n\n#container:not(.opened) {\n  display: none;\n}\n\n/* Generic appearance */\n/* &.generic { */\n* {\n  background: white;\n  border: 1px solid rgba(0, 0, 0, 0.2);\n  box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );\n  box-sizing: border-box;\n  padding: .25em;\n  -webkit-user-select: none;\n  user-select: none;\n}"
+      }, {
+        div: {
+          id: "container",
+          content: [
+            {
+              content: []
+            }
+          ]
+        }
+      }
+    ];
+
+    QuetzalPopup.prototype.ready = function() {
+      var _ref1;
+
+      QuetzalPopup.__super__.ready.call(this);
+      if ((_ref1 = this.overlayclass) == null) {
+        this.overlayclass = "quetzal-overlay";
+      }
+      return this.$.container.classList.add("foo");
+    };
+
+    QuetzalPopup.prototype.open = function() {
+      if (this.opened) {
+        return;
+      }
+      if (this.overlayclass != null) {
+        this.overlay = QuetzalElement.create(this.overlayclass);
+        this.overlay.target = this;
+      }
+      return this.opened = true;
+    };
+
+    QuetzalPopup.getter("opened", function() {
+      return this.$.container.classList.contains("opened");
+    });
+
+    QuetzalPopup.setter("opened", function(opened) {
+      return this.$.container.classList.toggle("opened", opened);
+    });
+
+    QuetzalPopup.property("overlay");
+
+    QuetzalPopup.property("overlayclass");
+
+    QuetzalPopup.register();
+
+    return QuetzalPopup;
+
+  })(QuetzalElement);
+
+}).call(this);
+
 (function() {
   var RepeatList, _ref,
     __hasProp = {}.hasOwnProperty,
@@ -452,15 +566,25 @@ Sugar to allow quick creation of element properties.
 
     TestElement.prototype.template = [
       {
-        style: "button {\n  padding: 1em;\n}\n:hover {\n  background: red;\n}"
+        quetzal_button: {
+          content: "Click for overlay"
+        }
       }, {
-        button: [
-          {
-            content: []
-          }
-        ]
+        quetzal_popup: {
+          id: "popup",
+          content: "Hello"
+        }
       }
     ];
+
+    TestElement.prototype.ready = function() {
+      var _this = this;
+
+      TestElement.__super__.ready.call(this);
+      return this.addEventListener("click", function() {
+        return _this.$.popup.open();
+      });
+    };
 
     TestElement.register();
 

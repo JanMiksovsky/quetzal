@@ -51,7 +51,6 @@ class window.QuetzalButton extends QuetzalElement
         border-color: #aaa;
         box-shadow: inset 0 1px 4px 2gba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
         color: #111;
-        filter: none;
         outline: 0;
       }
 

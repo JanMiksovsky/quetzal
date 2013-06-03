@@ -452,7 +452,13 @@ Sugar to allow quick creation of element properties.
 
     TestElement.prototype.template = [
       {
-        content: []
+        style: "button {\n  padding: 1em;\n}\n:hover {\n  background: red;\n}"
+      }, {
+        button: [
+          {
+            content: []
+          }
+        ]
       }
     ];
 

@@ -1,7 +1,18 @@
 class TestElement extends QuetzalElement
 
   template: [
-    content: []
+    style: """
+      button {
+        padding: 1em;
+      }
+      :hover {
+        background: red;
+      }
+    """
+  ,
+    button: [
+      content: []
+    ]
   ]
 
   @register()

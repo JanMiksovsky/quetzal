@@ -433,9 +433,9 @@ An element that covers the entire viewport, typically to swallow clicks.
       }
     ];
 
-    QuetzalPopup.propertyBool("cancelOnOutsideClick", true);
+    QuetzalPopup.propertyBool("cancelOnOutsideClick", null, true);
 
-    QuetzalPopup.propertyBool("cancelOnInsideClick", true);
+    QuetzalPopup.propertyBool("closeOnInsideClick", null, true);
 
     QuetzalPopup.prototype.cancel = function() {
       return this._close("canceled");

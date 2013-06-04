@@ -44,7 +44,7 @@ class QuetzalPopup extends QuetzalElement
   
   # True if the popup should be canceled if the user clicks outside it.
   # Default is true. See also the modal() property.
-  @propertyBool "cancelOnOutsideClick", true
+  @propertyBool "cancelOnOutsideClick", null, true
   
 #   # True if the popup should be canceled if the window loses focus.
 #   # Default is true.
@@ -60,7 +60,7 @@ class QuetzalPopup extends QuetzalElement
   
   # True if the popup should be closed normally if the user clicks inside
   # it. Default is true.
-  @propertyBool "cancelOnInsideClick", true
+  @propertyBool "closeOnInsideClick", null, true
   
   # Cancel the popup. This is just like closing it, but raises a "canceled"
   # event instead.

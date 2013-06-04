@@ -42,9 +42,9 @@ class QuetzalPopup extends QuetzalElement
 #   # Default is true.
 #   cancelOnEscapeKey: Control.property.bool( null, true )
   
-#   # True if the popup should be canceled if the user clicks outside it.
-#   # Default is true. See also the modal() property.
-#   cancelOnOutsideClick: Control.property.bool( null, true )
+  # True if the popup should be canceled if the user clicks outside it.
+  # Default is true. See also the modal() property.
+  @propertyBool "cancelOnOutsideClick", true
   
 #   # True if the popup should be canceled if the window loses focus.
 #   # Default is true.
@@ -58,9 +58,9 @@ class QuetzalPopup extends QuetzalElement
 #   # Default is true.
 #   cancelOnWindowScroll: Control.property.bool( null, true )
   
-#   # True if the popup should be closed normally if the user clicks inside
-#   # it. Default is true.
-#   closeOnInsideClick: Control.property.bool( null, true )
+  # True if the popup should be closed normally if the user clicks inside
+  # it. Default is true.
+  @propertyBool "cancelOnInsideClick", true
   
   # Cancel the popup. This is just like closing it, but raises a "canceled"
   # event instead.
@@ -174,11 +174,13 @@ class QuetzalPopup extends QuetzalElement
 #         # User clicked inside popup; implicitly close it.
 #         @close()
 
-    @_handlerOutsideClick = ( event ) => @cancel()
-    @overlay?.addEventListener "click", @_handlerOutsideClick
+    if @cancelOnOutsideClick
+      @_handlerOutsideClick = ( event ) => @cancel()
+      @overlay?.addEventListener "click", @_handlerOutsideClick
 
-    @_handlerInsideClick = ( event ) => @close()
-    @addEventListener "click", @_handlerInsideClick
+    if @closeOnInsideClick
+      @_handlerInsideClick = ( event ) => @close()
+      @addEventListener "click", @_handlerInsideClick
 
 #     handlerWindowBlur = (event) =>
 #       if @cancelOnWindowBlur()

@@ -62,16 +62,32 @@ Sugar to allow quick creation of element properties.
     });
   }
 
-  Function.prototype.property = function(propertyName, sideEffect) {
+  Function.prototype.property = function(propertyName, sideEffect, defaultValue, converter) {
     return Object.defineProperty(this.prototype, propertyName, {
       enumerable: true,
       get: function() {
-        return this._properties[propertyName];
+        var result;
+
+        result = this._properties[propertyName];
+        if (result === void 0) {
+          return defaultValue;
+        } else {
+          return result;
+        }
       },
       set: function(value) {
-        this._properties[propertyName] = value;
-        return sideEffect != null ? sideEffect.call(this, value) : void 0;
+        var result;
+
+        result = converter ? converter.call(this, value) : value;
+        this._properties[propertyName] = result;
+        return sideEffect != null ? sideEffect.call(this, result) : void 0;
       }
+    });
+  };
+
+  Function.prototype.propertyBool = function(propertyName, sideEffect, defaultValue) {
+    return this.property(propertyName, sideEffect, defaultValue, function(value) {
+      return String(value) === "true";
     });
   };
 
@@ -417,6 +433,10 @@ An element that covers the entire viewport, typically to swallow clicks.
       }
     ];
 
+    QuetzalPopup.propertyBool("cancelOnOutsideClick", true);
+
+    QuetzalPopup.propertyBool("cancelOnInsideClick", true);
+
     QuetzalPopup.prototype.cancel = function() {
       return this._close("canceled");
     };
@@ -488,16 +508,20 @@ An element that covers the entire viewport, typically to swallow clicks.
       var _ref1,
         _this = this;
 
-      this._handlerOutsideClick = function(event) {
-        return _this.cancel();
-      };
-      if ((_ref1 = this.overlay) != null) {
-        _ref1.addEventListener("click", this._handlerOutsideClick);
+      if (this.cancelOnOutsideClick) {
+        this._handlerOutsideClick = function(event) {
+          return _this.cancel();
+        };
+        if ((_ref1 = this.overlay) != null) {
+          _ref1.addEventListener("click", this._handlerOutsideClick);
+        }
       }
-      this._handlerInsideClick = function(event) {
-        return _this.close();
-      };
-      return this.addEventListener("click", this._handlerInsideClick);
+      if (this.closeOnInsideClick) {
+        this._handlerInsideClick = function(event) {
+          return _this.close();
+        };
+        return this.addEventListener("click", this._handlerInsideClick);
+      }
     };
 
     QuetzalPopup.property("_handlerInsideClick");

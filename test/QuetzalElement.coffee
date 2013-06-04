@@ -143,6 +143,22 @@ test "QuetzalElement: property", ->
   equal foo._properties.message, "Hello"
   ok foo._messageSet
 
+test "QuetzalElement: property with default value", ->
+  class Foo extends QuetzalElement
+    @property "message", null, "Hello"
+  foo = new Foo()
+  equal foo.message, "Hello"
+
+test "QuetzalElement: boolean property", ->
+  class Foo extends QuetzalElement
+    @propertyBool "enabled", ( -> @_enabledSet = true ), true
+  foo = new Foo()
+  ok not foo._enabledSet
+  ok foo.enabled
+  foo.enabled = false
+  ok not foo.enabled
+  ok foo._enabledSet
+
 test "QuetzalElement: ready method", ->
   class Foo extends QuetzalElement
     template: "Hello, world."

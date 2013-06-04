@@ -33,13 +33,26 @@ unless Function::name?
     get: ->
       /function\s+([^\( ]*)/.exec( @toString() )[1]
 
-Function::property = ( propertyName, sideEffect ) ->
+Function::property = ( propertyName, sideEffect, defaultValue, converter ) ->
   Object.defineProperty @prototype, propertyName,
     enumerable: true
-    get: -> @._properties[ propertyName ]
+    get: ->
+      result = @._properties[ propertyName ]
+      if result is undefined
+        defaultValue
+      else
+        result
     set: ( value ) ->
-      @._properties[ propertyName ] = value
-      sideEffect?.call @, value
+      result = if converter
+        converter.call @, value
+      else
+        value
+      @._properties[ propertyName ] = result
+      sideEffect?.call @, result
+
+Function::propertyBool = ( propertyName, sideEffect, defaultValue ) ->
+  @property propertyName, sideEffect, defaultValue, ( value ) ->
+      String( value ) == "true"
 
 Function::setter = ( propertyName, set ) ->
   Object.defineProperty @prototype, propertyName, { set, configurable: true, enumerable: true }

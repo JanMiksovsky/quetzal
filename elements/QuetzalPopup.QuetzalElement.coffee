@@ -62,18 +62,18 @@ class QuetzalPopup extends QuetzalElement
 #   # it. Default is true.
 #   closeOnInsideClick: Control.property.bool( null, true )
   
-#   # Cancel the popup. This is just like closing it, but raises a "canceled"
-#   # event instead.
-#   # 
-#   # This has no effect if the popup is already closed.
-#   cancel: ->
-#     @_close "canceled"
+  # Cancel the popup. This is just like closing it, but raises a "canceled"
+  # event instead.
+  # 
+  # This has no effect if the popup is already closed.
+  cancel: ->
+    @_close "canceled"
   
-#   # Close the popup (dismiss it). This raises a "closed" event.
-#   # 
-#   # This has no effect if the popup is already closed.
-#   close: ->
-#     @_close "closed"
+  # Close the popup (dismiss it). This raises a "closed" event.
+  # 
+  # This has no effect if the popup is already closed.
+  close: ->
+    @_close "closed"
 
   ready: ->
     super()
@@ -86,9 +86,9 @@ class QuetzalPopup extends QuetzalElement
     if @overlayclass?
       @overlay = QuetzalElement.create @overlayclass
       @overlay.target = @
-    # @_eventsOn()
+    @_eventsOn()
     @opened = true
-    #   .trigger("opened")
+    @dispatchEvent new CustomEvent "opened"
     #   .checkForSizeChange() # In case popup wants to resize anything now that it's visible.
     #   .positionPopup()      # Position the popup after the layout recalc.
 
@@ -113,25 +113,51 @@ class QuetzalPopup extends QuetzalElement
 #   # positioning.
 #   positionPopup: ->
   
-#   # Take care of hiding the popup, its overlay, and raising the indicated event.
-#   _close: ( closeEventName ) ->
-    
-#     # There may be cases where this function is called more than once.
-#     # As a defensive measure, we clean things up even if we think we're
-#     # already closed.
-#     if @_overlay()?
-#       @_overlay().remove()
-#       @_overlay null
-#     @_eventsOff()
-#     if @opened()
-#       if closeEventName
-#         @trigger closeEventName
-#       @opened false
-#     @
+  # Take care of hiding the popup, its overlay, and raising the indicated event.
+  _close: ( closeEventName ) ->
+    # There may be cases where this function is called more than once.
+    # As a defensive measure, we clean things up even if we think we're
+    # already closed.
+    @_eventsOff()
+    if @overlay?
+      @overlay.remove()
+      @overlay = null
+    if @opened
+      if closeEventName
+        @dispatchEvent new CustomEvent closeEventName
+      @opened = false
+
+  # Unbind the event handlers we bound earlier.
+  _eventsOff: ->
+    # Do checks before unbinding in case this function happens to get
+    # called more than once.
+    if @_handlerOutsideClick?
+      @overlay?.removeEventListener "click", @_handlerOutsideClick
+    if @_handlerInsideClick?
+      @removeEventListener "click", @_handlerInsideClick
+#     handlerDocumentClick = @_handlerDocumentClick()
+#     if handlerDocumentClick
+#       $( document ).off "click", handlerDocumentClick
+#       @_handlerDocumentClick null
+#     handlerDocumentKeydown = @_handlerDocumentKeydown()
+#     if handlerDocumentKeydown
+#       $( document ).off "keydown", handlerDocumentKeydown
+#       @_handlerDocumentKeydown null
+#     handlerWindowBlur = @_handlerWindowBlur()
+#     if handlerWindowBlur
+#       $( window ).off "blur", handlerWindowBlur
+#       @_handlerWindowBlur null
+#     handlerWindowResize = @_handlerWindowResize()
+#     if handlerWindowResize
+#       $( window ).off "resize", handlerWindowResize
+#       @_handlerWindowResize null
+#     handlerWindowScroll = @_handlerWindowScroll()
+#     if handlerWindowScroll
+#       $( window ).off "scroll", handlerWindowScroll
+#       @_handlerWindowScroll null
   
-#   # Wire up events.
-#   _eventsOn: ->
-    
+  # Wire up events.
+  _eventsOn: ->
 #     # Create the handlers as functions we can save in control properties.
 #     handlerDocumentKeydown = (event) =>
 #       if @cancelOnEscapeKey() and event.which is 27 # Escape
@@ -147,6 +173,12 @@ class QuetzalPopup extends QuetzalElement
 #       else if not outsideClick and @closeOnInsideClick()
 #         # User clicked inside popup; implicitly close it.
 #         @close()
+
+    @_handlerOutsideClick = ( event ) => @cancel()
+    @overlay?.addEventListener "click", @_handlerOutsideClick
+
+    @_handlerInsideClick = ( event ) => @close()
+    @addEventListener "click", @_handlerInsideClick
 
 #     handlerWindowBlur = (event) =>
 #       if @cancelOnWindowBlur()
@@ -190,35 +222,10 @@ class QuetzalPopup extends QuetzalElement
 #       ._handlerWindowResize( handlerWindowResize )
 #       ._handlerWindowScroll( handlerWindowScroll )
 
-#   # Unbind the event handlers we bound earlier.
-#   _eventsOff: ->
-    
-#     # Do checks before unbinding in case this function happens to get
-#     # called more than once.
-#     handlerDocumentClick = @_handlerDocumentClick()
-#     if handlerDocumentClick
-#       $( document ).off "click", handlerDocumentClick
-#       @_handlerDocumentClick null
-#     handlerDocumentKeydown = @_handlerDocumentKeydown()
-#     if handlerDocumentKeydown
-#       $( document ).off "keydown", handlerDocumentKeydown
-#       @_handlerDocumentKeydown null
-#     handlerWindowBlur = @_handlerWindowBlur()
-#     if handlerWindowBlur
-#       $( window ).off "blur", handlerWindowBlur
-#       @_handlerWindowBlur null
-#     handlerWindowResize = @_handlerWindowResize()
-#     if handlerWindowResize
-#       $( window ).off "resize", handlerWindowResize
-#       @_handlerWindowResize null
-#     handlerWindowScroll = @_handlerWindowScroll()
-#     if handlerWindowScroll
-#       $( window ).off "scroll", handlerWindowScroll
-#       @_handlerWindowScroll null
-#     @
-  
-#   # Handler for the document click event
+  # Handler for the document click event
 #   _handlerDocumentClick: Control.property()
+  @property "_handlerInsideClick"
+  @property "_handlerOutsideClick"
   
 #   # Handler for the keydown event
 #   _handlerDocumentKeydown: Control.property()

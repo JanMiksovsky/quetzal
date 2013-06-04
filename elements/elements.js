@@ -417,6 +417,14 @@ An element that covers the entire viewport, typically to swallow clicks.
       }
     ];
 
+    QuetzalPopup.prototype.cancel = function() {
+      return this._close("canceled");
+    };
+
+    QuetzalPopup.prototype.close = function() {
+      return this._close("closed");
+    };
+
     QuetzalPopup.prototype.ready = function() {
       var _ref1;
 
@@ -432,7 +440,9 @@ An element that covers the entire viewport, typically to swallow clicks.
         this.overlay = QuetzalElement.create(this.overlayclass);
         this.overlay.target = this;
       }
-      return this.opened = true;
+      this._eventsOn();
+      this.opened = true;
+      return this.dispatchEvent(new CustomEvent("opened"));
     };
 
     QuetzalPopup.getter("opened", function() {
@@ -446,6 +456,53 @@ An element that covers the entire viewport, typically to swallow clicks.
     QuetzalPopup.property("overlay");
 
     QuetzalPopup.property("overlayclass");
+
+    QuetzalPopup.prototype._close = function(closeEventName) {
+      this._eventsOff();
+      if (this.overlay != null) {
+        this.overlay.remove();
+        this.overlay = null;
+      }
+      if (this.opened) {
+        if (closeEventName) {
+          this.dispatchEvent(new CustomEvent(closeEventName));
+        }
+        return this.opened = false;
+      }
+    };
+
+    QuetzalPopup.prototype._eventsOff = function() {
+      var _ref1;
+
+      if (this._handlerOutsideClick != null) {
+        if ((_ref1 = this.overlay) != null) {
+          _ref1.removeEventListener("click", this._handlerOutsideClick);
+        }
+      }
+      if (this._handlerInsideClick != null) {
+        return this.removeEventListener("click", this._handlerInsideClick);
+      }
+    };
+
+    QuetzalPopup.prototype._eventsOn = function() {
+      var _ref1,
+        _this = this;
+
+      this._handlerOutsideClick = function(event) {
+        return _this.cancel();
+      };
+      if ((_ref1 = this.overlay) != null) {
+        _ref1.addEventListener("click", this._handlerOutsideClick);
+      }
+      this._handlerInsideClick = function(event) {
+        return _this.close();
+      };
+      return this.addEventListener("click", this._handlerInsideClick);
+    };
+
+    QuetzalPopup.property("_handlerInsideClick");
+
+    QuetzalPopup.property("_handlerOutsideClick");
 
     QuetzalPopup.register();
 
@@ -557,6 +614,7 @@ An element that covers the entire viewport, typically to swallow clicks.
     TestElement.prototype.template = [
       {
         quetzal_button: {
+          id: "button",
           content: "Click for overlay"
         }
       }, {
@@ -571,8 +629,17 @@ An element that covers the entire viewport, typically to swallow clicks.
       var _this = this;
 
       TestElement.__super__.ready.call(this);
-      return this.addEventListener("click", function() {
+      this.$.button.addEventListener("click", function() {
+        if (typeof console !== "undefined" && console !== null) {
+          console.log("open");
+        }
         return _this.$.popup.open();
+      });
+      this.addEventListener("closed", function() {
+        return typeof console !== "undefined" && console !== null ? console.log("close") : void 0;
+      });
+      return this.addEventListener("canceled", function() {
+        return typeof console !== "undefined" && console !== null ? console.log("cancel") : void 0;
       });
     };
 

@@ -342,6 +342,17 @@ Placeholder image from LoremPixel.com
 
     PopupSource.prototype.template = [
       {
+        quetzal_popup: {
+          id: "popup",
+          content: [
+            {
+              content: {
+                select: "property[name='popup']"
+              }
+            }
+          ]
+        }
+      }, {
         div: {
           id: "container",
           content: [
@@ -349,11 +360,6 @@ Placeholder image from LoremPixel.com
               content: []
             }
           ]
-        }
-      }, {
-        quetzal_popup: {
-          id: "popup",
-          content: "Popup goes here"
         }
       }
     ];
@@ -834,6 +840,16 @@ An element that covers the entire viewport, typically to swallow clicks.
       {
         "super": [
           {
+            property: {
+              name: "popup"
+            }
+          }, [
+            {
+              content: {
+                select: "property[name='popup']"
+              }
+            }
+          ], {
             quetzal_button: {
               id: "button",
               content: [

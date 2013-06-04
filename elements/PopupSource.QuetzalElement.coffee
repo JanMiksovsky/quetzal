@@ -1,11 +1,13 @@
 class PopupSource extends QuetzalElement
 
   template: [
+    quetzal_popup: id: "popup", content: [
+      content: select: "property[name='popup']"
+    ]
+  ,
     div: id: "container", content: [
       content: []
     ]
-  ,
-    quetzal_popup: id: "popup", content: "Popup goes here"
   ]
 
   ready: ->

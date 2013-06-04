@@ -706,11 +706,22 @@ An element that covers the entire viewport, typically to swallow clicks.
     }
 
     TestElement.prototype.template = [
-      {
-        popup_button: {
-          id: "button",
-          content: "I have a popup"
+      "Content: ", {
+        content: {
+          select: ":not(property)"
         }
+      }, {
+        p: [
+          {
+            i: [
+              "Foo:", {
+                content: {
+                  select: "property[name='foo']"
+                }
+              }
+            ]
+          }
+        ]
       }
     ];
 

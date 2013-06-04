@@ -86,6 +86,22 @@ test "QuetzalElement: <super> with attribute sets property on super element", ->
   bar = new Bar()
   equal bar._message, "Hello"
 
+test "QuetzalElement: element inherits reference to element defined by base class", ->
+  class Greet extends QuetzalElement
+    template: [
+      "Hello, "
+    ,
+      span: id: "name"
+    ,
+      "."
+    ]
+  class SubGreet extends Greet
+    ready: ->
+      super()
+      @$.name.textContent = "Alice"
+  subGreet = new SubGreet()
+  renderEqual subGreet, "Hello, <span id=\"name\">Alice</span>."
+
 test "QuetzalElement: set inherited base class property", ->
   class Foo extends QuetzalElement
     @getter "message", ( message ) -> @._message

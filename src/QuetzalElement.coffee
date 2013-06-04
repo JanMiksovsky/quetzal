@@ -122,12 +122,13 @@ class window.QuetzalElement extends HTMLDivElement
 
   # Return the element (and children) represented by the given template JSON.
   # If any occurrence of "super" is found, create an instance of the indicated
-  # element class' superclass.
-  @parse: ( json, elementClass ) ->
+  # element class' superclass; give the super-instance's properties to the
+  # indicated logical parent element.
+  @parse: ( json, elementClass, logicalParent ) ->
     if json instanceof Array
       fragment = document.createDocumentFragment()
       for child in json
-        fragment.appendChild @parse child, elementClass
+        fragment.appendChild @parse child, elementClass, logicalParent
       fragment
     else if typeof json == "string"
       document.createTextNode json
@@ -140,18 +141,18 @@ class window.QuetzalElement extends HTMLDivElement
         # Convert underscores to hyphens (which aren't allowed in plain JSON keys).
         tag = tag.replace "_", "-"
         element = if tag == "super"
-          @_createSuperInstance elementClass
+          @_createSuperInstance elementClass, logicalParent
         else
           document.createElement tag
         if properties instanceof Array or typeof properties == "string" 
           properties = content: properties
         for propertyName, propertyValue of properties
           if propertyName == "content"
-            element.appendChild @parse propertyValue, elementClass
+            element.appendChild @parse propertyValue, elementClass, logicalParent
           else if typeof propertyValue == "string"
             element[ propertyName ] = propertyValue
           else
-            element[ propertyName ] = @parse propertyValue, elementClass
+            element[ propertyName ] = @parse propertyValue, elementClass, logicalParent
         element
       else
         # No keys
@@ -227,31 +228,32 @@ class window.QuetzalElement extends HTMLDivElement
       # Markup template
       root.innerHTML = @template
       CustomElements.upgradeAll root
-      superElement = root.querySelector "super"
-      if superElement?
-        superInstance = QuetzalElement._createSuperInstance classDefiningTemplate
+      superNode = root.querySelector "super"
+      if superNode?
+        superInstance = QuetzalElement._createSuperInstanceForElement classDefiningTemplate, @
         # Move contents
-        while superElement.childNodes[0]?
-          superInstance.appendChild superElement.childNodes[0]
-        # Acquire super-instance's per-element data as if it were our own.
-        @$ = superInstance.$
-        @_properties = superInstance._properties
-        for { name, value } in superElement.attributes
+        while superNode.childNodes[0]?
+          superInstance.appendChild superNode.childNodes[0]
+        for { name, value } in superNode.attributes
           @[ name ] = value
-        superElement.parentNode.replaceChild superInstance, superElement
+        superNode.parentNode.replaceChild superInstance, superNode
     else
       # JSON template
-      root.appendChild QuetzalElement.parse @template, classDefiningTemplate
+      root.appendChild QuetzalElement.parse @template, classDefiningTemplate, @
       CustomElements.upgradeAll root
     for subelement in root.querySelectorAll "[id]"
       @$[ subelement.id ] = subelement
 
   # Create an instance of the indicated class' superclass.
-  @_createSuperInstance: ( elementClass ) ->
+  @_createSuperInstanceForElement: ( elementClass, element ) ->
     baseClass = elementClass.__super__.constructor
     unless baseClass?
       throw "The template for #{elementClass.name} uses <super>, but superclass can't be found."
-    QuetzalElement.create baseClass
+    superInstance = QuetzalElement.create baseClass
+    # The target element acquires the super-instance's per-element data.
+    element.$ = superInstance.$
+    element._properties = superInstance._properties
+    superInstance
 
 
 ###

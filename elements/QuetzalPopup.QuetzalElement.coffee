@@ -38,9 +38,9 @@ class QuetzalPopup extends QuetzalElement
 #   inherited:
 #     generic: true
 
-#   # True if the user can cancel an open popup by pressing the Escape key.
-#   # Default is true.
-#   cancelOnEscapeKey: Control.property.bool( null, true )
+  # True if the user can cancel an open popup by pressing the Escape key.
+  # Default is true.
+  @propertyBool "cancelOnEscapeKey", null, true
   
   # True if the popup should be canceled if the user clicks outside it.
   # Default is true. See also the modal() property.
@@ -90,7 +90,7 @@ class QuetzalPopup extends QuetzalElement
     @opened = true
     @dispatchEvent new CustomEvent "opened"
     #   .checkForSizeChange() # In case popup wants to resize anything now that it's visible.
-    #   .positionPopup()      # Position the popup after the layout recalc.
+    @positionPopup()      # Position the popup after the layout recalc.
 
   # Open the popup.
   # opened: Control.chain "applyClass/opened"
@@ -108,10 +108,9 @@ class QuetzalPopup extends QuetzalElement
   # value is the QuetzalOverlay class.
   @property "overlayclass"
   
-#   # A function called to position the popup when it is opened. By default
-#   # this has no effect. This can be overridden by subclasses for custom
-#   # positioning.
-#   positionPopup: ->
+  # A function called to position the popup when it is opened. By default this
+  # has no effect. This can be overridden by subclasses for custom positioning.
+  positionPopup: ->
   
   # Take care of hiding the popup, its overlay, and raising the indicated event.
   _close: ( closeEventName ) ->
@@ -133,16 +132,14 @@ class QuetzalPopup extends QuetzalElement
     # called more than once.
     if @_handlerOutsideClick?
       @overlay?.removeEventListener "click", @_handlerOutsideClick
+      @_handlerOutsideClick = null
     if @_handlerInsideClick?
       @removeEventListener "click", @_handlerInsideClick
-#     handlerDocumentClick = @_handlerDocumentClick()
-#     if handlerDocumentClick
-#       $( document ).off "click", handlerDocumentClick
-#       @_handlerDocumentClick null
-#     handlerDocumentKeydown = @_handlerDocumentKeydown()
-#     if handlerDocumentKeydown
-#       $( document ).off "keydown", handlerDocumentKeydown
-#       @_handlerDocumentKeydown null
+      @_handlerInsideClick = null
+    if @_handlerDocumentKeydown
+      document.removeEventListener "keydown", @_handlerDocumentKeydown
+      @_handlerDocumentKeydown = null
+
 #     handlerWindowBlur = @_handlerWindowBlur()
 #     if handlerWindowBlur
 #       $( window ).off "blur", handlerWindowBlur
@@ -158,21 +155,14 @@ class QuetzalPopup extends QuetzalElement
   
   # Wire up events.
   _eventsOn: ->
-#     # Create the handlers as functions we can save in control properties.
-#     handlerDocumentKeydown = (event) =>
-#       if @cancelOnEscapeKey() and event.which is 27 # Escape
-#         # Pressing ESC cancels popup.
-#         @cancel()
-#         event.stopPropagation()
+    # Create the handlers as functions we can save in control properties.
 
-#     handlerDocumentClick = (event) =>
-#       outsideClick = @_isElementOutsideControl event.target
-#       if outsideClick and @cancelOnOutsideClick()
-#         # User clicked outside popup; implicitly cancel it.
-#         @cancel()
-#       else if not outsideClick and @closeOnInsideClick()
-#         # User clicked inside popup; implicitly close it.
-#         @close()
+    @_handlerDocumentKeydown = ( event ) =>
+      if @cancelOnEscapeKey and event.keyCode == 27 # Esc
+        # Pressing ESC cancels popup.
+        @cancel()
+        event.stopPropagation()
+    document.addEventListener "keydown", @_handlerDocumentKeydown
 
     if @cancelOnOutsideClick
       @_handlerOutsideClick = ( event ) => @cancel()
@@ -198,7 +188,6 @@ class QuetzalPopup extends QuetzalElement
 #         # User scrolled outside the popup; implicitly cancel it.
 #         @cancel()
 
-#     $( document ).on "keydown", handlerDocumentKeydown
 #     $( window ).on
 #       blur: handlerWindowBlur
 #       resize: handlerWindowResize
@@ -224,13 +213,12 @@ class QuetzalPopup extends QuetzalElement
 #       ._handlerWindowResize( handlerWindowResize )
 #       ._handlerWindowScroll( handlerWindowScroll )
 
-  # Handler for the document click event
-#   _handlerDocumentClick: Control.property()
+  # Handler for the click events
   @property "_handlerInsideClick"
   @property "_handlerOutsideClick"
   
-#   # Handler for the keydown event
-#   _handlerDocumentKeydown: Control.property()
+  # Handler for the keydown event
+  @property "_handlerDocumentKeydown"
   
 #   # Handler for the window blur event
 #   _handlerWindowBlur: Control.property()

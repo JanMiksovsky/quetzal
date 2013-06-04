@@ -433,6 +433,8 @@ An element that covers the entire viewport, typically to swallow clicks.
       }
     ];
 
+    QuetzalPopup.propertyBool("cancelOnEscapeKey", null, true);
+
     QuetzalPopup.propertyBool("cancelOnOutsideClick", null, true);
 
     QuetzalPopup.propertyBool("closeOnInsideClick", null, true);
@@ -462,7 +464,8 @@ An element that covers the entire viewport, typically to swallow clicks.
       }
       this._eventsOn();
       this.opened = true;
-      return this.dispatchEvent(new CustomEvent("opened"));
+      this.dispatchEvent(new CustomEvent("opened"));
+      return this.positionPopup();
     };
 
     QuetzalPopup.getter("opened", function() {
@@ -476,6 +479,8 @@ An element that covers the entire viewport, typically to swallow clicks.
     QuetzalPopup.property("overlay");
 
     QuetzalPopup.property("overlayclass");
+
+    QuetzalPopup.prototype.positionPopup = function() {};
 
     QuetzalPopup.prototype._close = function(closeEventName) {
       this._eventsOff();
@@ -498,9 +503,15 @@ An element that covers the entire viewport, typically to swallow clicks.
         if ((_ref1 = this.overlay) != null) {
           _ref1.removeEventListener("click", this._handlerOutsideClick);
         }
+        this._handlerOutsideClick = null;
       }
       if (this._handlerInsideClick != null) {
-        return this.removeEventListener("click", this._handlerInsideClick);
+        this.removeEventListener("click", this._handlerInsideClick);
+        this._handlerInsideClick = null;
+      }
+      if (this._handlerDocumentKeydown) {
+        document.removeEventListener("keydown", this._handlerDocumentKeydown);
+        return this._handlerDocumentKeydown = null;
       }
     };
 
@@ -508,6 +519,13 @@ An element that covers the entire viewport, typically to swallow clicks.
       var _ref1,
         _this = this;
 
+      this._handlerDocumentKeydown = function(event) {
+        if (_this.cancelOnEscapeKey && event.keyCode === 27) {
+          _this.cancel();
+          return event.stopPropagation();
+        }
+      };
+      document.addEventListener("keydown", this._handlerDocumentKeydown);
       if (this.cancelOnOutsideClick) {
         this._handlerOutsideClick = function(event) {
           return _this.cancel();
@@ -527,6 +545,8 @@ An element that covers the entire viewport, typically to swallow clicks.
     QuetzalPopup.property("_handlerInsideClick");
 
     QuetzalPopup.property("_handlerOutsideClick");
+
+    QuetzalPopup.property("_handlerDocumentKeydown");
 
     QuetzalPopup.register();
 

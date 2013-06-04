@@ -657,35 +657,12 @@ An element that covers the entire viewport, typically to swallow clicks.
 
     TestElement.prototype.template = [
       {
-        quetzal_button: {
+        popup_button: {
           id: "button",
-          content: "Click for overlay"
-        }
-      }, {
-        quetzal_popup: {
-          id: "popup",
-          content: "Hello"
+          content: "I have a popup"
         }
       }
     ];
-
-    TestElement.prototype.ready = function() {
-      var _this = this;
-
-      TestElement.__super__.ready.call(this);
-      this.$.button.addEventListener("click", function() {
-        if (typeof console !== "undefined" && console !== null) {
-          console.log("open");
-        }
-        return _this.$.popup.open();
-      });
-      this.addEventListener("closed", function() {
-        return typeof console !== "undefined" && console !== null ? console.log("close") : void 0;
-      });
-      return this.addEventListener("canceled", function() {
-        return typeof console !== "undefined" && console !== null ? console.log("cancel") : void 0;
-      });
-    };
 
     TestElement.register();
 
@@ -1070,6 +1047,63 @@ Placeholder image from LoremPixel.com
 }).call(this);
 
 (function() {
+  var PopupSource, _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  PopupSource = (function(_super) {
+    __extends(PopupSource, _super);
+
+    function PopupSource() {
+      _ref = PopupSource.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    PopupSource.prototype.template = [
+      {
+        div: {
+          id: "container",
+          content: [
+            {
+              content: []
+            }
+          ]
+        }
+      }, {
+        quetzal_popup: {
+          id: "popup",
+          content: "Popup goes here"
+        }
+      }
+    ];
+
+    PopupSource.prototype.ready = function() {
+      var _this = this;
+
+      PopupSource.__super__.ready.call(this);
+      this.$.container.addEventListener("click", function() {
+        if (typeof console !== "undefined" && console !== null) {
+          console.log("open");
+        }
+        return _this.$.popup.open();
+      });
+      this.$.popup.addEventListener("closed", function() {
+        return typeof console !== "undefined" && console !== null ? console.log("close") : void 0;
+      });
+      return this.$.popup.addEventListener("canceled", function() {
+        return typeof console !== "undefined" && console !== null ? console.log("cancel") : void 0;
+      });
+    };
+
+    PopupSource.register();
+
+    return PopupSource;
+
+  })(QuetzalElement);
+
+}).call(this);
+
+(function() {
   var _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -1138,6 +1172,44 @@ Placeholder image from LoremPixel.com
     return IconButton;
 
   })(QuetzalButton);
+
+}).call(this);
+
+(function() {
+  var PopupButton, _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  PopupButton = (function(_super) {
+    __extends(PopupButton, _super);
+
+    function PopupButton() {
+      _ref = PopupButton.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    PopupButton.prototype.template = [
+      {
+        "super": [
+          {
+            quetzal_button: {
+              id: "button",
+              content: [
+                {
+                  content: []
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ];
+
+    PopupButton.register();
+
+    return PopupButton;
+
+  })(PopupSource);
 
 }).call(this);
 

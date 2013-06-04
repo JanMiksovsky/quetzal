@@ -141,7 +141,7 @@ class window.QuetzalElement extends HTMLDivElement
         # Convert underscores to hyphens (which aren't allowed in plain JSON keys).
         tag = tag.replace "_", "-"
         element = if tag == "super"
-          @_createSuperInstance elementClass, logicalParent
+          @_createSuperInstanceForElement elementClass, logicalParent
         else
           document.createElement tag
         if properties instanceof Array or typeof properties == "string" 

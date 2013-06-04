@@ -14,7 +14,7 @@ module.exports = ->
         dest: "elements/elements.js"
       src:
         src: sortDependencies.sortFiles "src/*.coffee"
-        dest: "src/quetzal.js"
+        dest: "quetzal.js"
       test:
         src: sortDependencies.sortFiles "test/*.coffee"
         dest: "test/unittests.js"

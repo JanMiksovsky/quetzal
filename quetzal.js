@@ -172,7 +172,7 @@ Sugar to allow quick creation of element properties.
           tag = keys[0];
           properties = json[tag];
           tag = tag.replace("_", "-");
-          element = tag === "super" ? this._createSuperInstance(elementClass, logicalParent) : document.createElement(tag);
+          element = tag === "super" ? this._createSuperInstanceForElement(elementClass, logicalParent) : document.createElement(tag);
           if (properties instanceof Array || typeof properties === "string") {
             properties = {
               content: properties

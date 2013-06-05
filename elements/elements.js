@@ -410,7 +410,7 @@ Placeholder image from LoremPixel.com
       PopupSource.__super__.ready.call(this);
       this.$.container.addEventListener("click", function() {
         if (typeof console !== "undefined" && console !== null) {
-          console.log("open");
+          console.log("" + _this.constructor.name + ": open");
         }
         return _this.open();
       });

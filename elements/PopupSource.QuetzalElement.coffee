@@ -75,7 +75,7 @@ class PopupSource extends QuetzalElement
   ready: ->
     super()
     @$.container.addEventListener "click", =>
-      console?.log "open"
+      console?.log "#{@.constructor.name}: open"
       @open()
     @$.popup.addEventListener "closed", => console?.log "close"
     @$.popup.addEventListener "canceled", => console?.log "cancel"

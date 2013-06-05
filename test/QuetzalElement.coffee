@@ -113,6 +113,30 @@ test "QuetzalElement: set inherited base class property", ->
   bar = new Bar()
   equal bar._message, "Hello"
 
+test "QuetzalElement: ready called", ->
+  count = 0
+  class Foo extends QuetzalElement
+    ready: ->
+      count++
+  equal count, 0
+  foo = new Foo()
+  equal count, 1
+
+test "QuetzalElement: element with super has super's ready invoked once", ->
+  count = 0
+  class Foo extends QuetzalElement
+    ready: ->
+      count++
+  class Bar extends Foo
+    template:
+      super: []
+    ready: ->
+      super()
+      count++
+  equal count, 0
+  bar = new Bar()
+  equal count, 1
+
 test "QuetzalElement: element reference", ->
   class Foo extends QuetzalElement
     template: "<span id='message'></span>"

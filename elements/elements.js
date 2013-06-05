@@ -364,6 +364,46 @@ Placeholder image from LoremPixel.com
       }
     ];
 
+    PopupSource.prototype.open = function() {
+      return this.$.popup.open();
+    };
+
+    PopupSource.prototype.positionPopup = function() {
+      var bottom, classList, height, left, popup, popupAlignLeft, popupAppearsBelow, popupFitsAbove, popupFitsBelow, popupFitsLeftAligned, popupFitsRightAligned, popupHeight, popupLeft, popupTop, popupWidth, right, scrollLeft, scrollTop, top, viewportHeight, viewportWidth, width;
+
+      if (typeof console !== "undefined" && console !== null) {
+        console.log("positionPopup");
+      }
+      top = this.offsetTop;
+      left = this.offsetLeft;
+      height = this.offsetHeight;
+      width = this.offsetWidth;
+      bottom = top + height;
+      right = left + width;
+      popup = this.$.popup;
+      popupHeight = popup.offsetHeight;
+      popupWidth = popup.offsetWidth;
+      scrollTop = 0;
+      scrollLeft = 0;
+      viewportHeight = window.innerHeight;
+      viewportWidth = window.innerWidth;
+      popupFitsBelow = bottom + popupHeight <= viewportHeight + scrollTop;
+      popupFitsAbove = top - popupHeight >= scrollTop;
+      popupAppearsBelow = popupFitsBelow || !popupFitsAbove;
+      popupTop = popupAppearsBelow ? "" : top - popupHeight;
+      popupFitsLeftAligned = left + popupWidth <= viewportWidth + scrollLeft;
+      popupFitsRightAligned = right - popupWidth >= scrollLeft;
+      popupAlignLeft = popupFitsLeftAligned || !popupFitsRightAligned;
+      popupLeft = popupAlignLeft ? "" : left + width - popupWidth;
+      popup.style.top = popupTop;
+      popup.style.left = popupLeft;
+      classList = popup.classList;
+      classList.toggle("popupAppearsAbove", !popupAppearsBelow);
+      classList.toggle("popupAppearsBelow", popupAppearsBelow);
+      classList.toggle("popupAlignLeft", popupAlignLeft);
+      return classList.toggle("popupAlignRight", !popupAlignLeft);
+    };
+
     PopupSource.prototype.ready = function() {
       var _this = this;
 
@@ -372,14 +412,17 @@ Placeholder image from LoremPixel.com
         if (typeof console !== "undefined" && console !== null) {
           console.log("open");
         }
-        return _this.$.popup.open();
+        return _this.open();
       });
       this.$.popup.addEventListener("closed", function() {
         return typeof console !== "undefined" && console !== null ? console.log("close") : void 0;
       });
-      return this.$.popup.addEventListener("canceled", function() {
+      this.$.popup.addEventListener("canceled", function() {
         return typeof console !== "undefined" && console !== null ? console.log("cancel") : void 0;
       });
+      return this.$.popup.positionPopup = function() {
+        return _this.positionPopup();
+      };
     };
 
     PopupSource.register();

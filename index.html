@@ -123,6 +123,19 @@ Here's a reference to the <markup-tag>script</markup-tag> tag.
 </demo-tile>
 
 <demo-tile>
+<property name="classname">popup-button</property>
+<property name="description">A button which, when clicked, shows a popup which
+is positioned above or below the button. (N.B. Positioning currently does not work.)
+</property>
+<property name="demo">
+<popup-button>
+    <property name="popup">Here's a popup</property>
+    Click for a popup
+</popup-button>
+</property>
+</demo-tile>
+
+<demo-tile>
 <property name="classname">quetzal-button</property>
 <property name="description">Shows its content inside a simple button. Note: Buttons currently have extra
 padding because — for some as yet undetermined reason — their content area does not appear to respond

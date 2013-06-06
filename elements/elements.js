@@ -486,7 +486,7 @@ An element that covers the entire viewport, typically to swallow clicks.
 
     QuetzalOverlay.prototype.template = [
       {
-        style: "@host {\n  * {\n    background: black;\n    bottom: 0;\n    cursor: default;\n    left: 0;\n    opacity: 0.25;\n    position: fixed;\n    right: 0;\n    top: 0;\n  }\n}"
+        style: "@host {\n  * {\n    /* background: black; */\n    bottom: 0;\n    cursor: default;\n    left: 0;\n    /* opacity: 0.25; */\n    position: fixed;\n    right: 0;\n    top: 0;\n  }\n}"
       }
     ];
 
@@ -898,6 +898,11 @@ An element that covers the entire viewport, typically to swallow clicks.
               content: [
                 {
                   content: []
+                }, {
+                  content: {
+                    select: "property[name='indicator']",
+                    content: "▼"
+                  }
                 }
               ]
             }

@@ -8,6 +8,8 @@ class PopupButton extends PopupSource
     ,
       quetzal_button: id: "button", content: [
         content: []
+      ,
+        content: select: "property[name='indicator']", content: "▼"
       ]
     ]
   ]

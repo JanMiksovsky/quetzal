@@ -8,11 +8,11 @@ class window.QuetzalOverlay extends QuetzalElement
     style: """
       @host {
         * {
-          background: black;
+          /* background: black; */
           bottom: 0;
           cursor: default;
           left: 0;
-          opacity: 0.25;
+          /* opacity: 0.25; */
           position: fixed;
           right: 0;
           top: 0;

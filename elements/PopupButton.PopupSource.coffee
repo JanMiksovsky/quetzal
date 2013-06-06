@@ -14,4 +14,8 @@ class PopupButton extends PopupSource
     ]
   ]
 
+  # ready: ->
+  #   super()
+  #   debugger
+
   @register()

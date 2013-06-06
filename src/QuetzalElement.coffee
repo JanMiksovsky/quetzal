@@ -219,6 +219,16 @@ class window.QuetzalElement extends HTMLDivElement
       elementClass = elementClass.__super__?.constructor
     null
 
+  @_copyWithShadow: ( source ) ->
+    target = source.cloneNode true
+    target.__proto__ = source.__proto__
+    if source.webkitShadowRoot?
+      target.webkitCreateShadowRoot()
+      sourceShadowRoot = source.webkitShadowRoot
+      while sourceShadowRoot.childNodes[0]
+        target.webkitShadowRoot.appendChild sourceShadowRoot.childNodes[0]
+    target
+
   # Create the shadow DOM and populate it.
   _createShadow: ( template ) ->
     root = @webkitCreateShadowRoot()
@@ -241,8 +251,7 @@ class window.QuetzalElement extends HTMLDivElement
       # JSON template
       root.appendChild QuetzalElement.parse @template, classDefiningTemplate, @
       CustomElements.upgradeAll root
-    for subelement in root.querySelectorAll "[id]"
-      @$[ subelement.id ] = subelement
+    @_generateElementReferences root
 
   # Create an instance of the indicated class' superclass.
   @_createSuperInstanceForElement: ( elementClass, element ) ->
@@ -251,9 +260,20 @@ class window.QuetzalElement extends HTMLDivElement
       throw "The template for #{elementClass.name} uses <super>, but superclass can't be found."
     superInstance = QuetzalElement.create baseClass
     # The target element acquires the super-instance's per-element data.
-    element.$ = superInstance.$
+    # element.$ = superInstance.$
+    # element._properties = superInstance._properties
+    # return superInstance
+    clone = QuetzalElement._copyWithShadow superInstance
+    element._generateElementReferences clone.webkitShadowRoot
     element._properties = superInstance._properties
-    superInstance
+    clone
+
+  _generateElementReferences: ( subtree ) ->
+    @$ ?= {}
+    subelementsWithIds = subtree?.querySelectorAll "[id]"
+    if subelementsWithIds?.length > 0
+      for subelement in subelementsWithIds
+        @$[ subelement.id ] = subelement
 
 
 ###

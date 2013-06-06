@@ -282,8 +282,23 @@ Sugar to allow quick creation of element properties.
       return null;
     };
 
+    QuetzalElement._copyWithShadow = function(source) {
+      var sourceShadowRoot, target;
+
+      target = source.cloneNode(true);
+      target.__proto__ = source.__proto__;
+      if (source.webkitShadowRoot != null) {
+        target.webkitCreateShadowRoot();
+        sourceShadowRoot = source.webkitShadowRoot;
+        while (sourceShadowRoot.childNodes[0]) {
+          target.webkitShadowRoot.appendChild(sourceShadowRoot.childNodes[0]);
+        }
+      }
+      return target;
+    };
+
     QuetzalElement.prototype._createShadow = function(template) {
-      var classDefiningTemplate, elementClass, name, root, subelement, superInstance, superNode, value, _i, _j, _len, _len1, _ref, _ref1, _ref2, _results;
+      var classDefiningTemplate, elementClass, name, root, superInstance, superNode, value, _i, _len, _ref, _ref1;
 
       root = this.webkitCreateShadowRoot();
       elementClass = this.constructor;
@@ -308,26 +323,38 @@ Sugar to allow quick creation of element properties.
         root.appendChild(QuetzalElement.parse(this.template, classDefiningTemplate, this));
         CustomElements.upgradeAll(root);
       }
-      _ref2 = root.querySelectorAll("[id]");
-      _results = [];
-      for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-        subelement = _ref2[_j];
-        _results.push(this.$[subelement.id] = subelement);
-      }
-      return _results;
+      return this._generateElementReferences(root);
     };
 
     QuetzalElement._createSuperInstanceForElement = function(elementClass, element) {
-      var baseClass, superInstance;
+      var baseClass, clone, superInstance;
 
       baseClass = elementClass.__super__.constructor;
       if (baseClass == null) {
         throw "The template for " + elementClass.name + " uses <super>, but superclass can't be found.";
       }
       superInstance = QuetzalElement.create(baseClass);
-      element.$ = superInstance.$;
+      clone = QuetzalElement._copyWithShadow(superInstance);
+      element._generateElementReferences(clone.webkitShadowRoot);
       element._properties = superInstance._properties;
-      return superInstance;
+      return clone;
+    };
+
+    QuetzalElement.prototype._generateElementReferences = function(subtree) {
+      var subelement, subelementsWithIds, _i, _len, _ref, _results;
+
+      if ((_ref = this.$) == null) {
+        this.$ = {};
+      }
+      subelementsWithIds = subtree != null ? subtree.querySelectorAll("[id]") : void 0;
+      if ((subelementsWithIds != null ? subelementsWithIds.length : void 0) > 0) {
+        _results = [];
+        for (_i = 0, _len = subelementsWithIds.length; _i < _len; _i++) {
+          subelement = subelementsWithIds[_i];
+          _results.push(this.$[subelement.id] = subelement);
+        }
+        return _results;
+      }
     };
 
     return QuetzalElement;

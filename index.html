@@ -136,6 +136,19 @@ is positioned above or below the button. (N.B. Positioning currently does not wo
 </demo-tile>
 
 <demo-tile>
+<property name="classname">popup-source</property>
+<property name="description">A base class for elements which produce a popup
+when clicked. See <markup-tag>popup-button</markup-tag>.
+</property>
+<property name="demo">
+<popup-source>
+    <property name="popup">Here's the popup</property>
+    Click me
+</popup-source>
+</property>
+</demo-tile>
+
+<demo-tile>
 <property name="classname">quetzal-button</property>
 <property name="description">Shows its content inside a simple button. Note: Buttons currently have extra
 padding because — for some as yet undetermined reason — their content area does not appear to respond
@@ -149,6 +162,13 @@ to clicks. They appear pressed only when clicked within their padding.</property
 <property name="classname">quetzal-element</property>
 <property name="description">A plain Quetzal element. This currently behaves like a
 <markup-tag>div</markup-tag>.</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-overlay</property>
+<property name="description">A "blanket" over the page to catch or prevent
+interaction with page elements. Used by <markup-tag>quetzal-popup</markup-tag>
+to disable interaction with page elements behind an active popup.
 </demo-tile>
 
 <demo-tile>

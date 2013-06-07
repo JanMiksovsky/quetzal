@@ -190,7 +190,7 @@ Sugar to allow quick creation of element properties.
             if (propertyName === "content") {
               element.appendChild(this.parse(propertyValue, elementClass));
             } else if (typeof propertyValue === "string") {
-              target((propertyName = propertyValue[0], propertyValue));
+              target[propertyName] = propertyValue;
             } else {
               target[propertyName] = this.parse(propertyValue, elementClass);
             }

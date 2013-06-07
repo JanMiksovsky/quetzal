@@ -1,0 +1,17 @@
+<icon-button>Open</icon-button>
+
+Becomes:
+<icon-button>
+    <shadow-root for icon-button>
+        <div holds template for icon-button — in lieu of plain-button instance>
+            <shadow-root for plain-button>
+                <button>
+                    <content></content>
+                </button>
+            </shadow-root>
+            <img src="document.png">
+            <content></content>
+        </div>
+    </shadow-root>
+    Open
+</icon-button>

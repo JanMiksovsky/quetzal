@@ -61,7 +61,7 @@ Function::setter = ( propertyName, set ) ->
 ###
 Base Quetzal element class
 ###
-class window.QuetzalElement extends HTMLDivElement
+class QuetzalElement extends HTMLDivElement
 
   # This constructor is only used with Quetzal element classes which are not
   # registered via Polymer's document.register().
@@ -124,11 +124,12 @@ class window.QuetzalElement extends HTMLDivElement
   # If any occurrence of "super" is found, create an instance of the indicated
   # element class' superclass; give the super-instance's properties to the
   # indicated logical parent element.
-  @parse: ( json, elementClass, logicalParent ) ->
+  # TODO: Update comments
+  parse: ( json, elementClass ) ->
     if json instanceof Array
       fragment = document.createDocumentFragment()
       for child in json
-        fragment.appendChild @parse child, elementClass, logicalParent
+        fragment.appendChild @parse child, elementClass
       fragment
     else if typeof json == "string"
       document.createTextNode json
@@ -140,19 +141,22 @@ class window.QuetzalElement extends HTMLDivElement
         properties = json[ tag ]
         # Convert underscores to hyphens (which aren't allowed in plain JSON keys).
         tag = tag.replace "_", "-"
-        element = if tag == "super"
-          @_createSuperInstanceForElement elementClass, logicalParent
+        element = document.createElement tag
+        if tag == "super"
+          # TODO: For <super>, should properties be set as attributes?
+          @_populateSuperElement element, elementClass
+          target = @
         else
-          document.createElement tag
+          target = element
         if properties instanceof Array or typeof properties == "string" 
           properties = content: properties
         for propertyName, propertyValue of properties
           if propertyName == "content"
-            element.appendChild @parse propertyValue, elementClass, logicalParent
+            element.appendChild @parse propertyValue, elementClass
           else if typeof propertyValue == "string"
-            element[ propertyName ] = propertyValue
+            target[ propertyName ] = propertyValue
           else
-            element[ propertyName ] = @parse propertyValue, elementClass, logicalParent
+            target[ propertyName ] = @parse propertyValue, elementClass
         element
       else
         # No keys
@@ -177,7 +181,8 @@ class window.QuetzalElement extends HTMLDivElement
       childList: true
       subtree: true
 
-    @_createShadow @template if @template?
+    if @template?
+      @_createShadowWithTemplate @, @constructor
 
     # Set inherited properties defined by base class(es).
     @[ key ] = value for key, value of @inherited
@@ -219,54 +224,25 @@ class window.QuetzalElement extends HTMLDivElement
       elementClass = elementClass.__super__?.constructor
     null
 
-  @_copyWithShadow: ( source ) ->
-    target = source.cloneNode true
-    target.__proto__ = source.__proto__
-    if source.webkitShadowRoot?
-      target.webkitCreateShadowRoot()
-      sourceShadowRoot = source.webkitShadowRoot
-      while sourceShadowRoot.childNodes[0]
-        target.webkitShadowRoot.appendChild sourceShadowRoot.childNodes[0]
-    target
-
-  # Create the shadow DOM and populate it.
-  _createShadow: ( template ) ->
-    root = @webkitCreateShadowRoot()
-    elementClass = @constructor
+  # Populate
+  # TODO: Update comments
+  _createShadowWithTemplate: ( element, elementClass ) ->
+    root = element.webkitCreateShadowRoot()
     classDefiningTemplate = @_classDefiningTemplate elementClass
-    if typeof @template == "string"
+    return unless classDefiningTemplate?
+    template = classDefiningTemplate::template
+    if typeof template == "string"
       # Markup template
-      root.innerHTML = @template
-      CustomElements.upgradeAll root
-      superNode = root.querySelector "super"
-      if superNode?
-        superInstance = QuetzalElement._createSuperInstanceForElement classDefiningTemplate, @
-        # Move contents
-        while superNode.childNodes[0]?
-          superInstance.appendChild superNode.childNodes[0]
-        for { name, value } in superNode.attributes
-          @[ name ] = value
-        superNode.parentNode.replaceChild superInstance, superNode
+      root.innerHTML = template
+      superElement = root.querySelector "super"
+      if superElement?
+        @_populateSuperElement superElement, elementClass
+        @[ name ] = value for { name, value } in superElement.attributes
     else
       # JSON template
-      root.appendChild QuetzalElement.parse @template, classDefiningTemplate, @
-      CustomElements.upgradeAll root
+      root.appendChild @parse template, elementClass
+    CustomElements.upgradeAll root
     @_generateElementReferences root
-
-  # Create an instance of the indicated class' superclass.
-  @_createSuperInstanceForElement: ( elementClass, element ) ->
-    baseClass = elementClass.__super__.constructor
-    unless baseClass?
-      throw "The template for #{elementClass.name} uses <super>, but superclass can't be found."
-    superInstance = QuetzalElement.create baseClass
-    # The target element acquires the super-instance's per-element data.
-    # element.$ = superInstance.$
-    # element._properties = superInstance._properties
-    # return superInstance
-    clone = QuetzalElement._copyWithShadow superInstance
-    element._generateElementReferences clone.webkitShadowRoot
-    element._properties = superInstance._properties
-    clone
 
   _generateElementReferences: ( subtree ) ->
     @$ ?= {}
@@ -274,6 +250,18 @@ class window.QuetzalElement extends HTMLDivElement
     if subelementsWithIds?.length > 0
       for subelement in subelementsWithIds
         @$[ subelement.id ] = subelement
+
+  # Create an instance of the indicated class' superclass.
+  _populateSuperElement: ( element, elementClass ) ->
+    baseClass = elementClass.__super__.constructor
+    unless baseClass?
+      throw "The template for #{elementClass.name} uses <super>, but superclass can't be found."
+    unless ( baseClass:: ) instanceof QuetzalElement
+      throw "The template for #{elementClass.name} uses <super>, but only subclasses of QuetzalElement can do that."
+    @_createShadowWithTemplate element, baseClass
+
+
+class Super extends QuetzalElement
 
 
 ###
@@ -299,3 +287,6 @@ Function::register = ->
 
 # Register <quetzal> as an element class
 QuetzalElement.register()
+
+# Register <super>
+Super.register()

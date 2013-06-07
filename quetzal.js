@@ -9,7 +9,8 @@ Sugar to allow quick creation of element properties.
 
 
 (function() {
-  var __hasProp = {}.hasOwnProperty,
+  var QuetzalElement, Super, _ref,
+    __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   Function.prototype.alias = function(propertyName, accessChain, sideEffect) {
@@ -104,7 +105,7 @@ Sugar to allow quick creation of element properties.
   */
 
 
-  window.QuetzalElement = (function(_super) {
+  QuetzalElement = (function(_super) {
     __extends(QuetzalElement, _super);
 
     function QuetzalElement() {
@@ -154,14 +155,14 @@ Sugar to allow quick creation of element properties.
       return newElement;
     };
 
-    QuetzalElement.parse = function(json, elementClass, logicalParent) {
-      var child, element, fragment, keys, properties, propertyName, propertyValue, tag, _i, _len;
+    QuetzalElement.prototype.parse = function(json, elementClass) {
+      var child, element, fragment, keys, properties, propertyName, propertyValue, tag, target, _i, _len;
 
       if (json instanceof Array) {
         fragment = document.createDocumentFragment();
         for (_i = 0, _len = json.length; _i < _len; _i++) {
           child = json[_i];
-          fragment.appendChild(this.parse(child, elementClass, logicalParent));
+          fragment.appendChild(this.parse(child, elementClass));
         }
         return fragment;
       } else if (typeof json === "string") {
@@ -172,7 +173,13 @@ Sugar to allow quick creation of element properties.
           tag = keys[0];
           properties = json[tag];
           tag = tag.replace("_", "-");
-          element = tag === "super" ? this._createSuperInstanceForElement(elementClass, logicalParent) : document.createElement(tag);
+          element = document.createElement(tag);
+          if (tag === "super") {
+            this._populateSuperElement(element, elementClass);
+            target = this;
+          } else {
+            target = element;
+          }
           if (properties instanceof Array || typeof properties === "string") {
             properties = {
               content: properties
@@ -181,11 +188,11 @@ Sugar to allow quick creation of element properties.
           for (propertyName in properties) {
             propertyValue = properties[propertyName];
             if (propertyName === "content") {
-              element.appendChild(this.parse(propertyValue, elementClass, logicalParent));
+              element.appendChild(this.parse(propertyValue, elementClass));
             } else if (typeof propertyValue === "string") {
-              element[propertyName] = propertyValue;
+              target((propertyName = propertyValue[0], propertyValue));
             } else {
-              element[propertyName] = this.parse(propertyValue, elementClass, logicalParent);
+              target[propertyName] = this.parse(propertyValue, elementClass);
             }
           }
           return element;
@@ -214,7 +221,7 @@ Sugar to allow quick creation of element properties.
         subtree: true
       });
       if (this.template != null) {
-        this._createShadow(this.template);
+        this._createShadowWithTemplate(this, this.constructor);
       }
       _ref = this.inherited;
       for (key in _ref) {
@@ -282,62 +289,31 @@ Sugar to allow quick creation of element properties.
       return null;
     };
 
-    QuetzalElement._copyWithShadow = function(source) {
-      var sourceShadowRoot, target;
+    QuetzalElement.prototype._createShadowWithTemplate = function(element, elementClass) {
+      var classDefiningTemplate, name, root, superElement, template, value, _i, _len, _ref, _ref1;
 
-      target = source.cloneNode(true);
-      target.__proto__ = source.__proto__;
-      if (source.webkitShadowRoot != null) {
-        target.webkitCreateShadowRoot();
-        sourceShadowRoot = source.webkitShadowRoot;
-        while (sourceShadowRoot.childNodes[0]) {
-          target.webkitShadowRoot.appendChild(sourceShadowRoot.childNodes[0]);
-        }
-      }
-      return target;
-    };
-
-    QuetzalElement.prototype._createShadow = function(template) {
-      var classDefiningTemplate, elementClass, name, root, superInstance, superNode, value, _i, _len, _ref, _ref1;
-
-      root = this.webkitCreateShadowRoot();
-      elementClass = this.constructor;
+      root = element.webkitCreateShadowRoot();
       classDefiningTemplate = this._classDefiningTemplate(elementClass);
-      if (typeof this.template === "string") {
-        root.innerHTML = this.template;
-        CustomElements.upgradeAll(root);
-        superNode = root.querySelector("super");
-        if (superNode != null) {
-          superInstance = QuetzalElement._createSuperInstanceForElement(classDefiningTemplate, this);
-          while (superNode.childNodes[0] != null) {
-            superInstance.appendChild(superNode.childNodes[0]);
-          }
-          _ref = superNode.attributes;
+      if (classDefiningTemplate == null) {
+        return;
+      }
+      template = classDefiningTemplate.prototype.template;
+      if (typeof template === "string") {
+        root.innerHTML = template;
+        superElement = root.querySelector("super");
+        if (superElement != null) {
+          this._populateSuperElement(superElement, elementClass);
+          _ref = superElement.attributes;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             _ref1 = _ref[_i], name = _ref1.name, value = _ref1.value;
             this[name] = value;
           }
-          superNode.parentNode.replaceChild(superInstance, superNode);
         }
       } else {
-        root.appendChild(QuetzalElement.parse(this.template, classDefiningTemplate, this));
-        CustomElements.upgradeAll(root);
+        root.appendChild(this.parse(template, elementClass));
       }
+      CustomElements.upgradeAll(root);
       return this._generateElementReferences(root);
-    };
-
-    QuetzalElement._createSuperInstanceForElement = function(elementClass, element) {
-      var baseClass, clone, superInstance;
-
-      baseClass = elementClass.__super__.constructor;
-      if (baseClass == null) {
-        throw "The template for " + elementClass.name + " uses <super>, but superclass can't be found.";
-      }
-      superInstance = QuetzalElement.create(baseClass);
-      clone = QuetzalElement._copyWithShadow(superInstance);
-      element._generateElementReferences(clone.webkitShadowRoot);
-      element._properties = superInstance._properties;
-      return clone;
     };
 
     QuetzalElement.prototype._generateElementReferences = function(subtree) {
@@ -357,9 +333,34 @@ Sugar to allow quick creation of element properties.
       }
     };
 
+    QuetzalElement.prototype._populateSuperElement = function(element, elementClass) {
+      var baseClass;
+
+      baseClass = elementClass.__super__.constructor;
+      if (baseClass == null) {
+        throw "The template for " + elementClass.name + " uses <super>, but superclass can't be found.";
+      }
+      if (!(baseClass.prototype instanceof QuetzalElement)) {
+        throw "The template for " + elementClass.name + " uses <super>, but only subclasses of QuetzalElement can do that.";
+      }
+      return this._createShadowWithTemplate(element, baseClass);
+    };
+
     return QuetzalElement;
 
   })(HTMLDivElement);
+
+  Super = (function(_super) {
+    __extends(Super, _super);
+
+    function Super() {
+      _ref = Super.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    return Super;
+
+  })(QuetzalElement);
 
   /*
   Allow registration of Quetzal element classes with browser.
@@ -392,5 +393,7 @@ Sugar to allow quick creation of element properties.
   };
 
   QuetzalElement.register();
+
+  Super.register();
 
 }).call(this);

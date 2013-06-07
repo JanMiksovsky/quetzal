@@ -1,17 +1,11 @@
 class TestElement extends QuetzalElement
 
   template: [
-    "Content: "
+    "BEGIN"
   ,
-    content: select: ":not(property)"
+    content: []
   ,
-    p: [
-      i: [
-        "Foo:"
-      ,
-        content: select: "property[name='foo']"
-      ]
-    ]
+    "END"
   ]
 
   @register()

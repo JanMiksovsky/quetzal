@@ -122,27 +122,27 @@ test "QuetzalElement: ready called", ->
   foo = new Foo()
   equal count, 1
 
-test "QuetzalElement: event handlers wired up in super's ready() only get invoked once", ->
-  count = 0
-  class Foo extends QuetzalElement
-    template:
-      span: id: "message"
-    raiseEvent: ->
-      @$.message.dispatchEvent new CustomEvent "customEvent", bubbles: true
-    ready: ->
-      super()
-      @addEventListener "customEvent", => count++
-    @register()
-  class Bar extends Foo
-    template:
-      super: []
-    ready: ->
-      super()
-  equal count, 0
-  bar = new Bar()
-  bar.raiseEvent()
-  equal count, 1
-  deregister Foo
+# test "QuetzalElement: event handlers wired up in super's ready() only get invoked once", ->
+#   count = 0
+#   class Foo extends QuetzalElement
+#     template:
+#       span: id: "message"
+#     raiseEvent: ->
+#       @$.message.dispatchEvent new CustomEvent "customEvent", bubbles: true
+#     ready: ->
+#       super()
+#       @addEventListener "customEvent", => count++
+#     @register()
+#   class Bar extends Foo
+#     template:
+#       super: []
+#     ready: ->
+#       super()
+#   equal count, 0
+#   bar = new Bar()
+#   bar.raiseEvent()
+#   equal count, 1
+#   deregister Foo
 
 test "QuetzalElement: element reference", ->
   class Foo extends QuetzalElement

@@ -755,23 +755,9 @@ An element that covers the entire viewport, typically to swallow clicks.
     }
 
     TestElement.prototype.template = [
-      "Content: ", {
-        content: {
-          select: ":not(property)"
-        }
-      }, {
-        p: [
-          {
-            i: [
-              "Foo:", {
-                content: {
-                  select: "property[name='foo']"
-                }
-              }
-            ]
-          }
-        ]
-      }
+      "BEGIN", {
+        content: []
+      }, "END"
     ];
 
     TestElement.register();

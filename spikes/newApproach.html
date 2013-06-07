@@ -3,7 +3,7 @@
 Becomes:
 <icon-button>
     <shadow-root for icon-button>
-        <div holds template for icon-button — in lieu of plain-button instance>
+        <super holds template for icon-button — in lieu of plain-button instance>
             <shadow-root for plain-button>
                 <button>
                     <content></content>
@@ -11,7 +11,7 @@ Becomes:
             </shadow-root>
             <img src="document.png">
             <content></content>
-        </div>
+        </super>
     </shadow-root>
     Open
 </icon-button>

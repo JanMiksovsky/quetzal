@@ -126,6 +126,7 @@ class QuetzalElement extends HTMLDivElement
   # indicated logical parent element.
   # TODO: Update comments
   parse: ( json, elementClass ) ->
+    elementClass ?= @constructor
     if json instanceof Array
       fragment = document.createDocumentFragment()
       for child in json
@@ -161,6 +162,12 @@ class QuetzalElement extends HTMLDivElement
       else
         # No keys
         null
+
+  # Utility that parses a JSON template and returns the resulting element.
+  @parse: ( json ) ->
+    element = new QuetzalElement()
+    parsed = element.parse [ json ]
+    parsed.childNodes[0]
 
   ready: ->
 
@@ -253,7 +260,7 @@ class QuetzalElement extends HTMLDivElement
 
   # Create an instance of the indicated class' superclass.
   _populateSuperElement: ( element, elementClass ) ->
-    baseClass = elementClass.__super__.constructor
+    baseClass = elementClass.__super__?.constructor
     unless baseClass?
       throw "The template for #{elementClass.name} uses <super>, but superclass can't be found."
     unless ( baseClass:: ) instanceof QuetzalElement

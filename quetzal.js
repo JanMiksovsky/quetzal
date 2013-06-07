@@ -158,6 +158,9 @@ Sugar to allow quick creation of element properties.
     QuetzalElement.prototype.parse = function(json, elementClass) {
       var child, element, fragment, keys, properties, propertyName, propertyValue, tag, target, _i, _len;
 
+      if (elementClass == null) {
+        elementClass = this.constructor;
+      }
       if (json instanceof Array) {
         fragment = document.createDocumentFragment();
         for (_i = 0, _len = json.length; _i < _len; _i++) {
@@ -200,6 +203,14 @@ Sugar to allow quick creation of element properties.
           return null;
         }
       }
+    };
+
+    QuetzalElement.parse = function(json) {
+      var element, parsed;
+
+      element = new QuetzalElement();
+      parsed = element.parse([json]);
+      return parsed.childNodes[0];
     };
 
     QuetzalElement.prototype.ready = function() {
@@ -334,9 +345,9 @@ Sugar to allow quick creation of element properties.
     };
 
     QuetzalElement.prototype._populateSuperElement = function(element, elementClass) {
-      var baseClass;
+      var baseClass, _ref;
 
-      baseClass = elementClass.__super__.constructor;
+      baseClass = (_ref = elementClass.__super__) != null ? _ref.constructor : void 0;
       if (baseClass == null) {
         throw "The template for " + elementClass.name + " uses <super>, but superclass can't be found.";
       }

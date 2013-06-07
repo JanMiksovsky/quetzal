@@ -265,6 +265,7 @@ class QuetzalElement extends HTMLDivElement
       throw "The template for #{elementClass.name} uses <super>, but superclass can't be found."
     unless ( baseClass:: ) instanceof QuetzalElement
       throw "The template for #{elementClass.name} uses <super>, but only subclasses of QuetzalElement can do that."
+    element.classList.add QuetzalElement.tagForClass baseClass
     @_createShadowWithTemplate element, baseClass
 
 

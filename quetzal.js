@@ -354,6 +354,7 @@ Sugar to allow quick creation of element properties.
       if (!(baseClass.prototype instanceof QuetzalElement)) {
         throw "The template for " + elementClass.name + " uses <super>, but only subclasses of QuetzalElement can do that.";
       }
+      element.classList.add(QuetzalElement.tagForClass(baseClass));
       return this._createShadowWithTemplate(element, baseClass);
     };
 

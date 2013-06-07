@@ -73,7 +73,7 @@ test "QuetzalElement: sub-subclass with <super>", ->
   ok emphatic instanceof Greet
   ok emphatic instanceof QuetzalElement
   ok emphatic instanceof HTMLDivElement
-  renderEqual emphatic, "<div class=\"Greet\">Hello, *Bob*.</div>"
+  renderEqual emphatic, "<super class=\"greet\">Hello, *Bob*.</super>"
 
 test "QuetzalElement: <super> with attribute sets property on super element", ->
   class Foo extends QuetzalElement
@@ -264,7 +264,7 @@ test "QuetzalElement: subclass with registered superclass creates super-instance
     template: "<super><content></content></super>"
   element = new SubClass()
   element.textContent = "Hello"
-  renderEqual element, "<foo-bar>Hello</foo-bar>"
+  renderEqual element, "<super class=\"foo-bar\">Hello</super>"
   deregister FooBar
 
 test "QuetzalElement: template for one class hosts instance of another class", ->

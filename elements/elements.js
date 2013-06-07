@@ -342,6 +342,8 @@ Placeholder image from LoremPixel.com
 
     PopupSource.prototype.template = [
       {
+        style: "@host {\n  * {\n    position: relative;\n  }\n}"
+      }, {
         quetzal_popup: {
           id: "popup",
           content: [
@@ -369,17 +371,12 @@ Placeholder image from LoremPixel.com
     };
 
     PopupSource.prototype.positionPopup = function() {
-      var bottom, classList, height, left, popup, popupAlignLeft, popupAppearsBelow, popupFitsAbove, popupFitsBelow, popupFitsLeftAligned, popupFitsRightAligned, popupHeight, popupLeft, popupTop, popupWidth, right, scrollLeft, scrollTop, top, viewportHeight, viewportWidth, width;
+      var bottom, classList, height, left, popup, popupAlignLeft, popupAppearsBelow, popupFitsAbove, popupFitsBelow, popupFitsLeftAligned, popupFitsRightAligned, popupHeight, popupLeft, popupTop, popupWidth, right, scrollLeft, scrollTop, top, viewportHeight, viewportWidth, width, _ref1;
 
       if (typeof console !== "undefined" && console !== null) {
         console.log("positionPopup");
       }
-      top = this.offsetTop;
-      left = this.offsetLeft;
-      height = this.offsetHeight;
-      width = this.offsetWidth;
-      bottom = top + height;
-      right = left + width;
+      _ref1 = this.getBoundingClientRect(), top = _ref1.top, left = _ref1.left, height = _ref1.height, width = _ref1.width, bottom = _ref1.bottom, right = _ref1.right;
       popup = this.$.popup;
       popupHeight = popup.offsetHeight;
       popupWidth = popup.offsetWidth;
@@ -390,13 +387,13 @@ Placeholder image from LoremPixel.com
       popupFitsBelow = bottom + popupHeight <= viewportHeight + scrollTop;
       popupFitsAbove = top - popupHeight >= scrollTop;
       popupAppearsBelow = popupFitsBelow || !popupFitsAbove;
-      popupTop = popupAppearsBelow ? "" : top - popupHeight;
+      popupTop = popupAppearsBelow ? height : -popupHeight;
       popupFitsLeftAligned = left + popupWidth <= viewportWidth + scrollLeft;
       popupFitsRightAligned = right - popupWidth >= scrollLeft;
       popupAlignLeft = popupFitsLeftAligned || !popupFitsRightAligned;
-      popupLeft = popupAlignLeft ? "" : left + width - popupWidth;
-      popup.style.top = popupTop;
-      popup.style.left = popupLeft;
+      popupLeft = popupAlignLeft ? 0 : width - popupWidth;
+      popup.style.top = "" + popupTop + "px";
+      popup.style.left = "" + popupLeft + "px";
       classList = popup.classList;
       classList.toggle("popupAppearsAbove", !popupAppearsBelow);
       classList.toggle("popupAppearsBelow", popupAppearsBelow);
@@ -867,6 +864,8 @@ An element that covers the entire viewport, typically to swallow clicks.
 
     PopupButton.prototype.template = [
       {
+        style: "@host {\n  * {\n    display: inline-block;\n  }\n}"
+      }, {
         "super": [
           {
             property: {

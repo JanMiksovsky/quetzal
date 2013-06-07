@@ -9,7 +9,7 @@ Sugar to allow quick creation of element properties.
 
 
 (function() {
-  var QuetzalElement, Super, _ref,
+  var Property, QuetzalElement, Super, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -362,18 +362,6 @@ Sugar to allow quick creation of element properties.
 
   })(HTMLDivElement);
 
-  Super = (function(_super) {
-    __extends(Super, _super);
-
-    function Super() {
-      _ref = Super.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
-
-    return Super;
-
-  })(QuetzalElement);
-
   /*
   Allow registration of Quetzal element classes with browser.
   
@@ -406,6 +394,32 @@ Sugar to allow quick creation of element properties.
 
   QuetzalElement.register();
 
-  Super.register();
+  Super = (function(_super) {
+    __extends(Super, _super);
+
+    function Super() {
+      _ref = Super.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    Super.register();
+
+    return Super;
+
+  })(QuetzalElement);
+
+  Property = (function(_super) {
+    __extends(Property, _super);
+
+    function Property() {
+      _ref1 = Property.__super__.constructor.apply(this, arguments);
+      return _ref1;
+    }
+
+    Property.register();
+
+    return Property;
+
+  })(QuetzalElement);
 
 }).call(this);

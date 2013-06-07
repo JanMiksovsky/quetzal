@@ -1,6 +1,14 @@
 class PopupButton extends PopupSource
 
   template: [
+    style: """
+      @host {
+        * {
+          display: inline-block;
+        }
+      }
+    """
+  ,
     super: [
       property: name: "popup", [
         content: select: "property[name='popup']"

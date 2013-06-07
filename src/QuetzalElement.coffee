@@ -120,11 +120,10 @@ class QuetzalElement extends HTMLDivElement
 
     newElement
 
-  # Return the element (and children) represented by the given template JSON.
+  # Parse the given "json" dictionary as a template for the present element.
   # If any occurrence of "super" is found, create an instance of the indicated
   # element class' superclass; give the super-instance's properties to the
-  # indicated logical parent element.
-  # TODO: Update comments
+  # present element.
   parse: ( json, elementClass ) ->
     elementClass ?= @constructor
     if json instanceof Array
@@ -169,6 +168,7 @@ class QuetzalElement extends HTMLDivElement
     parsed = element.parse [ json ]
     parsed.childNodes[0]
 
+  # Initialize a new Quetzal element.
   ready: ->
 
     # Initialize per-element data.
@@ -197,8 +197,8 @@ class QuetzalElement extends HTMLDivElement
     # Extract properties from the element attributes.
     @[ name ] = value for { name, value } in @.attributes
 
+  # Respond to the lifecycle event.
   readyCallback: ->
-    # REVIEW: Why does Polymer just invoke readyCallback?
     @ready()
 
   @tagForClass: ( classFn ) ->
@@ -231,8 +231,11 @@ class QuetzalElement extends HTMLDivElement
       elementClass = elementClass.__super__?.constructor
     null
 
-  # Populate
-  # TODO: Update comments
+  # Create a shadow root for the given element and populate it with the template
+  # of the given element class. Any elements in the template which have IDs will
+  # have automatic element references added to "this.$". N.B., the indicated
+  # element will either be the same as "this" or, when instantiating <super>,
+  # will be the <super> element.
   _createShadowWithTemplate: ( element, elementClass ) ->
     root = element.webkitCreateShadowRoot()
     classDefiningTemplate = @_classDefiningTemplate elementClass
@@ -251,6 +254,8 @@ class QuetzalElement extends HTMLDivElement
     CustomElements.upgradeAll root
     @_generateElementReferences root
 
+  # Search through the indicated tree looking for elements with IDs. Automatic
+  # element references for each element #foo will be added as this.$.foo.
   _generateElementReferences: ( subtree ) ->
     @$ ?= {}
     subelementsWithIds = subtree?.querySelectorAll "[id]"
@@ -267,9 +272,6 @@ class QuetzalElement extends HTMLDivElement
       throw "The template for #{elementClass.name} uses <super>, but only subclasses of QuetzalElement can do that."
     element.classList.add QuetzalElement.tagForClass baseClass
     @_createShadowWithTemplate element, baseClass
-
-
-class Super extends QuetzalElement
 
 
 ###
@@ -296,5 +298,14 @@ Function::register = ->
 # Register <quetzal> as an element class
 QuetzalElement.register()
 
-# Register <super>
-Super.register()
+
+# Implements a hypothetical <super> element.
+# This can be used within a template to fill in something that looks like an
+# instance of the element's base class, but without the overhead or
+# complexity of actually instantiating the base class.
+class Super extends QuetzalElement
+  @register()
+
+# Implements a hypothetical <property> element.
+class Property extends QuetzalElement
+  @register()

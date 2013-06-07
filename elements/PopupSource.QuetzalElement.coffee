@@ -1,6 +1,14 @@
 class PopupSource extends QuetzalElement
 
   template: [
+    style: """
+      @host {
+        * {
+          position: relative;
+        }
+      }
+    """
+  ,
     quetzal_popup: id: "popup", content: [
       content: select: "property[name='popup']"
     ]
@@ -22,15 +30,7 @@ class PopupSource extends QuetzalElement
   positionPopup: ->
 
     console?.log "positionPopup"
-    # offset = @offset()
-    # position = @position()
-    top = @offsetTop # Math.round offset.top
-    left = @offsetLeft # Math.round offset.left
-    height = @offsetHeight # @outerHeight()
-    width = @offsetWidth # @outerWidth()
-    bottom = top + height
-    right = left + width
-    # $popup = @$PopupSource_popup()
+    { top, left, height, width, bottom, right } = @getBoundingClientRect()
     popup = @$.popup
     popupHeight = popup.offsetHeight # $popup.outerHeight true
     popupWidth = popup.offsetWidth # $popup.outerWidth true
@@ -50,9 +50,9 @@ class PopupSource extends QuetzalElement
     popupAppearsBelow = ( popupFitsBelow or not popupFitsAbove )
 
     popupTop = if popupAppearsBelow
-      "" # Use default top
+      height
     else
-      top - popupHeight # Show above content
+      -popupHeight # Show above content
     
     # Horizontally left (preferred) or right align w.r.t. content.
     popupFitsLeftAligned = ( left + popupWidth <= viewportWidth + scrollLeft )
@@ -60,12 +60,12 @@ class PopupSource extends QuetzalElement
     popupAlignLeft = ( popupFitsLeftAligned or not popupFitsRightAligned )
 
     popupLeft = if popupAlignLeft
-      "" # Use default left
+      0
     else
-      left + width - popupWidth # Right align
+      width - popupWidth # Right align
 
-    popup.style.top = popupTop
-    popup.style.left = popupLeft
+    popup.style.top = "#{popupTop}px"
+    popup.style.left = "#{popupLeft}px"
     classList = popup.classList
     classList.toggle "popupAppearsAbove", not popupAppearsBelow
     classList.toggle "popupAppearsBelow", popupAppearsBelow

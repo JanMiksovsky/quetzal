@@ -1,31 +1,29 @@
 ###
-Rendering functions, primarily for unit testing.
-These handle shadow subtrees and <content> nodes.
+Render the element's inner HTML, accounting for (at most) one shadow subtree and
+any <content> nodes.
+This utility function is provided primarily for unit testing.
 ###
-
-QuetzalElement.outerHTML = ( element ) ->
-  if element instanceof Array or element instanceof NodeList
-    ( QuetzalElement.outerHTML item for item in element ).join ""
-  else if element instanceof Text
-    element.textContent
-  else
-    nodeName = element.nodeName.toLowerCase()
-    attributes = ( for attribute in element.attributes
-      " #{attribute.name}=\"#{attribute.value}\""
-    ).join ""
-    openTag = "<#{nodeName}#{attributes}>"
-    closeTag = "</#{nodeName}>"
-    innerHTML = QuetzalElement.innerHTML element
-    "#{openTag}#{innerHTML}#{closeTag}"
-
 QuetzalElement.innerHTML = ( element ) ->
-  target = element.webkitShadowRoot ? element
-  results = ( for child in target.childNodes
-    if child instanceof Text
-      child.textContent
-    else if child instanceof HTMLContentElement
-      QuetzalElement.outerHTML child.getDistributedNodes()
+  root = element.webkitShadowRoot ? element
+  @outerHTML root.childNodes
+
+###
+Render the element's outer HTML. See notes at innerHTML.
+###
+QuetzalElement.outerHTML = ( element ) ->
+  switch element.constructor
+    when Array, NodeList
+      ( @outerHTML item for item in element ).join ""
+    when Text
+      element.textContent
+    when HTMLContentElement
+      @outerHTML element.getDistributedNodes()
     else
-      QuetzalElement.outerHTML child
-  )
-  results.join ""
+      nodeName = element.nodeName.toLowerCase()
+      attributes = ( for attribute in element.attributes
+        " #{attribute.name}=\"#{attribute.value}\""
+      ).join ""
+      openTag = "<#{nodeName}#{attributes}>"
+      closeTag = "</#{nodeName}>"
+      innerHTML = @innerHTML element
+      "#{openTag}#{innerHTML}#{closeTag}"

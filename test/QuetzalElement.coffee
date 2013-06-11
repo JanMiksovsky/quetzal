@@ -11,6 +11,10 @@ window.renderEqual = ( element, expected ) ->
   actual = element.impl.innerHTML
   equal actual, expected
 
+window.renderEqual2 = ( element, expected ) ->
+  actual = QuetzalElement.innerHTML element
+  equal actual, expected
+
 deregister = ( classFn ) ->
   className = classFn.name
   tagName = QuetzalElement.tagForClass classFn

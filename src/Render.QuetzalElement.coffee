@@ -1,5 +1,10 @@
+###
+Rendering functions, primarily for unit testing.
+These handle shadow subtrees and <content> nodes.
+###
+
 QuetzalElement.outerHTML = ( element ) ->
-  if element instanceof Array
+  if element instanceof Array or element instanceof NodeList
     ( QuetzalElement.outerHTML item for item in element ).join ""
   else if element instanceof Text
     element.textContent

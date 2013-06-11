@@ -5,16 +5,9 @@ These rely on Polymer's ShadowDOMPolyfill to compose light DOM and shadow DOM
 together for inspection purposes.
 ###
 
-window.polyfillEqual = ( element, expected ) ->
-  renderer = ShadowDOMPolyfill.getRendererForHost element
-  renderer.render()
-  actual = element.impl.innerHTML
-  equal actual, expected
-
 window.renderEqual = ( element, expected ) ->
   actual = QuetzalElement.innerHTML element
   equal actual, expected
-  polyfillEqual element, expected
 
 deregister = ( classFn ) ->
   className = classFn.name

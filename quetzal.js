@@ -423,3 +423,72 @@ Sugar to allow quick creation of element properties.
   })(QuetzalElement);
 
 }).call(this);
+
+/*
+Rendering functions, primarily for unit testing.
+These handle shadow subtrees and <content> nodes.
+*/
+
+
+(function() {
+  QuetzalElement.outerHTML = function(element) {
+    var attribute, attributes, closeTag, innerHTML, item, nodeName, openTag;
+
+    if (element instanceof Array || element instanceof NodeList) {
+      return ((function() {
+        var _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = element.length; _i < _len; _i++) {
+          item = element[_i];
+          _results.push(QuetzalElement.outerHTML(item));
+        }
+        return _results;
+      })()).join("");
+    } else if (element instanceof Text) {
+      return element.textContent;
+    } else {
+      nodeName = element.nodeName.toLowerCase();
+      attributes = ((function() {
+        var _i, _len, _ref, _results;
+
+        _ref = element.attributes;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          attribute = _ref[_i];
+          _results.push(" " + attribute.name + "=\"" + attribute.value + "\"");
+        }
+        return _results;
+      })()).join("");
+      openTag = "<" + nodeName + attributes + ">";
+      closeTag = "</" + nodeName + ">";
+      innerHTML = QuetzalElement.innerHTML(element);
+      return "" + openTag + innerHTML + closeTag;
+    }
+  };
+
+  QuetzalElement.innerHTML = function(element) {
+    var child, results, target, _ref;
+
+    target = (_ref = element.webkitShadowRoot) != null ? _ref : element;
+    results = (function() {
+      var _i, _len, _ref1, _results;
+
+      _ref1 = target.childNodes;
+      _results = [];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        child = _ref1[_i];
+        if (child instanceof Text) {
+          _results.push(child.textContent);
+        } else if (child instanceof HTMLContentElement) {
+          _results.push(QuetzalElement.outerHTML(child.getDistributedNodes()));
+        } else {
+          _results.push(QuetzalElement.outerHTML(child));
+        }
+      }
+      return _results;
+    })();
+    return results.join("");
+  };
+
+}).call(this);

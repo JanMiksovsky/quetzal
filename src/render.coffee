@@ -11,19 +11,18 @@ QuetzalElement.innerHTML = ( element ) ->
 Render the element's outer HTML. See notes at innerHTML.
 ###
 QuetzalElement.outerHTML = ( element ) ->
-  switch element.constructor
-    when Array, NodeList
+  if element instanceof Array or element instanceof NodeList
       ( @outerHTML item for item in element ).join ""
-    when Text
-      element.textContent
-    when HTMLContentElement
-      @outerHTML element.getDistributedNodes()
-    else
-      nodeName = element.nodeName.toLowerCase()
-      attributes = ( for attribute in element.attributes
-        " #{attribute.name}=\"#{attribute.value}\""
-      ).join ""
-      openTag = "<#{nodeName}#{attributes}>"
-      closeTag = "</#{nodeName}>"
-      innerHTML = @innerHTML element
-      "#{openTag}#{innerHTML}#{closeTag}"
+  else if element instanceof Text
+    element.textContent
+  else if element instanceof HTMLContentElement
+    @outerHTML element.getDistributedNodes()
+  else
+    nodeName = element.nodeName.toLowerCase()
+    attributes = ( for attribute in element.attributes
+      " #{attribute.name}=\"#{attribute.value}\""
+    ).join ""
+    openTag = "<#{nodeName}#{attributes}>"
+    closeTag = "</#{nodeName}>"
+    innerHTML = @innerHTML element
+    "#{openTag}#{innerHTML}#{closeTag}"

@@ -1,111 +1,53 @@
 /*
+Allow registration of Quetzal element classes with browser.
+
+This defines a window global with the class' name. If the class is already
+global, this will *redefine* the global class to point to the registered class.
+When using Polymer's document.register() polyfill, the registered class is a
+munged version of the original. Assertions about instanceof should remain true
+even after munging, however.
+*/
+
+
+(function() {
+  var __hasProp = {}.hasOwnProperty;
+
+  Function.prototype.register = function() {
+    var className, methodName, originalClass, originalImplementation, registeredClass, tag;
+
+    originalClass = this;
+    className = originalClass.name;
+    tag = QuetzalElement.tagForClass(originalClass);
+    registeredClass = document.register(tag, {
+      prototype: originalClass.prototype
+    });
+    for (methodName in originalClass) {
+      if (!__hasProp.call(originalClass, methodName)) continue;
+      originalImplementation = originalClass[methodName];
+      if (methodName[0] !== "_") {
+        registeredClass[methodName] = originalImplementation;
+      }
+    }
+    return window[className] = registeredClass;
+  };
+
+}).call(this);
+
+/*
 Quetzal
 */
 
 
 /*
-Sugar to allow quick creation of element properties.
+Base Quetzal element class
 */
 
 
 (function() {
-  var Property, QuetzalElement, Super, _ref, _ref1,
-    __hasProp = {}.hasOwnProperty,
+  var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  Function.prototype.alias = function(propertyName, accessChain, sideEffect) {
-    var processChain;
-
-    processChain = function(obj, propertyName, accessChain, sideEffect, value) {
-      var index, key, keys, result, setter, _i, _len;
-
-      result = obj;
-      keys = accessChain.split(".");
-      setter = value !== void 0;
-      for (index = _i = 0, _len = keys.length; _i < _len; index = ++_i) {
-        key = keys[index];
-        if (index === keys.length - 1 && setter) {
-          result[key] = value;
-          result = value;
-        } else {
-          result = result[key];
-        }
-      }
-      if (setter && (sideEffect != null)) {
-        sideEffect.call(obj, value);
-      }
-      return result;
-    };
-    return Object.defineProperty(this.prototype, propertyName, {
-      enumerable: true,
-      get: function() {
-        return processChain(this, propertyName, accessChain, sideEffect);
-      },
-      set: function(value) {
-        return processChain(this, propertyName, accessChain, sideEffect, value);
-      }
-    });
-  };
-
-  Function.prototype.getter = function(propertyName, get) {
-    return Object.defineProperty(this.prototype, propertyName, {
-      get: get,
-      configurable: true,
-      enumerable: true
-    });
-  };
-
-  if (Function.prototype.name == null) {
-    Object.defineProperty(Function.prototype, "name", {
-      get: function() {
-        return /function\s+([^\( ]*)/.exec(this.toString())[1];
-      }
-    });
-  }
-
-  Function.prototype.property = function(propertyName, sideEffect, defaultValue, converter) {
-    return Object.defineProperty(this.prototype, propertyName, {
-      enumerable: true,
-      get: function() {
-        var result;
-
-        result = this._properties[propertyName];
-        if (result === void 0) {
-          return defaultValue;
-        } else {
-          return result;
-        }
-      },
-      set: function(value) {
-        var result;
-
-        result = converter ? converter.call(this, value) : value;
-        this._properties[propertyName] = result;
-        return sideEffect != null ? sideEffect.call(this, result) : void 0;
-      }
-    });
-  };
-
-  Function.prototype.propertyBool = function(propertyName, sideEffect, defaultValue) {
-    return this.property(propertyName, sideEffect, defaultValue, function(value) {
-      return String(value) === "true";
-    });
-  };
-
-  Function.prototype.setter = function(propertyName, set) {
-    return Object.defineProperty(this.prototype, propertyName, {
-      set: set,
-      configurable: true,
-      enumerable: true
-    });
-  };
-
-  /*
-  Base Quetzal element class
-  */
-
-
-  QuetzalElement = (function(_super) {
+  window.QuetzalElement = (function(_super) {
     __extends(QuetzalElement, _super);
 
     function QuetzalElement() {
@@ -362,65 +304,102 @@ Sugar to allow quick creation of element properties.
 
   })(HTMLDivElement);
 
-  /*
-  Allow registration of Quetzal element classes with browser.
-  
-  This defines a window global with the class' name. If the class is already
-  global, this will *redefine* the global class to point to the registered class.
-  When using Polymer's document.register() polyfill, the registered class is a
-  munged version of the original. Assertions about instanceof should remain true
-  even after munging, however.
-  */
-
-
-  Function.prototype.register = function() {
-    var className, methodName, originalClass, originalImplementation, registeredClass, tag;
-
-    originalClass = this;
-    className = originalClass.name;
-    tag = QuetzalElement.tagForClass(originalClass);
-    registeredClass = document.register(tag, {
-      prototype: originalClass.prototype
-    });
-    for (methodName in originalClass) {
-      if (!__hasProp.call(originalClass, methodName)) continue;
-      originalImplementation = originalClass[methodName];
-      if (methodName[0] !== "_") {
-        registeredClass[methodName] = originalImplementation;
-      }
-    }
-    return window[className] = registeredClass;
-  };
-
   QuetzalElement.register();
 
-  Super = (function(_super) {
-    __extends(Super, _super);
+}).call(this);
 
-    function Super() {
-      _ref = Super.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
+/*
+Sugar to allow quick creation of element properties.
+*/
 
-    Super.register();
 
-    return Super;
+(function() {
+  Function.prototype.alias = function(propertyName, accessChain, sideEffect) {
+    var processChain;
 
-  })(QuetzalElement);
+    processChain = function(obj, propertyName, accessChain, sideEffect, value) {
+      var index, key, keys, result, setter, _i, _len;
 
-  Property = (function(_super) {
-    __extends(Property, _super);
+      result = obj;
+      keys = accessChain.split(".");
+      setter = value !== void 0;
+      for (index = _i = 0, _len = keys.length; _i < _len; index = ++_i) {
+        key = keys[index];
+        if (index === keys.length - 1 && setter) {
+          result[key] = value;
+          result = value;
+        } else {
+          result = result[key];
+        }
+      }
+      if (setter && (sideEffect != null)) {
+        sideEffect.call(obj, value);
+      }
+      return result;
+    };
+    return Object.defineProperty(this.prototype, propertyName, {
+      enumerable: true,
+      get: function() {
+        return processChain(this, propertyName, accessChain, sideEffect);
+      },
+      set: function(value) {
+        return processChain(this, propertyName, accessChain, sideEffect, value);
+      }
+    });
+  };
 
-    function Property() {
-      _ref1 = Property.__super__.constructor.apply(this, arguments);
-      return _ref1;
-    }
+  Function.prototype.getter = function(propertyName, get) {
+    return Object.defineProperty(this.prototype, propertyName, {
+      get: get,
+      configurable: true,
+      enumerable: true
+    });
+  };
 
-    Property.register();
+  if (Function.prototype.name == null) {
+    Object.defineProperty(Function.prototype, "name", {
+      get: function() {
+        return /function\s+([^\( ]*)/.exec(this.toString())[1];
+      }
+    });
+  }
 
-    return Property;
+  Function.prototype.property = function(propertyName, sideEffect, defaultValue, converter) {
+    return Object.defineProperty(this.prototype, propertyName, {
+      enumerable: true,
+      get: function() {
+        var result;
 
-  })(QuetzalElement);
+        result = this._properties[propertyName];
+        if (result === void 0) {
+          return defaultValue;
+        } else {
+          return result;
+        }
+      },
+      set: function(value) {
+        var result;
+
+        result = converter ? converter.call(this, value) : value;
+        this._properties[propertyName] = result;
+        return sideEffect != null ? sideEffect.call(this, result) : void 0;
+      }
+    });
+  };
+
+  Function.prototype.propertyBool = function(propertyName, sideEffect, defaultValue) {
+    return this.property(propertyName, sideEffect, defaultValue, function(value) {
+      return String(value) === "true";
+    });
+  };
+
+  Function.prototype.setter = function(propertyName, set) {
+    return Object.defineProperty(this.prototype, propertyName, {
+      set: set,
+      configurable: true,
+      enumerable: true
+    });
+  };
 
 }).call(this);
 
@@ -483,5 +462,47 @@ This utility function is provided primarily for unit testing.
         return "" + openTag + innerHTML + closeTag;
     }
   };
+
+}).call(this);
+
+(function() {
+  var Super, _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Super = (function(_super) {
+    __extends(Super, _super);
+
+    function Super() {
+      _ref = Super.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    Super.register();
+
+    return Super;
+
+  })(QuetzalElement);
+
+}).call(this);
+
+(function() {
+  var Property, _ref,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  Property = (function(_super) {
+    __extends(Property, _super);
+
+    function Property() {
+      _ref = Property.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    Property.register();
+
+    return Property;
+
+  })(QuetzalElement);
 
 }).call(this);

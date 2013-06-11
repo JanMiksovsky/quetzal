@@ -2,66 +2,11 @@
 Quetzal
 ###
 
-###
-Sugar to allow quick creation of element properties.
-###
-Function::alias = ( propertyName, accessChain, sideEffect ) ->
-    processChain = ( obj, propertyName, accessChain, sideEffect, value ) ->
-      result = obj
-      keys = accessChain.split "."
-      setter = ( value isnt undefined) 
-      for key, index in keys
-        if index == keys.length - 1 and setter
-          result[ key ] = value
-          result = value
-        else
-          result = result[ key ]
-      if setter and sideEffect?
-        sideEffect.call obj, value
-      result
-    Object.defineProperty @prototype, propertyName,
-      enumerable: true
-      get: -> processChain @, propertyName, accessChain, sideEffect
-      set: ( value ) -> processChain @, propertyName, accessChain, sideEffect, value
-
-Function::getter = ( propertyName, get ) ->
-  Object.defineProperty @prototype, propertyName, { get, configurable: true, enumerable: true }
-
-# Polyfill for Function.name
-unless Function::name?
-  Object.defineProperty Function::, "name",
-    get: ->
-      /function\s+([^\( ]*)/.exec( @toString() )[1]
-
-Function::property = ( propertyName, sideEffect, defaultValue, converter ) ->
-  Object.defineProperty @prototype, propertyName,
-    enumerable: true
-    get: ->
-      result = @._properties[ propertyName ]
-      if result is undefined
-        defaultValue
-      else
-        result
-    set: ( value ) ->
-      result = if converter
-        converter.call @, value
-      else
-        value
-      @._properties[ propertyName ] = result
-      sideEffect?.call @, result
-
-Function::propertyBool = ( propertyName, sideEffect, defaultValue ) ->
-  @property propertyName, sideEffect, defaultValue, ( value ) ->
-      String( value ) == "true"
-
-Function::setter = ( propertyName, set ) ->
-  Object.defineProperty @prototype, propertyName, { set, configurable: true, enumerable: true }
-
 
 ###
 Base Quetzal element class
 ###
-class QuetzalElement extends HTMLDivElement
+class window.QuetzalElement extends HTMLDivElement
 
   # This constructor is only used with Quetzal element classes which are not
   # registered via Polymer's document.register().
@@ -273,39 +218,5 @@ class QuetzalElement extends HTMLDivElement
     element.classList.add QuetzalElement.tagForClass baseClass
     @_createShadowWithTemplate element, baseClass
 
-
-###
-Allow registration of Quetzal element classes with browser.
-
-This defines a window global with the class' name. If the class is already
-global, this will *redefine* the global class to point to the registered class.
-When using Polymer's document.register() polyfill, the registered class is a
-munged version of the original. Assertions about instanceof should remain true
-even after munging, however.
-###
-Function::register = ->
-  originalClass = @
-  className = originalClass.name
-  tag = QuetzalElement.tagForClass originalClass
-  registeredClass = document.register tag,
-    prototype: originalClass::
-  # The registered class wraps the original class. Copy public class methods
-  # from the original to the wrapped class, and forward the implementations.
-  for own methodName, originalImplementation of originalClass when methodName[0] != "_"
-    registeredClass[ methodName ] = originalImplementation
-  window[ className ] = registeredClass
-
-# Register <quetzal> as an element class
+# Register <quetzal-element> as an element class
 QuetzalElement.register()
-
-
-# Implements a hypothetical <super> element.
-# This can be used within a template to fill in something that looks like an
-# instance of the element's base class, but without the overhead or
-# complexity of actually instantiating the base class.
-class Super extends QuetzalElement
-  @register()
-
-# Implements a hypothetical <property> element.
-class Property extends QuetzalElement
-  @register()

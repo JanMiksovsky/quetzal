@@ -13,7 +13,14 @@ module.exports = ->
         src: sortDependencies.sortFiles "elements/*.coffee"
         dest: "elements/elements.js"
       src:
-        src: sortDependencies.sortFiles "src/*.coffee"
+        src: [
+          "src/register.coffee"
+          "src/QuetzalElement.coffee"
+          "src/properties.coffee"
+          "src/render.coffee"
+          "src/Super.QuetzalElement.coffee"
+          "src/Property.QuetzalElement.coffee"
+        ]
         dest: "quetzal.js"
       test:
         src: sortDependencies.sortFiles "test/*.coffee"

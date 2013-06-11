@@ -419,7 +419,7 @@ This utility function is provided primarily for unit testing.
   };
 
   /*
-  Render the element's outer HTML. See notes at innerHTML.
+  Render the element's outer HTML.
   */
 
 

@@ -8,7 +8,7 @@ QuetzalElement.innerHTML = ( element ) ->
   @outerHTML root.childNodes
 
 ###
-Render the element's outer HTML. See notes at innerHTML.
+Render the element's outer HTML.
 ###
 QuetzalElement.outerHTML = ( element ) ->
   if element instanceof Array or element instanceof NodeList

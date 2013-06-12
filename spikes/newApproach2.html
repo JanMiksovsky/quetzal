@@ -1,0 +1,56 @@
+<!-- After instantiating shadows -->
+<icon-button icon="document.png">
+    <shadow-root for quetzal-button>
+        <button>
+            <content></content>
+        </button>
+    </shadow-root>
+    <shadow-root for icon-button>
+        <shadow>
+            <img src="{{icon}}">
+            <content></content>
+        </shadow>
+    </shadow-root>
+    Open
+</icon-button>
+
+<!-- Following transformation -->
+<!--
+If a <super> element is encountered:
+* Append a <shadow> to the <super> element's content.
+* Use the shadow's .olderShadowRoot to get a reference to the base class shadow.
+* Remove the <shadow> element.
+* Create a shadow root for the <super>.
+* Move the children of the older shadow root to <super>'s new shadow root.
+-->
+<icon-button icon="document.png">
+    <shadow-root for quetzal-button>
+    </shadow-root>
+    <shadow-root for icon-button>
+        <super class="quetzal-button">
+            <shadow-root>
+                <button>
+                    <content></content>
+                </button>
+            </shadow-root>            
+            <img src="{{icon}}">
+            <content></content>
+        </super>
+    </shadow-root>
+    Open
+</icon-button>
+
+<!-- Or -->
+<icon-button icon="document.png">
+    <shadow-root for quetzal-button>
+        <button>
+            <img src="{{icon}}">
+            <content></content>
+        </button>
+    </shadow-root>
+    <shadow-root for icon-button>
+        <shadow>
+        </shadow>
+    </shadow-root>
+    Open
+</icon-button>

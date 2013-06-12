@@ -12,11 +12,15 @@ Render the element's outer HTML.
 ###
 QuetzalElement.outerHTML = ( element ) ->
   if element instanceof Array or element instanceof NodeList
-      ( @outerHTML item for item in element ).join ""
+    ( @outerHTML item for item in element ).join ""
   else if element instanceof Text
     element.textContent
   else if element instanceof HTMLContentElement
     @outerHTML element.getDistributedNodes()
+  else if element instanceof HTMLShadowElement
+    @outerHTML ( element.olderShadowRoot ? element.childNodes )
+  else if element instanceof DocumentFragment
+    @outerHTML element.childNodes
   else
     nodeName = element.nodeName.toLowerCase()
     attributes = ( for attribute in element.attributes

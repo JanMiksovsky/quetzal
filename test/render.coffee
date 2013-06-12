@@ -33,3 +33,12 @@ test "Render: element with shadow with content", ->
   root = div.webkitCreateShadowRoot()
   root.innerHTML = "<button><content></content></button>"
   renderEqual div, "<button>OK</button>"
+
+test "Render: element with two shadows", ->
+  div = document.createElement "div"
+  div.innerHTML = "Alice"
+  root1 = div.webkitCreateShadowRoot()
+  root1.innerHTML = "<i><content></content></i>"
+  root2 = div.webkitCreateShadowRoot()
+  root2.innerHTML = "Hello, <shadow></shadow>."
+  renderEqual div, "Hello, <i>Alice</i>."

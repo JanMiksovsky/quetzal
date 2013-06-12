@@ -424,7 +424,7 @@ This utility function is provided primarily for unit testing.
 
 
   QuetzalElement.outerHTML = function(element) {
-    var attribute, attributes, closeTag, innerHTML, item, nodeName, openTag;
+    var attribute, attributes, closeTag, innerHTML, item, nodeName, openTag, _ref;
 
     if (element instanceof Array || element instanceof NodeList) {
       return ((function() {
@@ -441,15 +441,19 @@ This utility function is provided primarily for unit testing.
       return element.textContent;
     } else if (element instanceof HTMLContentElement) {
       return this.outerHTML(element.getDistributedNodes());
+    } else if (element instanceof HTMLShadowElement) {
+      return this.outerHTML((_ref = element.olderShadowRoot) != null ? _ref : element.childNodes);
+    } else if (element instanceof DocumentFragment) {
+      return this.outerHTML(element.childNodes);
     } else {
       nodeName = element.nodeName.toLowerCase();
       attributes = ((function() {
-        var _i, _len, _ref, _results;
+        var _i, _len, _ref1, _results;
 
-        _ref = element.attributes;
+        _ref1 = element.attributes;
         _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          attribute = _ref[_i];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          attribute = _ref1[_i];
           _results.push(" " + attribute.name + "=\"" + attribute.value + "\"");
         }
         return _results;

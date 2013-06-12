@@ -404,8 +404,8 @@ Sugar to allow quick creation of element properties.
 }).call(this);
 
 /*
-Render the element's inner HTML, accounting for (at most) one shadow subtree and
-any <content> nodes.
+Render the element's inner HTML, accounting for shadow subtrees and any
+distributed content nodes.
 This utility function is provided primarily for unit testing.
 */
 

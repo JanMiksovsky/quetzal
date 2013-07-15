@@ -1,0 +1,156 @@
+<link rel="import" href="quetzal-element.html">
+<link rel="import" href="quetzal-overlay.html">
+
+<polymer-element name="quetzal-popup" extends="quetzal-element"
+  attributes="cancelOnEscapeKey cancelOnOutsideClick closeOnInsideClick opened">
+
+<template>
+
+<style>
+@host {
+
+  * {
+    display: block;
+    position: absolute;
+    /* REVIEW: Shouldn't need this, but without it, plain text popups wrap. */
+    white-space: nowrap;
+    z-index: 1;
+  }
+
+  *:not(.opened) {
+    display: none;
+  }
+
+  /* Generic appearance */
+  /* &.generic { */
+  * {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );
+    box-sizing: border-box;
+    padding: .25em;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+}
+</style>
+
+<content></content>
+
+</template>
+
+<script>
+Polymer( "quetzal-popup", {
+
+  // Cancel the popup. This is just like closing it, but raises a "canceled"
+  // event instead. This has no effect if the popup is already closed.
+  cancel: function() {
+    this._close( "canceled" );
+  },
+
+  // True if the user can cancel an open popup by pressing the Escape key.
+  // Default is true.
+  cancelOnEscapeKey: true,
+
+  // True if the popup should be canceled if the user clicks outside it.
+  // Default is true. See also the modal() property.
+  cancelOnOutsideClick: true,
+
+  // Close the popup (dismiss it). This raises a "closed" event. This has no
+  // effect if the popup is already closed.
+  close: function() {
+    this._close( "closed" );
+  },
+
+  // True if the popup should be closed normally if the user clicks inside it.
+  // Default is true.
+  closeOnInsideClick: true,
+
+  // Open the popup (show it). This raises an "opened" event. This has no effect
+  // if the popup is already opened.
+  open: function() {
+    this.opened = true;
+  },
+
+  opened: false,
+
+  openedChanged: function() {
+    if ( this.opened ) {
+      this.overlay = document.createElement( "quetzal-overlay" );
+      this.overlay.target = this;
+      this._eventsOn();
+      this.positionPopup();
+      this.dispatchEvent( new CustomEvent( "opened" ));      
+    }
+    this.classList.toggle( "opened", this.opened );
+  },
+
+  // A function called to position the popup when it is opened. By default this
+  // has no effect. This can be overridden by subclasses for custom positioning.
+  positionPopup: function() {},
+
+  // Take care of hiding the popup, its overlay, and raising the indicated event.
+  _close: function( closeEventName ) {
+    this._eventsOff();
+    if ( this.overlay ) {
+      this.overlay.remove();
+      this.overlay = null;
+    }
+    if ( this.opened ) {
+      if ( closeEventName ) {
+        this.dispatchEvent( new CustomEvent( closeEventName ) );
+      }
+      return this.opened = false;
+    }
+  },
+
+  // Unbind the event handlers we bound earlier.
+  _eventsOff: function() {
+    if ( this._handlerOutsideClick ) {
+      var overlay = this.overlay;
+      if ( overlay ) {
+        overlay.removeEventListener( "click", this._handlerOutsideClick );
+      }
+      this._handlerOutsideClick = null;
+    }
+    if ( this._handlerInsideClick != null ) {
+      this.removeEventListener( "click", this._handlerInsideClick );
+      this._handlerInsideClick = null;
+    }
+    if ( this._handlerDocumentKeydown ) {
+      document.removeEventListener( "keydown", this._handlerDocumentKeydown );
+      this._handlerDocumentKeydown = null;
+    }
+  },
+
+  // Wire up events.
+  _eventsOn: function() {
+    this._handlerDocumentKeydown = function( event ) {
+      if ( this.cancelOnEscapeKey && event.keyCode === 27 ) {
+        this.cancel();
+        event.stopPropagation();
+      }
+    }.bind( this );
+    document.addEventListener( "keydown", this._handlerDocumentKeydown );
+    if ( this.cancelOnOutsideClick ) {
+      this._handlerOutsideClick = function( event ) {
+        return this.cancel();
+      }.bind( this );
+      var overlay = this.overlay;
+      if ( overlay ) {
+        overlay.addEventListener( "click", this._handlerOutsideClick );
+      }
+    }
+    if ( this.closeOnInsideClick ) {
+      this._handlerInsideClick = function( event ) {
+        return this.close();
+      }.bind( this );
+      this.addEventListener( "click", this._handlerInsideClick );
+    }
+  }
+
+});
+</script>
+
+</polymer-element>

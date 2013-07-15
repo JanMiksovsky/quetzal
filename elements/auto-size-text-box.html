@@ -1,0 +1,175 @@
+<!--
+A text box that makes itself big enough to show its content.
+
+This works by copying the text to a hidden div which will automatically grow in
+size; the expanding copy will expand the container, which in turn stretch the
+text box.
+-->
+
+<link rel="import" href="quetzal-element.html">
+
+<polymer-element name="auto-size-text-box" extends="quetzal-element" attributes="minimumLines placeholder spellcheck">
+
+<template>
+
+  <style>
+  #container {
+    position: relative;
+  }
+
+  /*
+   * Ensure both the text area and copy end up with the element's own font
+   * metrics, so that text will lay out the same in both of them.
+   */
+  #textBox,
+  #textCopy {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    margin: 0;
+  }
+
+  #textBox {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    resize: none;
+    top: 0;
+    width: 100%;
+  }
+
+  #textCopy {
+    border-style: solid;
+    visibility: hidden;
+    width: 100%;
+    white-space: pre-wrap; /* So lines wrap */
+  }
+  </style>
+
+  <div id="container">
+    <textarea id="textBox" on-change="autoSize" on-keypress="_keypress" on-keyup="autoSize" placeholder="{{placeholder}}" spellcheck="{{spellcheck}}"></textarea>
+    <!--
+    The extra space below is an *em space*, which should be about as wide as the
+    widest character (in English, anyway). This extra space helps reduce jerk.
+    Without it, if the user is typing near the end of the line, they may see
+    the text jerk up before the text box gets a chance to grow. The wider we
+    make this extra space, the less chance the user will see that jerkiness.
+    The trade-off is that the user will also see more false positives: cases
+    where the text box grows an extra line taller than it needs to be.
+    -->
+    <pre id="textCopy"><content></content><span id="extraSpace">&emsp;</span><div id="extraLine">&nbsp;</div></pre>
+  </div>
+
+</template>
+
+<script>
+Polymer( "auto-size-text-box", {
+
+  // Resize the element such that the text box can exactly contain its content.
+  autoSize: function() {
+    // If we had speculatively added an extra line because of an Enter keypress,
+    // we can now hide the extra line.
+    this.$.extraLine.style.display = "none" ;
+
+    // We resize by copying the text box contents to the element itself. The
+    // element's content isn't visible, but takes up the same amount of room as
+    // the same text in the text box. Update the element's content adjusts the
+    // element's size, which in turn will make the text box the correct height.
+    this.innerHTML = this.$.textBox.value;
+  },
+
+  contentChangedCallback: function() {
+    if ( this.innerHTML !== this.$.textBox.value ) {
+      this.log( "content set externally" );
+      this.$.textBox.value = this.innerHTML;
+    }
+  },
+
+  // TODO: Change to enteredDocumentCallback
+  insertedCallback: function() {
+
+    // For auto-sizing to work, we need the text copy to have the same border,
+    // padding, and other relevant characteristics as the original text area.
+    // Since those aspects are affected by CSS, we have to wait until the
+    // element is in the document before we can update the text copy.
+    var textBoxStyle = getComputedStyle( this.$.textBox );
+    var textCopyStyle = this.$.textCopy.style;
+    textCopyStyle.borderBottomWidth  = textBoxStyle.borderBottomWidth;
+    textCopyStyle.borderLeftWidth    = textBoxStyle.borderLeftWidth;
+    textCopyStyle.borderRightWidth   = textBoxStyle.borderRightWidth;
+    textCopyStyle.borderTopWidth     = textBoxStyle.borderTopWidth;
+    textCopyStyle.paddingBottom      = textBoxStyle.paddingBottom;
+    textCopyStyle.paddingLeft        = textBoxStyle.paddingLeft;
+    textCopyStyle.paddingRight       = textBoxStyle.paddingRight;
+    textCopyStyle.paddingTop         = textBoxStyle.paddingTop;
+
+    // TODO: On Mozilla, an item which is in the document but not yet visible
+    // will report its padding as zero. Since we don't know the real padding,
+    // we need to take a guess that it's the standard padding.
+    // if (paddingBottom === "0px" && paddingLeft === "0px" && paddingRight === "0px" && paddingTop === "0px") {
+    //   paddingBottom = "2px";
+    //   paddingLeft = "2px";
+    //   paddingRight = "2px";
+    //   paddingTop = "2px";
+    // }
+
+    // Use the extraLine member to gauge the expected height of a single line of
+    // text. We can't use lineHeight, because that can be reported as "normal",
+    // and we want to know the actual pixel height.
+    this._lineHeight = this.$.extraLine.clientHeight;
+    // Now that we know the lineheight, we can hide the extra line.
+    this.$.extraLine.style.display = "none";
+
+    this._setMinimumHeight();
+  },
+
+  minimumLines: 1,
+
+  // BUG: Setting the minimumLines attribute after creation doesn't seem to
+  // trigger this changed handler.
+  minimumLinesChanged: function() {
+    if ( this._lineHeight ) {
+      this._setMinimumHeight();
+    }
+  },
+
+  ready: function() {
+    this.super();
+    // Force an initial sync of the text box with the element contents.
+    this.contentChangedCallback();
+  },
+
+  // Speculatively add a line to our copy of the text. We're not sure what the
+  // exact effect of typing this character will be, and at this point it's not
+  // reflected yet in the text box's content. We speculate that it will add a
+  // line to the text and size accordingly. (One other possibility is that the
+  // user's replacing a selected chunk of text with a newline.) In any event,
+  // once we get the keyup or change event, we'll make any final adjustments.
+  _keypress: function( event ) {
+    if ( event.keyCode === 13 /* Enter */ ) {
+      this.$.extraLine.style.display = "inherit";
+    }
+  },
+
+  // Setting the minimumLines attribute translates into setting the minimum
+  // height on the text copy.
+  _setMinimumHeight: function() {
+    var textCopy = this.$.textCopy;
+    var outerHeight = textCopy.getBoundingClientRect().height;
+    var style = getComputedStyle( textCopy );
+    var paddingTop = parseFloat( style.paddingTop );
+    var paddingBottom = parseFloat( style.paddingBottom );
+    var innerHeight = textCopy.clientHeight - paddingTop - paddingBottom;
+    var bordersPlusPadding = outerHeight - innerHeight;
+    var minHeight = ( this.minimumLines * this._lineHeight ) + bordersPlusPadding;
+    textCopy.style.minHeight = minHeight + "px";
+  }
+
+});
+</script>
+
+</polymer-element>

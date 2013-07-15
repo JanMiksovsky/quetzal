@@ -1,0 +1,85 @@
+<link rel="import" href="quetzal-element.html">
+<link rel="import" href="quetzal-popup.html">
+
+<polymer-element name="popup-source" extends="quetzal-element" attributes="opened">
+
+<template>
+<style>
+@host {
+  * {
+    position: relative;
+  }
+}
+
+#container {
+  display: inline-block;
+}
+</style>
+<quetzal-popup id="popup" opened="{{opened}}">
+  <content select="property[name='popup']"></content>
+</quetzal-popup>
+<div id="container">
+  <content></content>
+</div>
+</template>
+
+<script>
+Polymer( "quetzal-source", {
+
+  open: Quetzal.alias( "$.popup.open" ),
+
+  positionPopup: function() {
+    this.log( "positionPopup" );
+    var rect = this.getBoundingClientRect();
+    var top = rect.top;
+    var left = rect.left;
+    var height = rect.height;
+    var width = rect.width;
+    var bottom = rect.bottom;
+    var right = rect.right;
+    var popup = this.$.popup;
+    var popupHeight = popup.offsetHeight;
+    var popupWidth = popup.offsetWidth;
+    var scrollTop = 0;
+    var scrollLeft = 0;
+    var viewportHeight = window.innerHeight;
+    var viewportWidth = window.innerWidth;
+    var popupFitsBelow = bottom + popupHeight <= viewportHeight + scrollTop;
+    var popupFitsAbove = top - popupHeight >= scrollTop;
+    var popupAppearsBelow = popupFitsBelow || !popupFitsAbove;
+    var popupTop = popupAppearsBelow ? height : -popupHeight;
+    var popupFitsLeftAligned = left + popupWidth <= viewportWidth + scrollLeft;
+    var popupFitsRightAligned = right - popupWidth >= scrollLeft;
+    var popupAlignLeft = popupFitsLeftAligned || !popupFitsRightAligned;
+    var popupLeft = popupAlignLeft ? 0 : width - popupWidth;
+    popup.style.top = popupTop + "px";
+    popup.style.left = popupLeft + "px";
+    var classList = popup.classList;
+    classList.toggle( "popupAppearsAbove", !popupAppearsBelow );
+    classList.toggle( "popupAppearsBelow", popupAppearsBelow );
+    classList.toggle( "popupAlignLeft", popupAlignLeft );
+    classList.toggle( "popupAlignRight", !popupAlignLeft );
+  },
+
+  ready: function() {
+    this.super();
+    var self = this;
+    this.$.container.addEventListener( "click", function() {
+      self.log( "open" );
+      self.open();
+    });
+    this.$.popup.addEventListener( "closed", function() {
+      self.log( "close" );
+    });
+    this.$.popup.addEventListener( "canceled", function() {
+      self.log( "cancel" );
+    });
+    this.$.popup.positionPopup = function() {
+      self.positionPopup();
+    };
+  }
+
+});
+</script>
+
+</polymer-element>

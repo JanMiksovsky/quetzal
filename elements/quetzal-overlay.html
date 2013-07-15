@@ -1,0 +1,43 @@
+<link rel="import" href="quetzal-element.html">
+
+<polymer-element name="quetzal-overlay" extends="quetzal-element">
+
+<template>
+<style>
+@host {
+  * {
+    /*background: black;*/
+    bottom: 0;
+    cursor: default;
+    left: 0;
+    /*opacity: 0.25;*/
+    position: fixed;
+    right: 0;
+    top: 0;
+  }
+}
+</style>
+</template>
+
+<script>
+Polymer( "quetzal-overlay", {
+
+  get target() {
+    return this._target;
+  },
+  set target( target ) {
+    this._target = target;
+    if (target === null) {
+      return;
+    }
+    var targetZIndex = parseInt( target.style.zIndex );
+    if ( targetZIndex ) {
+      this.style.zIndex = targetZIndex;
+    }
+    target.parentNode.insertBefore( this, target );
+  }
+
+});
+</script>
+
+</polymer-element>

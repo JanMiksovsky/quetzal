@@ -1,0 +1,63 @@
+<link rel="import" href="shadowDistribution.html">
+
+<polymer-element name="quetzal-element" constructor="QuetzalElement">
+
+<script>
+Polymer( "quetzal-element", {
+
+  log: function( s ) {
+    if ( console ) {
+      console.log( this.localName + ": " + s );
+    }
+  },
+
+  ready: function() {
+    distributeShadowContent( this );
+    if ( this.contentChangedCallback ) {
+      this._observeContentChanged();
+    }
+  },
+
+  _observeContentChanged: function() {
+    var self = this;
+    var observer = new MutationObserver( function() {
+      self.contentChangedCallback();
+    });
+    observer.observe( this, {
+      characterData: true,
+      childList: true,
+      subtree: true
+    });
+  }
+
+});
+
+// Helpers
+window.Quetzal = {
+
+  // Sugar to allow quick delegation of a method to a sub-element.
+  alias: function( accessChain, sideEffectFn ) {
+    return function() {  
+      var result = this;
+      var keys = accessChain.split( "." );
+      var hasArguments = ( arguments.length > 0 );
+      for ( var i = 0, length = keys.length; i < length; i++ ) {
+        var key = keys[i];
+        if (i === keys.length - 1 ) {
+          result[ key ].apply( this, arguments );
+          if ( hasArguments && sideEffectFn ) {
+            sideEffectFn.apply( this, arguments );
+          }
+          result = this;
+        } else {
+          result = result[ key ];
+        }
+      }
+      return result;
+    }
+  }
+
+};
+</script>
+
+</polymer-element>

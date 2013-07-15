@@ -1,0 +1,27 @@
+<link rel="import" href="popup-source.html">
+
+<polymer-element name="popup-button" extends="popup-source">
+
+<template>
+  
+<style>
+@host {
+  * {
+    display: inline-block;
+  }
+}
+</style>
+
+<shadow>
+  <property name="popup">
+    <content select="property[name='popup']"></content>
+  </property>
+  <quetzal-button>
+    <content></content>
+    <span>▼</span>
+  </quetzal-button>
+</shadow>
+
+</template>
+
+</polymer-element>

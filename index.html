@@ -22,6 +22,20 @@ input {
 body {
   margin: 0.5in;
 }
+
+demo-tile {
+    margin-right: 1em;
+}
+
+p {
+    max-width: 800px;
+}
+
+/*
+:unresolved {
+    display: none;
+}
+*/
 </style>
 
 </head>
@@ -48,17 +62,92 @@ appear below. These are translations of some components from the
 <b>use Google Chrome</b> to view this page.
 </p>
 
-<div style="margin-bottom: 1em; width: 300px;">
-  <auto-size-text-box minimumLines="2" placeholder="Type all you want!"></auto-size-text-box>
-</div>
-<quetzal-button>Plain button</quetzal-button>
-<icon-button icon="resources/document_alt_stroke_12x16.png">Icon button</icon-button>
+<demo-tile>
+<property name="classname">auto-size-text-box</property>
+<property name="description">A text area that expands to contain its text.</property>
+<property name="demo">
+<auto-size-text-box minimumLines="2" placeholder="Type all you want!"></auto-size-text-box>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">document-icon-button</property>
+<property name="description">Demonstrates how to pre-fill a base class property, in this case an icon.</property>
+<property name="demo">
+<document-icon-button>Open</document-icon-button>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">icon-button</property>
+<property name="description">A button with an optional icon.</property>
+<property name="demo">
+<icon-button icon="resources/reload_12x14.png">Reload</icon-button>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">lorem-pixel</property>
+<property name="description">Selects a random photo from lorempixel.com.</property>
+<property name="demo">
+<lorem-pixel height="225" width="300"></lorem-pixel>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">markup-tag</property>
+<property name="description">Formats its contents as an HTML/XML tag.</property>
+<property name="demo">
+Here's a reference to the <markup-tag>script</markup-tag> tag.
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">popup-button</property>
+<property name="description">A button which, when clicked, shows a popup which
+is positioned above or below the button. [Note: due to a bug, this element
+currently fails to invoke the popup.]</property>
+<property name="demo">
 <popup-button>
-  <property name="popup">
-    Here's a popup
-  </property>
-  Popup button
+  <property name="popup">Here's the popup</property>
+  Click for a popup
 </popup-button>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">popup-source</property>
+<property name="description">A base class for elements which produce a popup
+when clicked. [Note: Due to a bug, this element currently fails to invoke the
+popup.] See also <markup-tag>popup-button</markup-tag>.</property>
+<property name="demo">
+<popup-source>
+  <property name="popup">Here's the popup</property>
+  Click me
+</popup-source>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-button</property>
+<property name="description">Shows its content inside a simple button.</property>
+<property name="demo">
+<quetzal-button>Button</quetzal-button>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-element</property>
+<property name="description">A plain Quetzal element. This currently behaves like a
+<markup-tag>div</markup-tag>.</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-overlay</property>
+<property name="description">A "blanket" over the page to catch or prevent
+interaction with page elements. Used by <markup-tag>quetzal-popup</markup-tag>
+to disable interaction with page elements behind an active popup.
+</demo-tile>
 
 </body>
 

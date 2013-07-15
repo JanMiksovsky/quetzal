@@ -1,0 +1,66 @@
+<link rel="import" href="quetzal-element.html">
+<link rel="import" href="markup-tag.html">
+
+<polymer-element name="demo-tile" extends="quetzal-element">
+
+<template>
+
+<style>
+@host {
+  * {
+    color: #444;
+    font-size: 0.9em;
+  }
+}
+
+#container {
+  display: inline-block;
+  max-width: 300px;
+  vertical-align: top;
+}
+
+h3 {
+  border-top: 2px solid gray;
+  color: black;
+  font-size: 1.2em;
+  padding-top: 0.5em;
+}
+
+#code {
+  margin: 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+</style>
+
+<div id="container">
+  <h3>
+    <markup-tag><content select="property[name='classname']"></content></markup-tag>
+  </h3>
+  <p>
+    <content select="property[name='description']"></content>
+  </p>
+  <content select="property[name='demo']"></content>
+  <pre id="code"></pre>
+</div>
+
+</template>
+
+<script>
+Polymer( "demo-tile", {
+
+  contentChanged: function() {
+    var demo = this.querySelector( "property[name='demo']" );
+    var code = demo && demo.innerHTML;
+    this.$.code.textContent = code;
+  },
+
+  ready: function() {
+    this.super();
+    this.contentChanged();
+  }
+
+});
+</script>
+
+</polymer-element>

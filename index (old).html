@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>Quetzal</title>
+
+<!-- <script src="platform/platform.js" debug="true"></script> -->
+<script src="platform/platform.min.js"></script>
+<script src="quetzal.js"></script>
+<script src="elements/elements.js"></script>
+
+<style>
+body,
+button,
+input {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+}
+
+body {
+    margin: 0.5in;
+}
+
+demo-tile {
+    margin-right: 1em;
+}
+
+p {
+    max-width: 800px;
+}
+
+:unresolved {
+    display: none;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1 style="color: green; vertical-align: top;">
+    <img style="height: 60px; width: 60px;" src="resources/quetzal.png"/>Quetzal
+</h1>
+
+<p>
+Quetzal is an experimental translation of concepts from the
+<a href="http://quickui.org">QuickUI</a> framework to HTML custom elements.
+This relies on Google's <a href="http://www.polymer-project.org">Polymer</a>
+project to support aspects of custom elements which are not yet supported in
+all browsers. The
+<a href="https://github.com/JanMiksovsky/quetzal">Quetzal source code</a> is
+available on GitHub.
+</p>
+<p>
+A small handful of initial, experimental custom elements created in Quetzal
+appear below. These are translations of some components from the
+<a href="http://quickui.org/catalog">QuickUI Catalog</a>. For the time being,
+<b>use Google Chrome</b> to view this page.
+</p>
+
+<demo-tile>
+<property name="classname">color-swatch</property>
+<property name="description">Shows a small square of a CSS color.</property>
+<property name="demo">
+<color-swatch color="OrangeRed"></color-swatch>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">document-icon-button</property>
+<property name="description">Demonstrates how to pre-fill a base class property, in this case an icon.</property>
+<property name="demo">
+<document-icon-button>Open</document-icon-button>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">icon-button</property>
+<property name="description">A button with an optional icon.</property>
+<property name="demo">
+<icon-button icon="resources/reload_12x14.png">Reload</icon-button>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">labeled-color-swatch</property>
+<property name="description">Interprets its content as a CSS color and adds a corresponding swatch
+of color.</property>
+<property name="demo">
+<labeled-color-swatch>LightSeaGreen</labeled-color-swatch>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">lorem-pixel</property>
+<property name="description">Selects a random photo from lorempixel.com.</property>
+<property name="demo">
+<lorem-pixel height="225" width="300"></lorem-pixel>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">mapped-list</property>
+<property name="description">Maps its children to a corresponding set of instances of a desired
+element class.</property>
+<property name="demo">
+<mapped-list itemclass="labeled-color-swatch">
+    <span>Red</span>
+    <span>Blue</span>
+    <span>Green</span>
+</mapped-list>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">markup-tag</property>
+<property name="description">Formats its contents as an HTML tag.</property>
+<property name="demo">
+Here's a reference to the <markup-tag>script</markup-tag> tag.
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">popup-button</property>
+<property name="description">A button which, when clicked, shows a popup which
+is positioned above or below the button.
+</property>
+<property name="demo">
+<popup-button>
+    <property name="popup">Here's the popup</property>
+    Click for a popup
+</popup-button>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">popup-source</property>
+<property name="description">A base class for elements which produce a popup
+when clicked. See <markup-tag>popup-button</markup-tag>.
+</property>
+<property name="demo">
+<popup-source>
+    <property name="popup">Here's the popup</property>
+    Click me
+</popup-source>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-button</property>
+<property name="description">Shows its content inside a simple button. Note:
+Buttons currently have extra-large padding because a
+<a href="https://code.google.com/p/chromium/issues/detail?id=244869">Chrome bug</a>
+prevents their content from responding property to mouse
+interactions.</property>
+<property name="demo">
+<quetzal-button>Button</quetzal-button>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-element</property>
+<property name="description">A plain Quetzal element. This currently behaves like a
+<markup-tag>div</markup-tag>.</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-overlay</property>
+<property name="description">A "blanket" over the page to catch or prevent
+interaction with page elements. Used by <markup-tag>quetzal-popup</markup-tag>
+to disable interaction with page elements behind an active popup.
+</demo-tile>
+
+<demo-tile>
+<property name="classname">repeat-list</property>
+<property name="description">Creates a certain number of instances of another element class.</property>
+<property name="demo">
+<repeat-list count="3" itemclass="quetzal-button" repeatcontent="Button"></repeat-list>
+</property>
+</demo-tile>
+
+</body>
+
+</html>

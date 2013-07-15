@@ -6,8 +6,8 @@
 
 <title>Elements</title>
 
-<!-- <script src="http://www.polymer-project.org/polymer/polymer.min.js"></script> -->
-<script src="../tools/polymer/polymer/polymer.js" debug="true"></script>
+<script src="http://www.polymer-project.org/polymer/polymer.min.js"></script>
+<!-- <script src="../tools/polymer/polymer/polymer.js" debug="true"></script> -->
 
 <link rel="import" href="elements/quetzal.collection.html">
 
@@ -27,17 +27,39 @@ body {
 </head>
 
 <body>
-  <div style="margin-bottom: 1em; width: 300px;">
-    <auto-size-text-box minimumLines="2" placeholder="Type all you want!"></auto-size-text-box>
-  </div>
-  <quetzal-button>Plain button</quetzal-button>
-  <icon-button icon="resources/document_alt_stroke_12x16.png">Icon button</icon-button>
-  <popup-button>
-    <property name="popup">
-      Here's a popup
-    </property>
-    Popup button
-  </popup-button>
+
+<h1 style="color: green; vertical-align: top;">
+    <img style="height: 60px; width: 60px;" src="resources/quetzal.png"/>Quetzal
+</h1>
+
+<p>
+Quetzal is an experimental translation of concepts from the
+<a href="http://quickui.org">QuickUI</a> framework to HTML custom elements.
+This relies on Google's <a href="http://www.polymer-project.org">Polymer</a>
+project to support aspects of custom elements which are not yet supported in
+all browsers. The
+<a href="https://github.com/JanMiksovsky/quetzal">Quetzal source code</a> is
+available on GitHub.
+</p>
+<p>
+A small handful of initial, experimental custom elements created in Quetzal
+appear below. These are translations of some components from the
+<a href="http://quickui.org/catalog">QuickUI Catalog</a>. For the time being,
+<b>use Google Chrome</b> to view this page.
+</p>
+
+<div style="margin-bottom: 1em; width: 300px;">
+  <auto-size-text-box minimumLines="2" placeholder="Type all you want!"></auto-size-text-box>
+</div>
+<quetzal-button>Plain button</quetzal-button>
+<icon-button icon="resources/document_alt_stroke_12x16.png">Icon button</icon-button>
+<popup-button>
+  <property name="popup">
+    Here's a popup
+  </property>
+  Popup button
+</popup-button>
+
 </body>
 
 </html>

@@ -97,13 +97,13 @@ Polymer( "quetzal-list-box", {
     }
   },
 
+  // TODO: Handle valueattr: selected indicates a value, not the index.
   get selectedIndex() {
-    return this.valueToIndex( this.selected );
+    var index = this.selected;
+    return index;
   },
   set selectedIndex( index ) {
-    var item = this.items[ index ];
-    this.selectedItem = item;
-    this.$.selection.select( item );
+    this.selected = index;
   },
 
   _keydown: function( event ) {

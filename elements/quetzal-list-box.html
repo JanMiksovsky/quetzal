@@ -9,6 +9,7 @@
 
   :scope {
     display: block;
+    outline: none;
     overflow-y: auto;
   }
 
@@ -25,7 +26,6 @@
 ::-webkit-distributed(> *) {
   box-sizing: border-box;
   display: block;
-  outline: none;
   padding: 0.25em;
   -webkit-user-select: none;
   user-select: none;
@@ -40,11 +40,112 @@
 
 <shadow></shadow>
 </template>
-<!-- 
+
 <script>
 Polymer( "quetzal-list-box", {
 
+  ready: function() {
+    this.super();
+    if ( this.tabIndex == -1 /* Default value */ ) {
+      // Try to convince the browser that the list is focusable, but without
+      // forcing it into the tab order (as a positive tabindex would do).
+      // Firefox, Chrome, and IE seem to handle this as desired if tabindex is
+      // (explicitly) set to a negative number.
+      this.tabIndex = -1;
+    }
+    this.addEventListener( "keydown", function( event ) {
+      this._keydown( event );
+    }.bind( this ));
+  },
+
+  selectFirstControl: function() {
+    if ( this.items.length > 0 ) {
+      this.selectedIndex = 0;
+      // this.scrollTop(0);
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  selectLastControl: function() {
+    if ( this.items.length > 0 ) {
+      this.selectedIndex = this.items.length - 1;
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  selectNextControl: function() {
+    var index = this.selectedIndex + 1;
+    if ( index < this.items.length ) {
+      this.selectedIndex = index;
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  selectPreviousControl: function() {
+    var index = this.selectedIndex - 1;
+    if ( index >= 0 && this.items.length > 0 ) {
+      this.selectedIndex = index;
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  get selectedIndex() {
+    return this.valueToIndex( this.selected );
+  },
+  set selectedIndex( index ) {
+    var item = this.items[ index ];
+    this.selectedItem = item;
+    this.$.selection.select( item );
+  },
+
+  _keydown: function( event ) {
+    var handled = false;
+    switch ( event.keyCode ) {
+      // case 33: // Page Up
+      //   handled = this._pageUp();
+      //   break;
+      // case 34: // Page Down
+      //   handled = this._pageDown();
+      //   break;
+      case 35: // End
+        handled = this.selectLastControl();
+        break;
+      case 36: // Home
+        handled = this.selectFirstControl();
+        break;
+      // case 37: // Left
+      //   if (this.selectedControlIsInline()) {
+      //     handled = this.selectPreviousControl();
+      //   }
+      //   break;
+      case 38: // Up
+        handled = event.altKey ? this.selectFirstControl() : this.selectPreviousControl();
+        break;
+      // case 39: // Right
+      //   if (this.selectedControlIsInline()) {
+      //     handled = this.selectNextControl();
+      //   }
+      //   break;
+      case 40: // Down
+        handled = event.altKey ? this.selectLastControl() : this.selectNextControl();
+        break;
+      default:
+        handled = false;
+    }
+    if ( handled ) {
+      return false;
+    }
+  }
+
 });
 </script>
- -->
+
 </polymer-element>

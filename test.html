@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>Test</title>
+
+<!-- <script src="http://www.polymer-project.org/polymer/polymer.min.js"></script> -->
+<script src="../tools/polymer/polymer/polymer.js" debug="true"></script>
+
+<link rel="import" href="elements/quetzal.collection.html">
+
+<style>
+body,
+button,
+input {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+
+body {
+  margin: 0.5in;
+}
+</style>
+
+</head>
+
+<body>
+<quetzal-list-box>
+  <!-- BUG: Should be able to set initial selection with class="polymer-selected". -->
+  <div>Alice</div>
+  <div>Bob</div>
+  <div>Carol</div>
+</quetzal-list-box>
+</body>
+
+</html>

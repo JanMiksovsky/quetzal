@@ -1,0 +1,50 @@
+<link rel="import" href="../../tools/polymer/polymer-elements/polymer-selector/polymer-selector.html">
+
+<polymer-element name="quetzal-list-box" extends="polymer-selector">
+
+<template>
+
+<style>
+@host {
+
+  :scope {
+    display: block;
+    overflow-y: auto;
+  }
+
+  /* Generic appearance */
+  /*&.generic {*/
+  :scope {
+    border: 1px solid lightgray;
+    box-sizing: border-box;
+    cursor: default;
+  }
+
+}
+
+::-webkit-distributed(> *) {
+  box-sizing: border-box;
+  display: block;
+  outline: none;
+  padding: 0.25em;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+::-webkit-distributed(.polymer-selected) {
+  background: highlight;
+  color: highlighttext;
+}
+
+</style>
+
+<shadow></shadow>
+</template>
+<!-- 
+<script>
+Polymer( "quetzal-list-box", {
+
+});
+</script>
+ -->
+</polymer-element>

@@ -10,7 +10,7 @@ Position Only) artwork.
 <polymer-element name="lorem-pixel" extends="quetzal-element" attributes="height width">
 
 <template>
-  <img id="image"/>
+  <img id="image" height="{{height}}" width="{{width}}"/>
 </template>
 
 <script>
@@ -21,7 +21,8 @@ Polymer( "lorem-pixel", {
   },
 
   ready: function() {
-    if ( this.height === undefined && this.width === undefined ) {
+    this.super();
+    if ( !this.height && !this.width ) {
       this.height = 300;
       this.width = 400;
     }

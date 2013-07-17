@@ -58,17 +58,29 @@ Polymer( "quetzal-list-box", {
     }.bind( this ));
   },
 
-  selectFirstControl: function() {
+  // TODO: Handle valueattr: selected indicates a value, not the index.
+  get selectedIndex() {
+    var index = this.selected;
+    return index;
+  },
+  set selectedIndex( index ) {
+    this.selected = index;
+  },
+
+  selectFirstItem: function() {
     if ( this.items.length > 0 ) {
       this.selectedIndex = 0;
-      // this.scrollTop(0);
+      // The list will have already scrolled the first element into view, but if
+      // the list has top padding, the scroll won't be all the way at the top.
+      // So, as a special case, force it to scroll to the top.
+      this.scrollTop = 0;
       return true;
     } else {
       return false;
     }
   },
 
-  selectLastControl: function() {
+  selectLastItem: function() {
     if ( this.items.length > 0 ) {
       this.selectedIndex = this.items.length - 1;
       return true;
@@ -77,7 +89,7 @@ Polymer( "quetzal-list-box", {
     }
   },
 
-  selectNextControl: function() {
+  selectNextItem: function() {
     var index = this.selectedIndex + 1;
     if ( index < this.items.length ) {
       this.selectedIndex = index;
@@ -87,7 +99,7 @@ Polymer( "quetzal-list-box", {
     }
   },
 
-  selectPreviousControl: function() {
+  selectPreviousItem: function() {
     var index = this.selectedIndex - 1;
     if ( index >= 0 && this.items.length > 0 ) {
       this.selectedIndex = index;
@@ -97,13 +109,11 @@ Polymer( "quetzal-list-box", {
     }
   },
 
-  // TODO: Handle valueattr: selected indicates a value, not the index.
-  get selectedIndex() {
-    var index = this.selected;
-    return index;
-  },
-  set selectedIndex( index ) {
-    this.selected = index;
+  // TODO: This should override selectedItem instead of valueToSelection.
+  // File bug report to expose selectedItem as attribute.
+  valueToSelection: function( value ) {
+    this.super( arguments );
+    this._scrollElementIntoView( this.selectedItem );
   },
 
   _keydown: function( event ) {
@@ -116,32 +126,56 @@ Polymer( "quetzal-list-box", {
       //   handled = this._pageDown();
       //   break;
       case 35: // End
-        handled = this.selectLastControl();
+        handled = this.selectLastItem();
         break;
       case 36: // Home
-        handled = this.selectFirstControl();
+        handled = this.selectFirstItem();
         break;
       // case 37: // Left
-      //   if (this.selectedControlIsInline()) {
-      //     handled = this.selectPreviousControl();
+      //   if (this.selectedItemIsInline()) {
+      //     handled = this.selectPreviousItem();
       //   }
       //   break;
       case 38: // Up
-        handled = event.altKey ? this.selectFirstControl() : this.selectPreviousControl();
+        handled = event.altKey ? this.selectFirstItem() : this.selectPreviousItem();
         break;
       // case 39: // Right
-      //   if (this.selectedControlIsInline()) {
-      //     handled = this.selectNextControl();
+      //   if (this.selectedItemIsInline()) {
+      //     handled = this.selectNextItem();
       //   }
       //   break;
       case 40: // Down
-        handled = event.altKey ? this.selectLastControl() : this.selectNextControl();
+        handled = event.altKey ? this.selectLastItem() : this.selectNextItem();
         break;
       default:
         handled = false;
     }
     if ( handled ) {
+      event.preventDefault();
       return false;
+    }
+  },
+
+  // Scroll the given element completely into view, minimizing the degree of
+  // scrolling performed.
+  //
+  // Blink has a scrollIntoViewIfNeeded() function that almost does what we
+  // want, but unfortunately it's non-standard, and in any event often ends up
+  // scrolling more than is absolutely necessary.
+  _scrollElementIntoView: function( element ) {
+    // Get the relative position of the element with respect to the top of the
+    // list's scrollable canvas. An element at the top of the list will have a
+    // elementTop of 0.
+    var elementTop = element.offsetTop - this.offsetTop - this.clientTop;
+    var elementBottom = elementTop + element.offsetHeight;
+    // Determine the bottom of the scrollable canvas.
+    var scrollBottom = this.scrollTop + this.clientHeight;
+    if ( elementBottom > scrollBottom ) {
+      // Scroll up until element is entirely visible.
+      this.scrollTop += elementBottom - scrollBottom;
+    } else if ( elementTop < this.scrollTop ) {
+      // Scroll down until element is entirely visible.
+      this.scrollTop = elementTop;
     }
   }
 

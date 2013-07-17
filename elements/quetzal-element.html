@@ -1,3 +1,7 @@
+<!--
+Base class for elements in the Quetzal collection.
+-->
+
 <link rel="import" href="shadowDistribution.html">
 
 <polymer-element name="quetzal-element" constructor="QuetzalElement">
@@ -33,7 +37,7 @@ Polymer( "quetzal-element", {
 });
 
 // Helpers
-window.Quetzal = {
+window.QuetzalElement = {
 
   // Sugar to allow quick delegation of a method to a sub-element.
   alias: function( accessChain, sideEffectFn ) {

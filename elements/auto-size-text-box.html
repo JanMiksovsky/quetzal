@@ -1,9 +1,9 @@
 <!--
 A text box that makes itself big enough to show its content.
 
-This works by copying the text to a hidden div which will automatically grow in
-size; the expanding copy will expand the container, which in turn stretch the
-text box.
+This works by copying the text to an invisible element which will automatically
+grow in size; the expanding copy will expand the container, which in turn
+stretch the text box.
 -->
 
 <link rel="import" href="quetzal-element.html">
@@ -53,13 +53,23 @@ text box.
   <div id="container">
     <textarea id="textBox" on-change="autoSize" on-keypress="_keypress" on-keyup="autoSize" placeholder="{{placeholder}}" spellcheck="{{spellcheck}}"></textarea>
     <!--
-    The extra space below is an *em space*, which should be about as wide as the
-    widest character (in English, anyway). This extra space helps reduce jerk.
-    Without it, if the user is typing near the end of the line, they may see
-    the text jerk up before the text box gets a chance to grow. The wider we
-    make this extra space, the less chance the user will see that jerkiness.
-    The trade-off is that the user will also see more false positives: cases
-    where the text box grows an extra line taller than it needs to be.
+    Use a pre element to hold the copied text in order to automatically convert
+    breaks, etc.
+
+    This pre contains two additional elements:
+    1. The extraSpace element helps reduce jerkiness during typing. Without it,
+    if the user is typing near the end of the line, they may see the text jerk
+    up before the text box gets a chance to grow.  The extra space below is an
+    *em space*, which should be about as wide as the widest character (in
+    English, anyway). With that, when the user is within striking distance of
+    the end of the line, the text box will grow by a new line. The wider we make
+    this extra space, the less chance the user will see that jerkiness. The
+    trade-off is that the user will also see more false positives: cases where
+    the text box grows an extra line taller than it needs to be.
+
+    2. The extraLine element exists to deal with the fact that, if the user
+    presses the Enter key, the text box's value will move before the complete
+    text is available. See notes at _keypress.
     -->
     <pre id="textCopy"><content></content><span id="extraSpace">&emsp;</span><div id="extraLine">&nbsp;</div></pre>
   </div>
@@ -75,16 +85,17 @@ Polymer( "auto-size-text-box", {
     // we can now hide the extra line.
     this.$.extraLine.style.display = "none" ;
 
-    // We resize by copying the text box contents to the element itself. The
-    // element's content isn't visible, but takes up the same amount of room as
-    // the same text in the text box. Update the element's content adjusts the
-    // element's size, which in turn will make the text box the correct height.
+    // We resize by copying the text box contents to the element itself; the
+    // text will then appear (via <content>) inside the invisible <pre>. If
+    // we've set things up correctly, this new content should take up the same
+    // amount of room as the same text in the text box. Updating the element's
+    // content adjusts the element's size, which in turn will make the text box
+    // the correct height.
     this.innerHTML = this.$.textBox.value;
   },
 
   contentChangedCallback: function() {
     if ( this.innerHTML !== this.$.textBox.value ) {
-      this.log( "content set externally" );
       this.$.textBox.value = this.innerHTML;
     }
   },
@@ -149,6 +160,11 @@ Polymer( "auto-size-text-box", {
   // line to the text and size accordingly. (One other possibility is that the
   // user's replacing a selected chunk of text with a newline.) In any event,
   // once we get the keyup or change event, we'll make any final adjustments.
+  //
+  // TODO: If the user holds down the Enter key, we can get a bunch of keypress
+  // events before we get keyup. This causes flicker. Instead of supporting only
+  // a single extra speculative line, we should grow the speculative element to
+  // contain the number of Enter keypresses we've received.
   _keypress: function( event ) {
     if ( event.keyCode === 13 /* Enter */ ) {
       this.$.extraLine.style.display = "inherit";

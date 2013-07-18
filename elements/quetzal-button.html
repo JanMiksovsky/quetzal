@@ -23,11 +23,15 @@ button {
   text-align: left; /* Many more things behave like buttons than want to be center-aligned like a stock button. */
   -webkit-user-select: none;
   -moz-user-select: none;
+  user-select: none;
   vertical-align: baseline; /* Improves appearance and consistency in all browsers */
 }
 
-/* &.generic */
-button {
+button[disabled] {
+  cursor: default; /* Re-set default cursor for disabled buttons */
+}
+
+button.generic {
   background: whitesmoke;
   background-image: -webkit-linear-gradient(top, white, #e6e6e6);
   background-image: linear-gradient(top, white, #e6e6e6);
@@ -42,7 +46,7 @@ button {
   vertical-align: middle;
 }
 
-button:hover {
+button.generic:hover {
   background-color: #e6e6e6;
   background-image: -webkit-linear-gradient(top, white, #eee);
   background-image: linear-gradient(top, white, #eee);
@@ -54,30 +58,50 @@ button:hover {
   text-shadow: 0 1px 3px white;
 }
 
-button:active {
+button.generic:active {
   background-color: #d9d9d9;
   background-image: none;
   border-color: #aaa;
   box-shadow: inset 0 1px 4px 2gba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
   color: #111;
-  outline: 0;
+  outline: none;
 }
 
-button[disabled] {
+button.generic[disabled] {
   background: whitesmoke;
   border: 1px solid #ccc;
   box-shadow: none;
   color: #999;
-  cursor: default; /* Re-set default cursor for disabled buttons */
   text-shadow: none;
 }
 
 </style>
 
-<button>
+<button id="button">
   <content></content>
 </button>
 
 </template>
+
+<script>
+Polymer( "quetzal-button", {
+
+  genericChanged: function() {
+    this.log( "specific genericChanged" );
+    this.super();
+    this.$.button.classList.toggle( "generic", this.generic );
+  },
+
+  ready: function() {
+    this.log( "ready" );
+    this.super();
+    if ( this.generic == null ) {
+      this.log( "generic by default" );
+      this.generic = true;
+    }
+  }
+
+});
+</script>
 
 </polymer-element>

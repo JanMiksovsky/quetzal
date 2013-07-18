@@ -4,10 +4,16 @@ Base class for elements in the Quetzal collection.
 
 <link rel="import" href="shadowDistribution.html">
 
-<polymer-element name="quetzal-element" constructor="QuetzalElement">
+<polymer-element name="quetzal-element" constructor="QuetzalElement" attributes="generic">
 
 <script>
 Polymer( "quetzal-element", {
+
+  genericChanged: function() {
+    var generic = ( String( this.generic ) === "true" );
+    this.log( "generic changed to " + generic );
+    this.classList.toggle( "generic", generic );
+  },
 
   log: function( s ) {
     if ( console ) {

@@ -123,14 +123,9 @@ Polymer( "quetzal-list-box", {
     this._scrollElementIntoView( this.selectedItem );
   },
 
-  // Return the item that spans the given y position (relative to the top of
-  // the list's scrolling client area), or null if not found.
+  // Return the item whose content spans the given y position (relative to the
+  // top of the list's scrolling client area), or null if not found.
   //
-  // TODO: Instead, find the first item that's past the indicated y, then back
-  // up an item and return that. Using item clientHeight instead of
-  // offsetHeight. That way, an item whose padding (but not content) is at the
-  // edge won't be returned.
-  // 
   // If downward is true, move down the list of items to find the first item
   // found at the given y position; if downward is false, move up the list of
   // items to find the last item at that position.
@@ -139,19 +134,44 @@ Polymer( "quetzal-list-box", {
     var start = downward ? 0 : items.length - 1;
     var end = downward ? items.length : 0;
     var step = downward ? 1 : -1;
-    var topOfClientArea = this.offsetTop - this.clientTop;
+    var topOfClientArea = this.offsetTop + this.clientTop;
     var i = start;
+    var found = false;
     while ( i !== end ) {
       var item = items[i];
       var itemTop = item.offsetTop - topOfClientArea;
       var itemBottom = itemTop + item.offsetHeight;
       if ( itemTop <= y && itemBottom >= y ) {
         // Item spans the indicated y coordinate.
-        return i;
+        found = true;
+        break;
       }
       i += step;
     }
-    return null;
+
+    if ( !found ) {
+      return null;
+    }
+
+    // We may have found an item whose padding spans the given y coordinate,
+    // but whose content is actually above/below that point.
+    // TODO: If the item has a border, then padding should be included in
+    // considering a hit.
+    var itemStyle = getComputedStyle( item );
+    var itemPaddingTop = parseFloat( itemStyle.paddingTop );
+    var itemPaddingBottom = parseFloat( itemStyle.paddingBottom );
+    var contentTop = itemTop + item.clientTop + itemPaddingTop;
+    var contentBottom = contentTop + item.clientHeight - itemPaddingTop - itemPaddingBottom;
+    if ( downward && contentTop <= y
+      || !downward && contentBottom >= y ) {
+      // The indicated coordinate hits the actual item content.
+      return i;
+    } else {
+      // The indicated coordinate falls within the item's padding. Back up to
+      // the item below/above the item we found and return that.
+      i -= step;
+      return i;
+    }
   },
 
   _keydown: function( event ) {
@@ -201,7 +221,6 @@ Polymer( "quetzal-list-box", {
   // want, but unfortunately it's non-standard, and in any event often ends up
   // scrolling more than is absolutely necessary.
   _scrollElementIntoView: function( element ) {
-    console.log( element );
     // Get the relative position of the element with respect to the top of the
     // list's scrollable canvas. An element at the top of the list will have a
     // elementTop of 0.
@@ -248,10 +267,8 @@ Polymer( "quetzal-list-box", {
 
     if ( newIndex !== selectedIndex ) {
       this.selectedIndex = newIndex;
-      console.log( "scrolled" );
       return true; // We handled the page up/down ourselves.
     } else {
-      console.log( "didn't scroll" );
       return false; // We didn't do anything.
     }
   }

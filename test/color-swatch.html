@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>color-swatch</title>
+
+<script src="../../tools/polymer/polymer/polymer.js" debug="true"></script>
+
+<link rel="import" href="../elements/quetzal.collection.html">
+
+<style>
+body,
+button,
+input {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+
+body {
+  margin: 0.5in;
+}
+</style>
+
+</head>
+
+<body>
+  <p>
+    <color-swatch color="orangered"></color-swatch>
+    <color-swatch color="ThisIsNotAValidColor"></color-swatch>
+  </p>
+  <quetzal-list-box>
+    <labeled-color-swatch>LightPink</labeled-color-swatch>
+    <labeled-color-swatch>Plum</labeled-color-swatch>
+    <labeled-color-swatch>LightGreen</labeled-color-swatch>
+  </quetzal-list-box>
+</body>
+
+</html>

@@ -27,6 +27,7 @@ Polymer( "quetzal-element", {
     distributeShadowContent( this );
     if ( this.contentChangedCallback ) {
       this._observeContentChanged();
+      this.contentChangedCallback();
     }
   },
 

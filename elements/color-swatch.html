@@ -1,0 +1,67 @@
+<!--
+Shows a block of a CSS color given a color name or hex color value.
+-->
+
+<link rel="import" href="quetzal-element.html">
+
+<polymer-element name="color-swatch" extends="quetzal-element" attributes="color valid">
+
+<template>
+
+<style>
+@host {
+  * {
+    display: inline-block;
+  }
+}
+
+#swatch {
+  box-sizing: border-box;
+  min-height: 1.5em;
+  min-width: 1.5em;
+}
+#swatch:not(.valid) {
+  border: 1px solid lightgray;
+}
+</style>
+
+<div id="swatch">
+  <content></content>
+</div>
+
+</template>
+
+<script>
+Polymer( "color-swatch", {
+
+  colorChanged: function() {  
+    // To determine whether the color is valid, we first apply white, then the
+    // indicated color.
+    var swatchStyle = this.$.swatch.style;
+    swatchStyle.backgroundColor = "white";
+    swatchStyle.backgroundColor = this.color;
+    var colorValid;
+    switch ( this.color ) {
+      case "":
+        colorValid = false; // Empty color value; use the invalid style.
+      case "white":
+      case "rgb( 255, 255, 255 )":
+        colorValid = true;  // White color values are known to be good.
+      default:
+        // See if the new value "stuck", or is still white.
+        resultingColor = swatchStyle.backgroundColor;
+        colorValid = !( resultingColor === "white" || resultingColor === "rgb( 255, 255, 255 )" );
+    }
+    this.valid = colorValid;
+  },
+
+  valid: false,
+
+  validChanged: function() {
+    this.$.swatch.classList.toggle( "valid", this.valid );
+  }
+
+});
+</script>
+
+</polymer-element>

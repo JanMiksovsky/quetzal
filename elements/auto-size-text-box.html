@@ -148,12 +148,6 @@ Polymer( "auto-size-text-box", {
     }
   },
 
-  ready: function() {
-    this.super();
-    // Force an initial sync of the text box with the element contents.
-    // this.contentChangedCallback();
-  },
-
   // Speculatively add a line to our copy of the text. We're not sure what the
   // exact effect of typing this character will be, and at this point it's not
   // reflected yet in the text box's content. We speculate that it will add a

@@ -27,7 +27,11 @@ Polymer( "quetzal-element", {
     distributeShadowContent( this );
     if ( this.contentChangedCallback ) {
       this._observeContentChanged();
-      this.contentChangedCallback();
+      if ( this.childNodes.length > 0 ) {
+        // Consider any initial content of a new element to be "changed" content
+        // and invoke the callback so the element can do any corresponding setup.
+        this.contentChangedCallback();
+      }
     }
   },
 

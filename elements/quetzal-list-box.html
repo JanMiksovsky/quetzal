@@ -1,3 +1,18 @@
+<!--
+A list box that allows single selection.
+
+The user can select an item with the mouse/touch or keyboard: Up/Down, Page
+Up/Down, Home/End.
+
+The selection behavior generally follows that of Microsoft Windows:
+* The Page Up/Down and Home/End keys actually move the selection, rather than
+  just scrolling the list. The former behavior seems more generally useful.
+* Pressing Page Up/Down will move the selection to the topmost/bottommost
+  visible item if the selection is not already there. Thereafter, the key will
+  move the selection up/down by a page, and (per the above point) make the
+  selected item visible.
+-->
+
 <link rel="import" href="../../tools/polymer/polymer-elements/polymer-selector/polymer-selector.html">
 
 <polymer-element name="quetzal-list-box" extends="polymer-selector" constructor="QuetzalListBox">

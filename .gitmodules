@@ -1,3 +1,6 @@
 [submodule "platform"]
 	path = platform
 	url = git://github.com/Polymer/platform.git
+[submodule "polymer-elements"]
+	path = polymer-elements
+	url = https://github.com/Polymer/polymer-elements.git

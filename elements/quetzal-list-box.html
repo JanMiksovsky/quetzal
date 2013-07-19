@@ -88,6 +88,12 @@ Polymer( "quetzal-list-box", {
     this.selected = index;
   },
 
+  // Override base implementation so we can ensure new item is in view.
+  selectedItemChanged: function() {
+    this.super();
+    this._scrollElementIntoView( this.selectedItem );
+  },
+
   selectFirstItem: function() {
     if ( this.items.length > 0 ) {
       this.selectedIndex = 0;
@@ -128,13 +134,6 @@ Polymer( "quetzal-list-box", {
     } else {
       return false;
     }
-  },
-
-  // TODO: This should override selectedItem instead of valueToSelection.
-  // File bug report to expose selectedItem as attribute.
-  valueToSelection: function( value ) {
-    this.super( arguments );
-    this._scrollElementIntoView( this.selectedItem );
   },
 
   // Return the item whose content spans the given y position (relative to the

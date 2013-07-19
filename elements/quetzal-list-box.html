@@ -25,7 +25,6 @@
 
 ::-webkit-distributed(> *) {
   box-sizing: border-box;
-  display: block;
   padding: 0.25em;
   -webkit-user-select: none;
   user-select: none;
@@ -189,19 +188,19 @@ Polymer( "quetzal-list-box", {
       case 36: // Home
         handled = this.selectFirstItem();
         break;
-      // case 37: // Left
-      //   if (this.selectedItemIsInline()) {
-      //     handled = this.selectPreviousItem();
-      //   }
-      //   break;
+      case 37: // Left
+        if (this._selectedItemIsInline()) {
+          handled = this.selectPreviousItem();
+        }
+        break;
       case 38: // Up
         handled = event.altKey ? this.selectFirstItem() : this.selectPreviousItem();
         break;
-      // case 39: // Right
-      //   if (this.selectedItemIsInline()) {
-      //     handled = this.selectNextItem();
-      //   }
-      //   break;
+      case 39: // Right
+        if (this._selectedItemIsInline()) {
+          handled = this.selectNextItem();
+        }
+        break;
       case 40: // Down
         handled = event.altKey ? this.selectLastItem() : this.selectNextItem();
         break;
@@ -239,6 +238,7 @@ Polymer( "quetzal-list-box", {
 
   // Move by one page downward ( if downward is true ), or upward (if false).
   // Return true if we ended up changing the selection, false if not.
+  // TODO: Better support for horizontal lists.
   _scrollOnePage: function( downward ) {
     // Determine the item visible just at the edge of direction we're heading.
     // We'll select that item if it's not already selected.
@@ -271,8 +271,18 @@ Polymer( "quetzal-list-box", {
     } else {
       return false; // We didn't do anything.
     }
-  }
+  },
 
+  // Return true if the selected control is displayed inline.
+  _selectedItemIsInline: function() {
+    if ( !this.selectedItem ) {
+      return false;
+    }
+    var style = getComputedStyle( this.selectedItem );
+    var inlineDisplayValues = [ "inline", "inline-block", "inline-table" ];
+    var itemIsInline = ( inlineDisplayValues.indexOf( style.display ) >= 0 );
+    return itemIsInline
+  }
 });
 </script>
 

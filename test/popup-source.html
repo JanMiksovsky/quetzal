@@ -9,7 +9,7 @@
 <!-- <script src="http://www.polymer-project.org/polymer/polymer.min.js"></script> -->
 <script src="../../../tools/polymer/polymer/polymer.js" debug="true"></script>
 
-<!-- <link rel="import" href="../elements/quetzal.collection.html"> -->
+<link rel="import" href="../elements/quetzal.collection.html">
 
 <style>
 body,
@@ -24,23 +24,19 @@ body {
 }
 </style>
 
-<polymer-element name="markup-tag">
-
-<template>
-
-&lt;<content></content>&gt;</template>
-
-</polymer-element>
-
 </head>
 
 <body>
-  <markup-tag>Hello</markup-tag>
-<!--   <popup-source>
+<!--
+  <popup-source>
     <property name="popup">Here's the popup</property>
     Click me
   </popup-source>
  -->
+  <popup-button>
+    <property name="popup">Here's the popup</property>
+    Click me
+  </popup-button>
 </body>
 
 </html>

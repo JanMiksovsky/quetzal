@@ -13,6 +13,8 @@
 
 #container {
   display: inline-block;
+  -webkit-user-select: none;
+  user-select: none;
 }
 </style>
 <quetzal-popup id="popup" opened="{{opened}}">
@@ -62,6 +64,7 @@ Polymer( "popup-source", {
   },
 
   ready: function() {
+    debugger;
     this.super();
     var self = this;
     this.$.container.addEventListener( "click", function() {

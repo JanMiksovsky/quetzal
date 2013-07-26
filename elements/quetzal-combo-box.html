@@ -1,0 +1,31 @@
+<link rel="import" href="popup-source.html">
+<link rel="import" href="quetzal-button.html">
+
+<polymer-element name="quetzal-combo-box" extends="popup-source">
+
+<template>
+
+  <shadow>
+    <property name="popup">
+      <content select="property[name='popup']"></content>
+    </property>
+      <input type="text"/>
+      <quetzal-button>
+        <span>▼</span>
+      </quetzal-button>
+    </quetzal-button>
+  </shadow>
+
+</template>
+
+<script>
+Polymer( "quetzal-combo-box", {
+
+  ready: function() {
+
+  }
+  
+});
+</script>
+
+</polymer-element>

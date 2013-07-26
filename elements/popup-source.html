@@ -4,25 +4,27 @@
 <polymer-element name="popup-source" extends="quetzal-element" attributes="opened">
 
 <template>
+
 <style>
-@host {
-  * {
-    position: relative;
-  }
+#positioner {
+  position: relative;
 }
 
 #container {
-  display: inline-block;
   -webkit-user-select: none;
   user-select: none;
 }
 </style>
-<quetzal-popup id="popup" opened="{{opened}}">
-  <content select="property[name='popup']"></content>
-</quetzal-popup>
-<div id="container">
-  <content></content>
+
+<div id="positioner">
+  <quetzal-popup id="popup" opened="{{opened}}">
+    <content select="property[name='popup']"></content>
+  </quetzal-popup>
+  <div id="container">
+    <content></content>
+  </div>
 </div>
+
 </template>
 
 <script>
@@ -31,7 +33,7 @@ Polymer( "popup-source", {
   open: Quetzal.alias( "$.popup.open" ),
 
   positionPopup: function() {
-    this.log( "positionPopup" );
+    // this.log( "positionPopup" );
     var rect = this.getBoundingClientRect();
     var top = rect.top;
     var left = rect.left;
@@ -67,14 +69,14 @@ Polymer( "popup-source", {
     this.super();
     var self = this;
     this.$.container.addEventListener( "click", function() {
-      self.log( "open" );
+      // self.log( "open" );
       self.open();
     });
     this.$.popup.addEventListener( "closed", function() {
-      self.log( "close" );
+      // self.log( "close" );
     });
     this.$.popup.addEventListener( "canceled", function() {
-      self.log( "cancel" );
+      // self.log( "cancel" );
     });
     this.$.popup.positionPopup = function() {
       self.positionPopup();

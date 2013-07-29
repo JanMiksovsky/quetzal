@@ -4,10 +4,45 @@ Base class for elements in the Quetzal collection.
 
 <link rel="import" href="shadowDistribution.html">
 
-<polymer-element name="quetzal-element" constructor="Quetzal" attributes="generic">
+<polymer-element name="quetzal-element" attributes="generic">
 
 <script>
-Polymer( "quetzal-element", {
+// Quetzal helpers.
+window.Quetzal = {
+
+  // Sugar to allow quick delegation of a method to a sub-element.
+  alias: function( accessChain, sideEffectFn ) {
+    return function() {  
+      var result = this;
+      var keys = accessChain.split( "." );
+      var hasArguments = ( arguments.length > 0 );
+      for ( var i = 0, length = keys.length; i < length; i++ ) {
+        var key = keys[i];
+        if (i === keys.length - 1 ) {
+          result[ key ].apply( this, arguments );
+          if ( hasArguments && sideEffectFn ) {
+            sideEffectFn.apply( this, arguments );
+          }
+          result = this;
+        } else {
+          result = result[ key ];
+        }
+      }
+      return result;
+    }
+  },
+
+  // Extend the given set of members with the Quetzal helpers and return the
+  // result.
+  extend: function( options ) {
+    options = options || {};
+    for ( var key in Quetzal ) {
+      if ( !options[ key ] ) {
+        options[ key ] = Quetzal[ key ];
+      }
+    }
+    return options;
+  },
 
   generic: true,
 
@@ -23,7 +58,7 @@ Polymer( "quetzal-element", {
     }
   },
 
-  ready: function() {
+  setup: function() {
     distributeShadowContent( this );
     if ( this.contentChangedCallback ) {
       this._observeContentChanged();
@@ -47,34 +82,15 @@ Polymer( "quetzal-element", {
     });
   }
 
-});
+};
 
-// Helpers
-window.Quetzal = {
+Polymer( "quetzal-element", Quetzal.extend({
 
-  // Sugar to allow quick delegation of a method to a sub-element.
-  alias: function( accessChain, sideEffectFn ) {
-    return function() {  
-      var result = this;
-      var keys = accessChain.split( "." );
-      var hasArguments = ( arguments.length > 0 );
-      for ( var i = 0, length = keys.length; i < length; i++ ) {
-        var key = keys[i];
-        if (i === keys.length - 1 ) {
-          result[ key ].apply( this, arguments );
-          if ( hasArguments && sideEffectFn ) {
-            sideEffectFn.apply( this, arguments );
-          }
-          result = this;
-        } else {
-          result = result[ key ];
-        }
-      }
-      return result;
-    }
+  ready: function() {
+    this.setup();
   }
 
-};
+}));
 </script>
 
 </polymer-element>

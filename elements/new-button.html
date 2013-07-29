@@ -71,10 +71,6 @@
     text-shadow: none;
   }
 
-  :scope[generic=true] {
-    color: red;
-  }
-
 }
 </style>
 
@@ -83,13 +79,7 @@
 </template>
 
 <script>
-Polymer( "new-button", Quetzal.extend({
-
-  genericChanged: function() {
-    this.classList.toggle( "generic", this.generic );
-  }
-
-}));
+Polymer( "new-button", Quetzal.extend());
 </script>
 
 </polymer-element>

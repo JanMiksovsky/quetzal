@@ -1,6 +1,6 @@
 <link rel="import" href="quetzal-element.html">
 
-<polymer-element name="new-button" extends="button">
+<polymer-element name="new-button" extends="button" attributes="generic">
 
 <template>
 
@@ -69,6 +69,10 @@
     box-shadow: none;
     color: #999;
     text-shadow: none;
+  }
+
+  :scope[generic=true] {
+    color: red;
   }
 
 }

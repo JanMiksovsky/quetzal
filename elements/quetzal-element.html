@@ -44,7 +44,7 @@ window.Quetzal = {
     return options;
   },
 
-  generic: true,
+  // generic: true,
 
   // genericChanged: function() {
   //   var generic = ( String( this.generic ) === "true" );
@@ -58,6 +58,11 @@ window.Quetzal = {
     }
   },
 
+  ready: function() {
+    this.super();
+    this.setup();
+  },
+
   setup: function() {
     distributeShadowContent( this );
     if ( this.contentChangedCallback ) {
@@ -67,6 +72,9 @@ window.Quetzal = {
         // and invoke the callback so the element can do any corresponding setup.
         this.contentChangedCallback();
       }
+    }
+    if ( this.generic == null ) {
+      this.generic = true;
     }
   },
 
@@ -84,13 +92,7 @@ window.Quetzal = {
 
 };
 
-Polymer( "quetzal-element", Quetzal.extend({
-
-  ready: function() {
-    this.setup();
-  }
-
-}));
+Polymer( "quetzal-element", Quetzal.extend());
 </script>
 
 </polymer-element>

@@ -5,16 +5,69 @@
 
 <template>
 
-  <shadow>
-    <property name="popup">
-      <content select="property[name='popup']"></content>
-    </property>
-      <input type="text"/>
-      <quetzal-button>
-        <span>▼</span>
-      </quetzal-button>
+<style>
+@host {
+  :scope {
+    display: inline-block;
+  }
+}
+
+#container {
+  position: relative;
+}
+
+#textBox {
+  border: none;
+  box-sizing: border-box;
+  margin-right: 1.5em;
+  outline: none;
+  padding: 2px;
+  position: relative;
+}
+
+#dropdownButton {
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+  bottom: 0;
+  height: 100%;
+  filter: none;
+  outline: none;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+}
+
+/* Generic appearance */
+#container { 
+  border: 1px solid lightgray;
+}
+
+#dropdownButton {
+  border: none;
+  border-left: 1px solid transparent;
+  border-radius: 0;
+  padding: 0 0.25em; /* Tighter padding that normal */
+}
+
+#container:hover #dropdownButton {
+  border-left-color: lightgray;
+}
+
+</style>
+
+<shadow>
+  <property name="popup">
+    <content select="property[name='popup']"></content>
+  </property>
+  <div id="container">
+    <input id="textBox" type="text"/>
+    <quetzal-button id="dropdownButton" tabindex="-1">
+      <span>▼</span>
     </quetzal-button>
-  </shadow>
+  </div>
+</shadow>
 
 </template>
 
@@ -22,9 +75,9 @@
 Polymer( "quetzal-combo-box", {
 
   ready: function() {
-
+    this.super();
   }
-  
+
 });
 </script>
 

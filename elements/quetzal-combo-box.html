@@ -100,7 +100,7 @@ Polymer( "quetzal-combo-box", {
     // the handler will cancel the popup on a click. Need to find some way to
     // absorb those focusout events in that case.
     this.closeOnInsideClick = false;
-    this.openOnClick = false;
+    // this.openOnClick = false;
 
     this.addEventListener( "keydown", function( event ) {
       if ( event.keyCode === 13 /* Enter */ && this.opened ) {

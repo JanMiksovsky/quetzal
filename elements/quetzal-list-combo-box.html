@@ -33,14 +33,13 @@ Polymer( "quetzal-list-combo-box", {
   ready: function() {
     this.super();
     this.$.listBox.addEventListener( "click", function( event ) {
+      if ( event.target === this ) {
+        // Clicked on list background.
+        return;
+      }
       // Clicking a list item puts its content into the text box portion.
-      debugger;
-      // var closestItem = $( event.target ).closest( this.$.listBox.children() );
-      // if ( closestItem ) {
-      //   var itemContent = $closestItem.control().content();
-      //   this.value = itemContent;
-      //   this.close();
-      // }
+      this.value = event.target.textContent;
+      this.close();
     }.bind( this ));
   }
 

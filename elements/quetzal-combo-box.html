@@ -72,6 +72,11 @@ Polymer( "quetzal-combo-box", {
 
   open: function() {
     if ( !this.opened ) {
+      if ( this.generic ) {
+        // Make dropdown at least as wide as combo box.
+        var width = this.getBoundingClientRect().width;
+        this.$.popup.style.minWidth = width + "px";
+      }
       this.$.dropdownButton.selected = true;
     }
     this.super();

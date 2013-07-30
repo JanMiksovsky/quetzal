@@ -26,16 +26,11 @@
 }
 
 #dropdownButton {
-  background: none;
-  border-color: transparent;
-  box-shadow: none;
   bottom: 0;
   height: 100%;
-  filter: none;
   outline: none;
   position: absolute;
   right: 0;
-  text-align: center;
   top: 0;
 }
 
@@ -44,15 +39,17 @@
   border: 1px solid lightgray;
 }
 
-#dropdownButton {
-  border: none;
-  border-left: 1px solid transparent;
-  border-radius: 0;
-  padding: 0 0.25em; /* Tighter padding that normal */
+#dropdownButton::x-button {
+  background: none; /* REVIEW: Doesn't work */
+  border: none !important;
+  border-left: 1px solid transparent !important;
+  border-radius: 0 !important;
+  padding: 0 0.25em !important; /* Tighter padding that normal */
+  text-align: center !important;
 }
 
-#container:hover #dropdownButton {
-  border-left-color: lightgray;
+#container:hover #dropdownButton::x-button {
+  border-left-color: lightgray !important;
 }
 
 </style>

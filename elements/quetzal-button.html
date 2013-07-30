@@ -23,12 +23,14 @@ button {
   cursor: default;
   /* cursor: pointer; */ /* Improves consistency */
   font: inherit;
+  height: 100%;
   margin: 0; /* Addresses margins set differently in IE6/7, FF3+, S5, Chrome */
   text-align: left; /* Many more things behave like buttons than want to be center-aligned like a stock button. */
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
   vertical-align: baseline; /* Improves appearance and consistency in all browsers */
+  width: 100%;
 }
 
 button[disabled] {
@@ -81,7 +83,7 @@ button.generic[disabled] {
 
 </style>
 
-<button id="button">
+<button id="button" pseudo="x-button">
   <content></content>
 </button>
 

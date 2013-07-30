@@ -1,27 +1,40 @@
 <link rel="import" href="quetzal-button.html">
 
-<polymer-element name="quetzal-toggle-button" extends="quetzal-button" attributes="selected">
+<!-- TODO: Restore extends="quetzal-button" once we have shadow distribution -->
+<polymer-element name="quetzal-toggle-button" attributes="selected">
 
 <template>
 
 <style>
-shadow-modified::x-button.selected {
+#button {
+  height: 100%;
+  width: 100%;
+}
+
+/* shadow-modified::x-button.selected { */
+#button.selected::x-button {
   box-shadow: inset 0 1px 2px rgba( 0, 0, 0, .1 ) !important;
   background-color: #eee !important;
   background-image: -webkit-linear-gradient( top, #e0e0e0, #d8d8d8 ) !important;
   background-image: linear-gradient( top, #e0e0e0, #d8d8d8 ) !important;
   border-color: #ccc !important;
 
-shadow-modified::x-button.selected:hover {
+/*shadow-modified::x-button.selected:hover {*/
+#button.selected::x-button:hover {
   background-color: #f0f0f0 !important;
   background-image: -webkit-linear-gradient( top, #e8e8e8, #e0e0e0 ) !important;
   background-image: linear-gradient( top, #e8e8e8, #e0e0e0 ) !important;
 }
 </style>
 
+<!--
 <shadow>
   <content></content>
 </shadow>
+-->
+<quetzal-button id="button" pseudo="x-button">
+  <content></content>
+</quetzal-button>
 
 </template>
 

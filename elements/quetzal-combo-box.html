@@ -1,7 +1,7 @@
 <link rel="import" href="popup-source.html">
 <link rel="import" href="quetzal-button.html">
 
-<polymer-element name="quetzal-combo-box" extends="popup-source" attributes="value">
+<polymer-element name="quetzal-combo-box" extends="popup-source" attributes="closeOnEnter value">
 
 <template>
 
@@ -62,6 +62,10 @@
   </property>
   <div id="container">
     <input id="textBox" type="text" value="{{value}}"/>
+    <!--
+    REVIEW: Because of hacks in quetzal-toggle-button, tabindex="-1" doesn't
+    actually remove element from tab order.
+    -->
     <quetzal-toggle-button id="dropdownButton" tabindex="-1" on-click="open">▼</quetzal-toggle-button>
   </div>
 </shadow>
@@ -70,6 +74,8 @@
 
 <script>
 Polymer( "quetzal-combo-box", {
+
+  closeOnEnter: true,
 
   open: function() {
     if ( !this.opened ) {
@@ -91,18 +97,22 @@ Polymer( "quetzal-combo-box", {
     this.closeOnInsideClick = false;
     this.openOnClick = false;
 
-    this.$.container.addEventListener( "focusout", function( event ) {
-      // Close the popup when the combo box loses focus.
-      //
+    this.addEventListener( "keydown", function( event ) {
+      if ( event.keyCode === 13 /* Enter */ && this.opened ) {
+        /* Enter key closes popup. */
+        this.close();
+      }
+    }.bind( this ));
+
+    // Close the popup when the combo box loses focus.
+    this.addEventListener( "focusout", function( event ) {
       // We want to close the popup if the focus moves completely outside the
       // combo box; i.e., is not within the input box or the popup.
       // Unfortunately, if the user clicks in the popup, the input will blur
       // before we've had a chance to even register the click. And at the point
       // the blur handler here is invoked, the new activeElement is not yet
-      // known, so we can't test that.
-      // 
-      // Our solution is to set a timeout which will defer testing of
-      // activeElement until after the normal focusout sequence has completed
+      // known, so we can't test that. Instead, set a timeout to defer testing
+      // of activeElement until after the normal focusout sequence has completed
       // and focus has been placed in the new element.
       if ( this.opened ) {
         setTimeout( function() {
@@ -115,13 +125,13 @@ Polymer( "quetzal-combo-box", {
     }.bind( this ));
 
     this.$.popup.addEventListener( "canceled", function() {
+      debugger;
       this.$.dropdownButton.selected = false;
     }.bind( this ));
     this.$.popup.addEventListener( "closed", function() {
       // Closing the popup leaves the text selected.
       var textBox = this.$.textBox;
       textBox.focus();
-      debugger;
       textBox.setSelectionRange( 0, textBox.value.length );
       this.$.dropdownButton.selected = false;
     }.bind( this ));

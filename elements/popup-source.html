@@ -1,7 +1,7 @@
 <link rel="import" href="quetzal-element.html">
 <link rel="import" href="quetzal-popup.html">
 
-<polymer-element name="popup-source" extends="quetzal-element" attributes="opened">
+<polymer-element name="popup-source" extends="quetzal-element" attributes="opened openOnClick openOnFocus">
 
 <template>
 
@@ -30,7 +30,15 @@
 <script>
 Polymer( "popup-source", {
 
+  cancel: Quetzal.alias( "$.popup.cancel" ),
+
+  close: Quetzal.alias( "$.popup.close" ),
+
   open: Quetzal.alias( "$.popup.open" ),
+
+  openOnClick: true,
+
+  openOnFocus: false,
 
   positionPopup: function() {
     // this.log( "positionPopup" );
@@ -67,20 +75,25 @@ Polymer( "popup-source", {
 
   ready: function() {
     this.super();
-    var self = this;
     this.$.container.addEventListener( "click", function() {
-      // self.log( "open" );
-      self.open();
-    });
+      if ( this.openOnClick ) {
+        this.open();
+      }
+    }.bind( this ));
+    this.$.container.addEventListener( "focusin", function() {
+      if ( this.openOnFocus ) {
+        this.open();
+      }
+    }.bind( this ));
     this.$.popup.addEventListener( "closed", function() {
-      // self.log( "close" );
-    });
+      // this.log( "close" );
+    }.bind( this ));
     this.$.popup.addEventListener( "canceled", function() {
-      // self.log( "cancel" );
-    });
+      // this.log( "cancel" );
+    }.bind( this ));
     this.$.popup.positionPopup = function() {
-      self.positionPopup();
-    };
+      this.positionPopup();
+    }.bind( this ) ;
   }
 
 });

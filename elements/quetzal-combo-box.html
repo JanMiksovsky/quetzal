@@ -82,14 +82,36 @@ Polymer( "quetzal-combo-box", {
     this.super();
   },
 
+  openOnFocus: true,
+
   ready: function() {
     this.super();
+    this.$.container.addEventListener( "focusout", function( event ) {
+      // Close the popup when the control loses focus.
+      //
+      // We want to close the popup if the focus moves completely outside the
+      // combo box; i.e., is not within the input box or the popup.
+      // Unfortunately, if the user clicks in the popup, the input will blur
+      // before we've had a chance to even register the click. And at the point
+      // the blur handler here is invoked, the new activeElement is not yet
+      // known, so we can't test that.
+      // 
+      // Our solution is to set a timeout which will defer testing of
+      // activeElement until after the normal focusout sequence has completed
+      // and focus has been placed in the new control.
+      if ( this.opened ) {
+        setTimeout( function() {
+          debugger;
+          this.cancel();
+        }.bind( this ), 1 );
+      }
+    }.bind( this ));
     this.$.popup.addEventListener( "canceled", function() {
       this.$.dropdownButton.selected = false;
-    }.bind( this ) );
+    }.bind( this ));
     this.$.popup.addEventListener( "closed", function() {
       this.$.dropdownButton.selected = false;
-    }.bind( this ) );
+    }.bind( this ));
   }
 
 });

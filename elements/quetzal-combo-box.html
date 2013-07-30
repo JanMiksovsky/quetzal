@@ -1,7 +1,7 @@
 <link rel="import" href="popup-source.html">
 <link rel="import" href="quetzal-button.html">
 
-<polymer-element name="quetzal-combo-box" extends="popup-source">
+<polymer-element name="quetzal-combo-box" extends="popup-source" attributes="value">
 
 <template>
 
@@ -20,6 +20,7 @@
 #textBox {
   border: none;
   box-sizing: border-box;
+  font: inherit;
   margin-right: 1.5em; /* HACK to avoid overlapping button. Not general enough. */
   outline: none;
   padding: 2px;
@@ -60,7 +61,7 @@
     <content select="property[name='popup']"></content>
   </property>
   <div id="container">
-    <input id="textBox" type="text" value="Hello"/>
+    <input id="textBox" type="text" value="{{value}}"/>
     <quetzal-toggle-button id="dropdownButton" tabindex="-1" on-click="open">▼</quetzal-toggle-button>
   </div>
 </shadow>

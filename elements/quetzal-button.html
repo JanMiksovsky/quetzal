@@ -4,7 +4,7 @@ A button with a simple generic style.
 
 <link rel="import" href="quetzal-element.html">
 
-<polymer-element name="quetzal-button" extends="quetzal-element" noscript>
+<polymer-element name="quetzal-button" extends="quetzal-element">
 
 <template>
 
@@ -86,5 +86,16 @@ button.generic[disabled] {
 </button>
 
 </template>
+
+<script>
+Polymer( "quetzal-button", {
+
+  genericChanged: function() {
+    var generic = ( String( this.generic ) === "true" );
+    this.$.button.classList.toggle( "generic", generic );
+  }  
+
+});
+</script>
 
 </polymer-element>

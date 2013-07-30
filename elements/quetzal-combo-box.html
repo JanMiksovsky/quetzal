@@ -122,9 +122,8 @@ Polymer( "quetzal-combo-box", {
       if ( this.opened ) {
         setTimeout( function() {
           // Still open?
-          console.log( document.activeElement );
           if ( this.opened && !this.contains( document.activeElement )) {
-            this.cancel();
+            // this.cancel();
           }
         }.bind( this ), 1 );
       }

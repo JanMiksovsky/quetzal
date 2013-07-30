@@ -1,0 +1,36 @@
+<link rel="import" href="quetzal-combo-box.html">
+<link rel="import" href="quetzal-list-box.html">
+
+<polymer-element name="quetzal-list-combo-box" extends="quetzal-combo-box">
+
+<template>
+
+<style>
+@host {
+  :scope {
+    display: inline-block;
+  }
+}
+
+#listBox {
+  border: none !important;
+}
+</style>
+
+<shadow>
+  <property name="popup">
+    <quetzal-list-box id="listBox">
+      <content></content>
+    </quetzal-list-box>
+  </property>
+</shadow>
+
+</template>
+
+<script>
+Polymer( "quetzal-list-combo-box", {
+
+});
+</script>
+
+</polymer-element>

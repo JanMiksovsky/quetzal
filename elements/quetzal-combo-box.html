@@ -60,7 +60,7 @@
     <content select="property[name='popup']"></content>
   </property>
   <div id="container">
-    <input id="textBox" type="text"/>
+    <input id="textBox" type="text" value="Hello"/>
     <quetzal-toggle-button id="dropdownButton" tabindex="-1" on-click="open">▼</quetzal-toggle-button>
   </div>
 </shadow>
@@ -86,8 +86,12 @@ Polymer( "quetzal-combo-box", {
 
   ready: function() {
     this.super();
+
+    this.closeOnInsideClick = false;
+    this.openOnClick = false;
+
     this.$.container.addEventListener( "focusout", function( event ) {
-      // Close the popup when the control loses focus.
+      // Close the popup when the combo box loses focus.
       //
       // We want to close the popup if the focus moves completely outside the
       // combo box; i.e., is not within the input box or the popup.
@@ -98,18 +102,26 @@ Polymer( "quetzal-combo-box", {
       // 
       // Our solution is to set a timeout which will defer testing of
       // activeElement until after the normal focusout sequence has completed
-      // and focus has been placed in the new control.
+      // and focus has been placed in the new element.
       if ( this.opened ) {
         setTimeout( function() {
-          debugger;
-          this.cancel();
+          // Still open?
+          if ( this.opened && !this.contains( document.activeElement )) {
+            this.cancel();
+          }
         }.bind( this ), 1 );
       }
     }.bind( this ));
+
     this.$.popup.addEventListener( "canceled", function() {
       this.$.dropdownButton.selected = false;
     }.bind( this ));
     this.$.popup.addEventListener( "closed", function() {
+      // Closing the popup leaves the text selected.
+      var textBox = this.$.textBox;
+      textBox.focus();
+      debugger;
+      textBox.setSelectionRange( 0, textBox.value.length );
       this.$.dropdownButton.selected = false;
     }.bind( this ));
   }

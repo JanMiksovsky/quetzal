@@ -19,7 +19,7 @@ window.Quetzal = {
       for ( var i = 0, length = keys.length; i < length; i++ ) {
         var key = keys[i];
         if (i === keys.length - 1 ) {
-          result[ key ].apply( this, arguments );
+          result[ key ].apply( result, arguments );
           if ( hasArguments && sideEffectFn ) {
             sideEffectFn.apply( this, arguments );
           }

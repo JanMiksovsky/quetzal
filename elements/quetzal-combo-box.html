@@ -94,6 +94,11 @@ Polymer( "quetzal-combo-box", {
   ready: function() {
     this.super();
 
+    // BUG: The following line doesn't have the intended effect. The focusout
+    // handler below still gets the focusout event and, because the
+    // activeElement will be the body (if the popup's content is all static),
+    // the handler will cancel the popup on a click. Need to find some way to
+    // absorb those focusout events in that case.
     this.closeOnInsideClick = false;
     this.openOnClick = false;
 
@@ -117,6 +122,7 @@ Polymer( "quetzal-combo-box", {
       if ( this.opened ) {
         setTimeout( function() {
           // Still open?
+          console.log( document.activeElement );
           if ( this.opened && !this.contains( document.activeElement )) {
             this.cancel();
           }
@@ -125,7 +131,6 @@ Polymer( "quetzal-combo-box", {
     }.bind( this ));
 
     this.$.popup.addEventListener( "canceled", function() {
-      debugger;
       this.$.dropdownButton.selected = false;
     }.bind( this ));
     this.$.popup.addEventListener( "closed", function() {

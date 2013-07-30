@@ -16,10 +16,11 @@
   position: relative;
 }
 
+/* TODO: Use flexbox */
 #textBox {
   border: none;
   box-sizing: border-box;
-  margin-right: 1.5em;
+  margin-right: 1.5em; /* HACK to avoid overlapping button. Not general enough. */
   outline: none;
   padding: 2px;
   position: relative;
@@ -60,9 +61,7 @@
   </property>
   <div id="container">
     <input id="textBox" type="text"/>
-    <quetzal-button id="dropdownButton" tabindex="-1">
-      <span>▼</span>
-    </quetzal-button>
+    <quetzal-toggle-button id="dropdownButton" tabindex="-1" on-click="open">▼</quetzal-toggle-button>
   </div>
 </shadow>
 
@@ -71,8 +70,21 @@
 <script>
 Polymer( "quetzal-combo-box", {
 
+  open: function() {
+    if ( !this.opened ) {
+      this.$.dropdownButton.selected = true;
+    }
+    this.super();
+  },
+
   ready: function() {
     this.super();
+    this.$.popup.addEventListener( "canceled", function() {
+      this.$.dropdownButton.selected = false;
+    }.bind( this ) );
+    this.$.popup.addEventListener( "closed", function() {
+      this.$.dropdownButton.selected = false;
+    }.bind( this ) );
   }
 
 });

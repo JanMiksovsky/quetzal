@@ -135,13 +135,17 @@ Polymer( "quetzal-combo-box", {
     this.$.popup.addEventListener( "closed", function() {
       // Closing the popup leaves the text selected.
       this.$.textBox.focus();
-      this._selectAllText();
+      this.selectTextAll();
       this.$.dropdownButton.selected = false;
     }.bind( this ));
   },
 
-  _selectAllText: function() {
-    this.$.textBox.setSelectionRange( 0, this.$.textBox.value.length );
+  selectTextAll: function() {
+    this.selectTextRange( 0, this.$.textBox.value.length );
+  },
+
+  selectTextRange: function( start, end ) {
+    this.$.textBox.setSelectionRange( start, end );
   }
 
 });

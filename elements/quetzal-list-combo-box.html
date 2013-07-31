@@ -30,6 +30,19 @@
 <script>
 Polymer( "quetzal-list-combo-box", {
 
+  // Match the current text against the list items' text.
+  autoComplete: function() {
+    var typedText = this.$.textBox.value;
+    var match = this._completeWithPrefix( typedText );
+    if ( match ) {
+      this.$.textBox.value = match;
+      this.selectTextRange( typedText.length, match.length );
+      this._selectTextInList();
+    } else {
+      this.$.listBox.selectedItem = null;
+    }
+  },
+
   ready: function() {
     this.super();
     this.$.textBox.addEventListener( "keydown", function( event ) {
@@ -52,6 +65,27 @@ Polymer( "quetzal-list-combo-box", {
     }.bind( this ));
   },
 
+  // Return the item whose prefix matches the given string, ignoring case.
+  // Return null if not found.
+  _completeWithPrefix: function( prefix ) {
+    var match = null;
+    var prefixLength = prefix.length;
+    if ( prefixLength > 0 ) {
+      var lowercasePrefix = prefix.toLowerCase();
+      // We want to be able to break out of the loop, so we use some() instead
+      // of forEach().
+      Array.prototype.some.call( this.children, function( child ) {
+        var childText = child.textContent;
+        if (prefixLength <= childText.length
+            && childText.substr( 0, prefixLength ).toLowerCase() === lowercasePrefix ) {
+          match = childText;
+          return true;
+        }
+      }.bind( this ));
+    }
+    return match;
+  },
+
   // Forward the given keyboard event to the indicated target.
   _forwardKeyboardEvent: function( event, target ) {
     // Use generic events instead of keyboard events to work around a WebKit
@@ -67,13 +101,48 @@ Polymer( "quetzal-list-combo-box", {
     target.dispatchEvent( forwardedEvent );
   },
 
+  // The given item in the list was selected. If this is different than the
+  // current text value, the text value will be updated to match, and the full
+  // text left selected.
   _itemSelected: function( item ) {
-    // Set the text box value directly. It'd be more elegant to set our own
-    // value attribute, which is bound to the text box value, but that binding
-    // is updated asynchronously -- not in time for the text selection which
-    // needs to immediately follow.
-    this.$.textBox.value = item.textContent;
-    this._selectAllText();
+    var text = item.textContent;
+    if ( this.$.textBox.value !== text ) {
+      // Set the text box value directly. It'd be more elegant to set our own
+      // value attribute, which is bound to the text box value, but that binding
+      // is updated asynchronously -- not in time for the text selection which
+      // needs to immediately follow.
+      this.$.textBox.value = text;
+      this.selectTextAll();
+    }
+  },
+
+  // Select the current input text in the list if it's there.
+  // Clear the list selection if the text is not found.
+  _selectTextInList: function() {
+    if ( this.opened ) {
+      var index = -1;
+      var text = this.$.textBox.value;
+      if ( text.length > 0 ) {
+        Array.prototype.some.call( this.children, function( child, childIndex ) {
+          if ( text === child.textContent ) {
+            index = childIndex;
+            return true;
+          }
+        }.bind( this ));
+      }
+      this.$.listBox.selectedIndex = index;
+    }
+  },
+
+  // Arrange for a callback to be performed via a timeout.
+  // See notes at _textBoxKeydown.
+  _setTimeout: function ( callback ) {
+    if ( this._timeout ) {
+      // Cancel pending AutoComplete timeout.
+      clearTimeout( this._timeout );
+    }
+    // Queue a new timeout.
+    this._timeout = setTimeout( callback, 50 );
   },
 
   // Handle a keydown event. Keydown gives the best AutoComplete performance and
@@ -96,25 +165,25 @@ Polymer( "quetzal-list-combo-box", {
     // Do AutoComplete on Space, or characters from zero (0) and up, ignoring
     // any combinations that involve Alt or Ctrl.
     if ( ( event.keyCode === 32 || event.keyCode >= 48 ) && !( event.altKey || event.ctrlKey || event.metaKey ) ) {
-      // this._setTimeout( function() {
-      //   return _this._autoComplete();
-      // });
+      this._setTimeout( function() {
+        return this.autoComplete();
+      }.bind ( this ));
     } else if ( this.opened && navigationKeys.indexOf( event.keyCode ) >= 0 ) {
       // Forward navigation keys to the opened list.
       this._forwardKeyboardEvent( event, this.$.listBox );
       handled = true;
     } else if ( event.keyCode === 8 || event.keyCode === 46 ) {
       // On Backspace or Delete, clear list select if text is empty.
-      // this._setTimeout( function() {
-      //   return _this._selectTextInList();
-      // });
+      this._setTimeout( function() {
+        return this._selectTextInList();
+      }.bind( this ));
     } else if ( event.keyCode === 40 /* Down */ ) {
       this.open();
-      content = this.content();
-      // If the input text is empty, select the first list item.
-      // if ( !( content != null ) || content.length === 0 ) {
-      //   this.$list().selectedIndex( 0 );
-      // }
+      // If the text box is empty, select the first list item.
+      var value = this.$.textBox.value;
+      if ( !value || value.length === 0 ) {
+        this.$.listBox.selectedIndex = 0;
+      }
       handled = true;
     }
     if ( handled ) {

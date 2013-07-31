@@ -15,7 +15,7 @@ The selection behavior generally follows that of Microsoft Windows:
 
 <link rel="import" href="../polymer-elements/polymer-selector/polymer-selector.html">
 
-<polymer-element name="quetzal-list-box" extends="polymer-selector" constructor="QuetzalListBox">
+<polymer-element name="quetzal-list-box" extends="polymer-selector">
 
 <template>
 
@@ -82,16 +82,18 @@ Polymer( "quetzal-list-box", {
   // TODO: Handle valueattr: selected indicates a value, not the index.
   get selectedIndex() {
     var index = this.selected;
-    return index;
+    return index ? index : -1;
   },
   set selectedIndex( index ) {
-    this.selected = index;
+    this.selected = ( index >= 0 ) ? index : null;
   },
 
   // Override base implementation so we can ensure new item is in view.
   selectedItemChanged: function() {
     this.super();
-    this._scrollElementIntoView( this.selectedItem );
+    if ( this.selectedItem ) {
+      this._scrollElementIntoView( this.selectedItem );
+    }
   },
 
   selectFirstItem: function() {

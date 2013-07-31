@@ -41,6 +41,68 @@ Polymer( "quetzal-list-combo-box", {
       this.value = event.target.textContent;
       this.close();
     }.bind( this ));
+    this.$.textBox.addEventListener( "keydown", function( event ) {
+      this._textBoxKeydown( event );
+    }.bind( this ));
+  },
+
+  // Handle a keydown event. Keydown gives the best AutoComplete performance and
+  // behavior: among other things, the AutoComplete happens as soon as the user
+  // begins typing. However, using keydown creates a problem that the input
+  // element's content won't actually reflect the effects key the user just
+  // pressed down. So we set a timeout to give the keydown event a chance to
+  // bubble up and do its work, then do our AutoComplete work against the
+  // resulting text.
+  _textBoxKeydown: function( event ) {
+
+    this.log( event.which );
+
+    var handled = false;
+    var navigationKeys = [
+      33, // Page Up
+      34, // Page Down
+      38, // Up
+      40  // Down
+    ];
+
+    // Do AutoComplete on Space, or characters from zero (0) and up, ignoring
+    // any combinations that involve Alt or Ctrl.
+    if ( ( event.keyCode === 32 || event.keyCode >= 48 ) && !( event.altKey || event.ctrlKey || event.metaKey ) ) {
+      // this._setTimeout( function() {
+      //   return _this._autoComplete();
+      // });
+    } else if ( this.opened && navigationKeys.indexOf( event.keyCode ) >= 0 ) {
+      // Forward navigation keys to opened list.
+      // Use generic events instead of keyboard events to work around a WebKit
+      // bug. See http://stackoverflow.com/a/14468563/76472.
+      var forwardedEvent = document.createEvent( "Events" );
+      forwardedEvent.initEvent(
+        "keydown",
+        true, // bubbles
+        true // cancelable
+      );
+      forwardedEvent.keyCode = event.keyCode;
+      forwardedEvent.which = event.which;
+      this.$.listBox.dispatchEvent( forwardedEvent );
+      handled = true;
+    } else if ( event.keyCode === 8 || event.keyCode === 46 ) {
+      // On Backspace or Delete, clear list select if text is empty.
+      // this._setTimeout( function() {
+      //   return _this._selectTextInList();
+      // });
+    } else if ( event.keyCode === 40 /* Down */ ) {
+      this.open();
+      content = this.content();
+      // If the input text is empty, select the first list item.
+      // if ( !( content != null ) || content.length === 0 ) {
+      //   this.$list().selectedIndex( 0 );
+      // }
+      handled = true;
+    }
+    if ( handled ) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
   }
 
 });

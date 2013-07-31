@@ -32,18 +32,26 @@ Polymer( "quetzal-list-combo-box", {
 
   ready: function() {
     this.super();
+    this.$.textBox.addEventListener( "keydown", function( event ) {
+      this._textBoxKeydown( event );
+    }.bind( this ));
     this.$.listBox.addEventListener( "click", function( event ) {
       if ( event.target === this ) {
         // Clicked on list background.
         return;
       }
       // Clicking a list item puts its content into the text box portion.
-      this.value = event.target.textContent;
+      this._itemSelected( event.target );
       this.close();
     }.bind( this ));
-    this.$.textBox.addEventListener( "keydown", function( event ) {
-      this._textBoxKeydown( event );
+    this.$.listBox.addEventListener( "polymer-select", function( event ) {
+      this._itemSelected( event.detail.item );
     }.bind( this ));
+  },
+
+  _itemSelected: function( item ) {
+    this.value = item.textContent;
+    this._selectAllText();
   },
 
   // Handle a keydown event. Keydown gives the best AutoComplete performance and

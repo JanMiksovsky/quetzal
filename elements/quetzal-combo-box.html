@@ -134,11 +134,14 @@ Polymer( "quetzal-combo-box", {
     }.bind( this ));
     this.$.popup.addEventListener( "closed", function() {
       // Closing the popup leaves the text selected.
-      var textBox = this.$.textBox;
-      textBox.focus();
-      textBox.setSelectionRange( 0, textBox.value.length );
+      this.$.textBox.focus();
+      this._selectAllText();
       this.$.dropdownButton.selected = false;
     }.bind( this ));
+  },
+
+  _selectAllText: function() {
+    this.$.textBox.setSelectionRange( 0, this.$.textBox.value.length );
   }
 
 });

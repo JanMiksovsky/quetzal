@@ -45,12 +45,34 @@ Polymer( "quetzal-list-combo-box", {
       this.close();
     }.bind( this ));
     this.$.listBox.addEventListener( "polymer-select", function( event ) {
-      this._itemSelected( event.detail.item );
+      // We only care about selections, not deselections.
+      if ( event.detail.isSelected ) {
+        this._itemSelected( event.detail.item );
+      }
     }.bind( this ));
   },
 
+  // Forward the given keyboard event to the indicated target.
+  _forwardKeyboardEvent: function( event, target ) {
+    // Use generic events instead of keyboard events to work around a WebKit
+    // bug. See http://stackoverflow.com/a/14468563/76472.
+    var forwardedEvent = document.createEvent( "Events" );
+    forwardedEvent.initEvent(
+      "keydown",
+      true, // bubbles
+      true // cancelable
+    );
+    forwardedEvent.keyCode = event.keyCode;
+    forwardedEvent.which = event.which;
+    target.dispatchEvent( forwardedEvent );
+  },
+
   _itemSelected: function( item ) {
-    this.value = item.textContent;
+    // Set the text box value directly. It'd be more elegant to set our own
+    // value attribute, which is bound to the text box value, but that binding
+    // is updated asynchronously -- not in time for the text selection which
+    // needs to immediately follow.
+    this.$.textBox.value = item.textContent;
     this._selectAllText();
   },
 
@@ -62,8 +84,6 @@ Polymer( "quetzal-list-combo-box", {
   // bubble up and do its work, then do our AutoComplete work against the
   // resulting text.
   _textBoxKeydown: function( event ) {
-
-    this.log( event.which );
 
     var handled = false;
     var navigationKeys = [
@@ -80,18 +100,8 @@ Polymer( "quetzal-list-combo-box", {
       //   return _this._autoComplete();
       // });
     } else if ( this.opened && navigationKeys.indexOf( event.keyCode ) >= 0 ) {
-      // Forward navigation keys to opened list.
-      // Use generic events instead of keyboard events to work around a WebKit
-      // bug. See http://stackoverflow.com/a/14468563/76472.
-      var forwardedEvent = document.createEvent( "Events" );
-      forwardedEvent.initEvent(
-        "keydown",
-        true, // bubbles
-        true // cancelable
-      );
-      forwardedEvent.keyCode = event.keyCode;
-      forwardedEvent.which = event.which;
-      this.$.listBox.dispatchEvent( forwardedEvent );
+      // Forward navigation keys to the opened list.
+      this._forwardKeyboardEvent( event, this.$.listBox );
       handled = true;
     } else if ( event.keyCode === 8 || event.keyCode === 46 ) {
       // On Backspace or Delete, clear list select if text is empty.

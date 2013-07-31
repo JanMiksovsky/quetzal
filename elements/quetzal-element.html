@@ -78,10 +78,9 @@ window.Quetzal = {
   },
 
   _observeContentChanged: function() {
-    var self = this;
     var observer = new MutationObserver( function() {
-      self.contentChangedCallback();
-    });
+      this.contentChangedCallback();
+    }.bind( this ));
     observer.observe( this, {
       characterData: true,
       childList: true,

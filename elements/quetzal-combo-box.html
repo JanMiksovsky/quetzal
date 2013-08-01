@@ -12,7 +12,7 @@
   }
 }
 
-#container {
+#comboContainer {
   position: relative;
 }
 
@@ -37,7 +37,7 @@
 }
 
 /* Generic appearance */
-#container { 
+#comboContainer { 
   border: 1px solid lightgray;
 }
 
@@ -50,7 +50,7 @@
   text-align: center !important;
 }
 
-#container:hover #dropdownButton::x-button::x-button {
+#comboContainer:hover #dropdownButton::x-button::x-button {
   border-left-color: lightgray !important;
 }
 
@@ -60,7 +60,7 @@
   <property name="popup">
     <content select="property[name='popup']"></content>
   </property>
-  <div id="container">
+  <div id="comboContainer">
     <input id="textBox" type="text" value="{{value}}"/>
     <!--
     REVIEW: Because of hacks in quetzal-toggle-button, tabindex="-1" doesn't
@@ -94,20 +94,10 @@ Polymer( "quetzal-combo-box", {
   ready: function() {
     this.super();
 
-    // BUG: The following line doesn't have the intended effect. The focusout
-    // handler below still gets the focusout event and, because the
-    // activeElement will be the body (if the popup's content is all static),
-    // the handler will cancel the popup on a click. Need to find some way to
-    // absorb those focusout events in that case.
     this.closeOnInsideClick = false;
-    // this.openOnClick = false;
-
-    this.addEventListener( "keydown", function( event ) {
-      if ( event.keyCode === 13 /* Enter */ && this.opened ) {
-        /* Enter key closes popup. */
-        this.close();
-      }
-    }.bind( this ));
+    this.openOnClick = false;
+    // We'll use focus on just the text box to implicitly open the combo box.
+    this.openOnFocus = false;
 
     // Close the popup when the combo box loses focus.
     this.addEventListener( "focusout", function( event ) {
@@ -126,6 +116,27 @@ Polymer( "quetzal-combo-box", {
             // this.cancel();
           }
         }.bind( this ), 1 );
+      }
+    }.bind( this ));
+
+    this.addEventListener( "keydown", function( event ) {
+      if ( event.keyCode === 13 /* Enter */ && this.opened ) {
+        /* Enter key closes popup. */
+        this.close();
+      }
+    }.bind( this ));
+
+    this.$.textBox.addEventListener( "focusin", function() {
+      // if ( this.openOnFocus ) {
+        this.open();
+      // }
+    }.bind( this ));
+
+    this.$.dropdownButton.addEventListener( "click", function( event ) {
+      if ( this.opened ) {
+        this.close();
+      } else {
+        this.open();
       }
     }.bind( this ));
 

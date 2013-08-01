@@ -20,6 +20,13 @@
   <quetzal-popup id="popup" closeOnInsideClick="{{closeOnInsideClick}}" opened="{{opened}}" openOnClick="{{openOnClick}}" tabindex="-1">
     <content select="property[name='popup']"></content>
   </quetzal-popup>
+  <!--
+  BUG: The container of the real content of the popup source (the thing you can click on to open
+  the popup) should go before the popup so that it can get covered by the popup.
+  Unfortunately, a limitation on the use of a plain content element means that
+  it has to go last (so that the popup property gets appropriately distributed
+  to the popup via the select attribute).
+  -->
   <div id="container">
     <content></content>
   </div>
@@ -35,6 +42,10 @@ Polymer( "popup-source", {
   close: Quetzal.alias( "$.popup.close" ),
 
   open: Quetzal.alias( "$.popup.open" ),
+
+  openedChanged: function() {
+    this.$.container.classList.toggle( "opened", this.opened );
+  },
 
   openOnClick: true,
 

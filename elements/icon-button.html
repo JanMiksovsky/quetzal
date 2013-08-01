@@ -1,11 +1,15 @@
 <link rel="import" href="quetzal-button.html">
 
-<polymer-element name="icon-button" extends="quetzal-button" attributes="icon" noscript>
+<polymer-element name="icon-button" extends="quetzal-button" attributes="icon">
 
 <template>
   <shadow>
     <img src="{{icon}}"/>&nbsp;<content></content>
   </shadow>
 </template>
+
+<script>
+Polymer( "icon-button" );
+</script>
 
 </polymer-element>

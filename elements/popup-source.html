@@ -43,6 +43,11 @@ Polymer( "popup-source", {
 
   open: Quetzal.alias( "$.popup.open" ),
 
+  // REVIEW: Not sure why we need to explicitly set the default value of opened
+  // to false. The attribute should be bound to the popup's opened value, and
+  // that value should already be false by default.
+  opened: false,
+
   openedChanged: function() {
     this.$.container.classList.toggle( "opened", this.opened );
   },

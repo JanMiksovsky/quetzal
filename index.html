@@ -141,6 +141,18 @@ when clicked. See also <markup-tag>popup-button</markup-tag>.</property>
 </demo-tile>
 
 <demo-tile>
+<property name="classname">quetzal-combo-box</property>
+<property name="description">
+An input area with a dropdown arrow that invokes a popup. This is intended for
+use as base class for custom combo boxes.
+</property>
+<property name="demo">
+<quetzal-combo-box value="Hello">
+  <property name="popup">You can populate a popup like this with choices for the user to pick.</property>
+</quetzal-combo-box>
+</demo-tile>
+
+<demo-tile>
 <property name="classname">quetzal-element</property>
 <property name="description">A plain Quetzal element. This currently behaves like a
 <markup-tag>div</markup-tag>.</property>
@@ -178,6 +190,33 @@ when clicked. See also <markup-tag>popup-button</markup-tag>.</property>
   <div>Yellow</div>
   <div>YellowGreen</div>
 </quetzal-list-box>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-list-combo-box</property>
+<property name="description">
+A combo box in which choices are rendered in a dropdown list box.
+</property>
+<property name="demo">
+<quetzal-list-combo-box>
+  <labeled-color-swatch>Blue</labeled-color-swatch>
+  <labeled-color-swatch>Brown</labeled-color-swatch>
+  <labeled-color-swatch>DarkBlue</labeled-color-swatch>
+  <labeled-color-swatch>DarkGreen</labeled-color-swatch>
+  <labeled-color-swatch>DarkRed</labeled-color-swatch>
+  <labeled-color-swatch>Green</labeled-color-swatch>
+  <labeled-color-swatch>LightCoral</labeled-color-swatch>
+  <labeled-color-swatch>LightGray</labeled-color-swatch>
+  <labeled-color-swatch>LightSeaGreen</labeled-color-swatch>
+  <labeled-color-swatch>LightSkyBlue</labeled-color-swatch>
+  <labeled-color-swatch>OrangeRed</labeled-color-swatch>
+  <labeled-color-swatch>Red</labeled-color-swatch>
+  <labeled-color-swatch>SlateBlue</labeled-color-swatch>
+  <labeled-color-swatch>SteelBlue</labeled-color-swatch>
+  <labeled-color-swatch>Tan</labeled-color-swatch>
+  <labeled-color-swatch>Yellow</labeled-color-swatch>
+</quetzal-list-combo-box>
 </property>
 </demo-tile>
 

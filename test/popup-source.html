@@ -23,6 +23,16 @@ input {
 body {
   margin: 0.5in;
 }
+
+#button {
+  margin-top: 6in;
+}
+
+#popup {
+  border: 1px solid gray;
+  height: 400px;
+  width: 400px;
+}
 </style>
 
 </head>
@@ -34,8 +44,10 @@ body {
     Click me
   </popup-source>
  -->
-  <popup-button>
-    <property name="popup">Here's the popup</property>
+  <popup-button id="button">
+    <property name="popup">
+      <div id="popup">Here's the popup</div>
+    </property>
     Click me
   </popup-button>
 </body>

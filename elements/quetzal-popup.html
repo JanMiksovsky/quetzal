@@ -18,7 +18,11 @@
   }
 
   *:not(.opened) {
-    display: none;
+    /*
+    Use visibility: hidden instead of display: none so that we can inspect the
+    popup size for layout purposes before the popup is made visible.
+    */
+    visibility: hidden;
   }
 
   /* Generic appearance */

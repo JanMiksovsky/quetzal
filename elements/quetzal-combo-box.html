@@ -106,16 +106,18 @@ Polymer( "quetzal-combo-box", {
       // Unfortunately, if the user clicks in the popup, the input will blur
       // before we've had a chance to even register the click. And at the point
       // the blur handler here is invoked, the new activeElement is not yet
-      // known, so we can't test that. Instead, set a timeout to defer testing
-      // of activeElement until after the normal focusout sequence has completed
-      // and focus has been placed in the new element.
+      // known, so we can't test that. Instead, we start polling to wait for
+      // a new element to get the focus. Once that happens, we see whether the
+      // newly-focused element is somewhere inside this element (probably in
+      // the popup). If it's *not*, we've really lost the focus, so we can
+      // implicitly close the popup.
       if ( this.opened ) {
-        setTimeout( function() {
+        this._waitForFocusedElement( function() {
           // Still open?
           if ( this.opened && !this.contains( document.activeElement )) {
             this.cancel();
           }
-        }.bind( this ), 1 );
+        }.bind( this ));
       }
     }.bind( this ));
 
@@ -157,6 +159,32 @@ Polymer( "quetzal-combo-box", {
 
   selectTextRange: function( start, end ) {
     this.$.textBox.setSelectionRange( start, end );
+  },
+
+  // When the focus is transitioning from one element to another, during that
+  // interval the activeElement will appear to be the document body. Wait for
+  // some element to actually receive the focus, then invoke the callback. As
+  // a fallback, if no element gains the focus after some time has passed,
+  // perhaps the document body really does have the focus, and we invoke the
+  // callback at that point.
+  // See the focusout handler above for more on why we need this.
+  _waitForFocusedElement: function( callback ) {
+    var countdownTimer = 500; /* Wait for half a second, max. */
+    var interval = setInterval( function() {
+      var done;
+      if ( document.activeElement && document.activeElement !== document.body ) {
+        done = true;
+      } else {
+        countdownTimer -= 10;
+        if ( countdownTimer < 0 ) {
+          done = true;
+        }
+      }
+      if ( done ) {
+        callback.call( this );
+        clearInterval( interval );
+      }
+    }.bind( this ), 10);
   }
 
 });

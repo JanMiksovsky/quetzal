@@ -4,7 +4,7 @@ A button with a simple generic style.
 
 <link rel="import" href="quetzal-element.html">
 
-<polymer-element name="quetzal-button" extends="quetzal-element">
+<polymer-element name="quetzal-button" extends="quetzal-element" attributes="tabindex">
 
 <template>
 
@@ -88,7 +88,7 @@ button.generic[disabled] {
 
 </style>
 
-<button id="button" pseudo="x-button">
+<button id="button" pseudo="x-button" tabindex="{{tabindex}}">
   <content></content>
 </button>
 

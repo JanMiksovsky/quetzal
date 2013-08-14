@@ -1,7 +1,7 @@
 <link rel="import" href="quetzal-button.html">
 
 <!-- TODO: Restore extends="quetzal-button" once we have shadow distribution -->
-<polymer-element name="quetzal-toggle-button" attributes="selected">
+<polymer-element name="quetzal-toggle-button" attributes="selected tabindex">
 
 <template>
 
@@ -38,7 +38,7 @@
   <content></content>
 </shadow>
 -->
-<quetzal-button id="button" pseudo="x-button">
+<quetzal-button id="button" pseudo="x-button" tabindex="{{tabindex}}">
   <content></content>
 </quetzal-button>
 

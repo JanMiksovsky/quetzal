@@ -1,0 +1,14 @@
+{
+  "name": "quetzal",
+  "version": "0.0.2",
+  "dependencies": {
+    "polymer": "*"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

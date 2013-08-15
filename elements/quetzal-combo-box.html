@@ -153,7 +153,7 @@ Polymer( "quetzal-combo-box", {
     }.bind( this ));
     this.$.popup.addEventListener( "closed", function() {
       // Closing the popup leaves the text selected.
-      this.$.textBox.focus();
+      // this.$.textBox.focus();
       this.selectTextAll();
       this.$.dropdownButton.selected = false;
     }.bind( this ));
@@ -165,6 +165,10 @@ Polymer( "quetzal-combo-box", {
 
   selectTextRange: function( start, end ) {
     this.$.textBox.setSelectionRange( start, end );
+  },
+
+  get _focusContainer() {
+    return this.$.textBox;
   },
 
   // When the focus is transitioning from one element to another, during that

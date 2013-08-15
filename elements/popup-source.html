@@ -104,8 +104,9 @@ Polymer( "popup-source", {
         this.open();
       }
     }.bind( this ));
-    this.$.container.addEventListener( "focusin", function( event ) {
-      this.log( event.target + " focusin: this.opened = " + this.opened );
+    this._focusContainer.addEventListener( "focusin", function( event ) {
+      this.log( "focusin: this.opened = " + this.opened );
+      console.log( event.target );
       if ( this.openOnFocus && !this.opened ) {
         this.open();
       }
@@ -119,6 +120,10 @@ Polymer( "popup-source", {
     this.$.popup.positionPopup = function() {
       this.positionPopup();
     }.bind( this ) ;
+  },
+
+  get _focusContainer() {
+    return this.$.container;
   }
 
 });

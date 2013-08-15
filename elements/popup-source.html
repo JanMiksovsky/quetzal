@@ -92,30 +92,15 @@ Polymer( "popup-source", {
 
   ready: function() {
     this.super();
-    // this.$.container.addEventListener( "click", function() {
-    //   this.log( "click" );
-    //   if ( this.openOnClick ) {
-    //     this.open();
-    //   }
-    // }.bind( this ));
     this.$.container.addEventListener( "mousedown", function() {
-      this.log( "mouseDown" );
       if ( this.openOnMouseDown ) {
         this.open();
       }
     }.bind( this ));
     this._focusContainer.addEventListener( "focusin", function( event ) {
-      this.log( "focusin: this.opened = " + this.opened );
-      console.log( event.target );
       if ( this.openOnFocus && !this.opened ) {
         this.open();
       }
-    }.bind( this ));
-    this.$.popup.addEventListener( "closed", function() {
-      // this.log( "close" );
-    }.bind( this ));
-    this.$.popup.addEventListener( "canceled", function() {
-      // this.log( "cancel" );
     }.bind( this ));
     this.$.popup.positionPopup = function() {
       this.positionPopup();

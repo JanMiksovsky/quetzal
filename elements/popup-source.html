@@ -56,6 +56,8 @@ Polymer( "popup-source", {
 
   openOnFocus: false,
 
+  openOnMouseDown: true,
+
   positionPopup: function() {
     var rect = this.getBoundingClientRect();
     var top = rect.top;
@@ -90,13 +92,21 @@ Polymer( "popup-source", {
 
   ready: function() {
     this.super();
-    this.$.container.addEventListener( "click", function() {
-      if ( this.openOnClick ) {
+    // this.$.container.addEventListener( "click", function() {
+    //   this.log( "click" );
+    //   if ( this.openOnClick ) {
+    //     this.open();
+    //   }
+    // }.bind( this ));
+    this.$.container.addEventListener( "mousedown", function() {
+      this.log( "mouseDown" );
+      if ( this.openOnMouseDown ) {
         this.open();
       }
     }.bind( this ));
-    this.$.container.addEventListener( "focusin", function() {
-      if ( this.openOnFocus ) {
+    this.$.container.addEventListener( "focusin", function( event ) {
+      this.log( event.target + " focusin: this.opened = " + this.opened );
+      if ( this.openOnFocus && !this.opened ) {
         this.open();
       }
     }.bind( this ));

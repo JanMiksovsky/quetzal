@@ -53,10 +53,11 @@ Polymer( "quetzal-list-combo-box", {
     this._selectTextInList();
     this.super();
 
-    // Give the input control focus if it doesn't already have it.
-    if ( document.activeElement !== this.$.textBox ) {
-      this.$.textBox.focus();
-    }
+    // Give the input control focus.
+    // if ( document.activeElement !== this.$.textBox ) {
+      // console.log( document.activeElement );
+      // this.$.textBox.focus();
+    // }
   },
 
   ready: function() {

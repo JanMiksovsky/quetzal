@@ -1,5 +1,6 @@
 <link rel="import" href="quetzal-element.html">
 <link rel="import" href="markup-tag.html">
+<link rel="import" href="../polymer-elements/polymer-collapse/polymer-collapse.html">
 
 <polymer-element name="demo-tile" extends="quetzal-element">
 
@@ -26,13 +27,25 @@ h3 {
   padding-top: 0.5em;
 }
 
+#codeToggleContainer {
+  margin-bottom: 0;
+}
+
+#codeToggle {
+  color: #444;
+  font-size: 0.9em;
+  text-decoration: none;
+  margin-top: 1em;
+}
+#codeToggle:hover {
+  border-bottom: 1px dotted rgb(0, 0, 238);
+  color: rgb(0, 0, 238);
+}
+
 #code {
   font-size: 0.9em;
   margin: 0;
-  max-height: 150px;
-  overflow: auto;
-  white-space: pre-wrap;
-  word-wrap: break-word;
+  overflow-y: auto;
 }
 </style>
 
@@ -44,7 +57,11 @@ h3 {
     <content select="property[name='description']"></content>
   </p>
   <content select="property[name='demo']"></content>
+  <p id="codeToggleContainer">
+    <a id="codeToggle" on-click="_codeToggleClick">View code</a>
+  </p>
   <pre id="code"></pre>
+  <polymer-collapse id="codeCollapse" targetId="code" closed></polymer-collapse>
 </div>
 
 </template>
@@ -61,6 +78,11 @@ Polymer( "demo-tile", {
   ready: function() {
     this.super();
     this.contentChanged();
+    this.$.codeToggle.href = "javascript:";
+  },
+
+  _codeToggleClick: function() {
+    this.$.codeCollapse.toggle();
   }
 
 });

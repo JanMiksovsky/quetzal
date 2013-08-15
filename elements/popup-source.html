@@ -122,6 +122,9 @@ Polymer( "popup-source", {
     }.bind( this ) ;
   },
 
+  // This returns the element used to listen to focusin events. Subclasses can
+  // override this if they only want to listen to focusin from within a specific
+  // sub-element.
   get _focusContainer() {
     return this.$.container;
   }

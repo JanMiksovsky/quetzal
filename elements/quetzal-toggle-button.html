@@ -1,7 +1,7 @@
 <link rel="import" href="quetzal-button.html">
 
 <!-- TODO: Restore extends="quetzal-button" once we have shadow distribution -->
-<polymer-element name="quetzal-toggle-button" attributes="selected tabindex">
+<polymer-element name="quetzal-toggle-button" attributes="autotoggle selected tabindex">
 
 <template>
 
@@ -47,11 +47,15 @@
 <script>
 Polymer( "quetzal-toggle-button", {
 
+  autotoggle: true,
+
   ready: function() {
     this.super();
     this.addEventListener( "click", function() {
       // TODO: if not disabled...
-      this.toggleSelected();
+      if ( this.autotoggle ) {
+        this.toggleSelected();
+      }
     }.bind( this ) );
   },
 

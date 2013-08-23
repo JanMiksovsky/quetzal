@@ -87,6 +87,20 @@ Polymer( "quetzal-list-combo-box", {
     }.bind( this ));
   },
 
+  get selected() {
+    return this.$.listBox.selected;
+  },
+  set selected( value ) {
+    this.$.listBox.selected = value;
+  },
+
+  get selectedItem() {
+    return this.$.listBox.selectedItem;
+  },
+  set selectedItem( value ) {
+    this.$.listBox.selectedItem = value;
+  },
+
   // Return the item whose prefix matches the given string, ignoring case.
   // Return null if not found.
   _completeWithPrefix: function( prefix ) {

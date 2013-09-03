@@ -78,14 +78,6 @@ appear below. These are translations of some components from the
 -->
 
 <demo-tile>
-<property name="classname">icon-button</property>
-<property name="description">A button with an optional icon.</property>
-<property name="demo">
-<icon-button icon="resources/reload_12x14.png">Reload</icon-button>
-</property>
-</demo-tile>
-
-<demo-tile>
 <property name="classname">lorem-pixel</property>
 <property name="description">Selects a random photo from lorempixel.com.</property>
 <property name="demo">
@@ -98,30 +90,6 @@ appear below. These are translations of some components from the
 <property name="description">Formats its contents as an HTML/XML tag.</property>
 <property name="demo">
 Here's a reference to the <markup-tag>script</markup-tag> tag.
-</property>
-</demo-tile>
-
-<demo-tile>
-<property name="classname">popup-button</property>
-<property name="description">A button which, when clicked, shows a popup which
-is positioned above or below the button.</property>
-<property name="demo">
-<popup-button>
-  <property name="popup">Here's the popup</property>
-  Click for a popup
-</popup-button>
-</property>
-</demo-tile>
-
-<demo-tile>
-<property name="classname">popup-source</property>
-<property name="description">A base class for elements which produce a popup
-when clicked. See also <markup-tag>popup-button</markup-tag>.</property>
-<property name="demo">
-<popup-source>
-  <property name="popup">Here's the popup</property>
-  Click me
-</popup-source>
 </property>
 </demo-tile>
 
@@ -157,6 +125,14 @@ use as base class for custom combo boxes.
 <property name="classname">quetzal-element</property>
 <property name="description">A plain Quetzal element. This currently behaves like a
 <markup-tag>div</markup-tag>.</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-icon-button</property>
+<property name="description">A button with an optional icon.</property>
+<property name="demo">
+<quetzal-icon-button icon="resources/reload_12x14.png">Reload</quetzal-icon-button>
+</property>
 </demo-tile>
 
 <demo-tile>
@@ -226,6 +202,30 @@ A combo box in which choices are rendered in a dropdown list box.
 <property name="description">A "blanket" over the page to catch or prevent
 interaction with page elements. Used by <markup-tag>quetzal-popup</markup-tag>
 to disable interaction with page elements behind an active popup.
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-popup-button</property>
+<property name="description">A button which, when clicked, shows a popup which
+is positioned above or below the button.</property>
+<property name="demo">
+<quetzal-popup-button>
+  <property name="popup">Here's the popup</property>
+  Click for a popup
+</quetzal-popup-button>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-popup-source</property>
+<property name="description">A base class for elements which produce a popup
+when clicked. See also <markup-tag>popup-button</markup-tag>.</property>
+<property name="demo">
+<popup-source>
+  <property name="popup">Here's the popup</property>
+  Click me
+</popup-source>
+</property>
 </demo-tile>
 
 </body>

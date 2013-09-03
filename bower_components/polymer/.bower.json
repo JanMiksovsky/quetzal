@@ -8,16 +8,17 @@
     "browser"
   ],
   "author": "Polymer Authors <polymer-dev@googlegroups.com>",
-  "version": "0.0.20130816",
+  "version": "0.0.20130829",
   "main": [
     "polymer.min.js"
   ],
-  "_release": "0.0.20130816",
+  "_release": "0.0.20130829",
   "_resolution": {
     "type": "version",
-    "tag": "0.0.20130816",
-    "commit": "e4564020d586455243fa02535d22fa9de05aa49c"
+    "tag": "0.0.20130829",
+    "commit": "4ad45fd1c8cccdb2d3f9506558991a9268720714"
   },
   "_source": "git://github.com/components/polymer.git",
-  "_target": "*"
+  "_target": "*",
+  "_originalSource": "polymer"
 }

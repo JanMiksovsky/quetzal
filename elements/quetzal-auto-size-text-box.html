@@ -8,7 +8,7 @@ stretch the text box.
 
 <link rel="import" href="quetzal-element.html">
 
-<polymer-element name="auto-size-text-box" extends="quetzal-element" attributes="minimumLines placeholder spellcheck">
+<polymer-element name="quetzal-auto-size-text-box" extends="quetzal-element" attributes="minimumLines placeholder spellcheck">
 
 <template>
 
@@ -77,7 +77,7 @@ stretch the text box.
 </template>
 
 <script>
-Polymer( "auto-size-text-box", {
+Polymer( "quetzal-auto-size-text-box", {
 
   // Resize the element such that the text box can exactly contain its content.
   autoSize: function() {
@@ -100,8 +100,7 @@ Polymer( "auto-size-text-box", {
     }
   },
 
-  // TODO: Change to enteredDocumentCallback
-  insertedCallback: function() {
+  enteredDocumentCallback: function() {
 
     // For auto-sizing to work, we need the text copy to have the same border,
     // padding, and other relevant characteristics as the original text area.
@@ -132,6 +131,7 @@ Polymer( "auto-size-text-box", {
     // text. We can't use lineHeight, because that can be reported as "normal",
     // and we want to know the actual pixel height.
     this._lineHeight = this.$.extraLine.clientHeight;
+
     // Now that we know the lineheight, we can hide the extra line.
     this.$.extraLine.style.display = "none";
 

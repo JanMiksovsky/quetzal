@@ -1,17 +1,19 @@
 <link rel="import" href="quetzal-element.html">
 <link rel="import" href="../polymer-elements/polymer-overlay/polymer-overlay.html">
 
-<polymer-element name="quetzal-popup2" extends="quetzal-element">
+<polymer-element name="quetzal-popup2" extends="quetzal-element" attributes="opened">
 
 <template>
-  <div>
-    <polymer-overlay id="overlay"></polymer-overlay>
-    <content></content>
-  </div>
+  <polymer-overlay id="overlay" opened="opened"></polymer-overlay>
+  <content></content>
 </template>
 
 <script>
 Polymer( "quetzal-popup2", {
+
+  created: function() {
+    this.$.overlay.target = this;
+  },
 
   toggle: Quetzal.alias( "$.overlay.toggle" )
 

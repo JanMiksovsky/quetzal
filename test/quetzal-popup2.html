@@ -26,10 +26,15 @@ body {
 
 <script>
 window.addEventListener( "WebComponentsReady", function() {
+
+  // var overlay = document.querySelector( "#overlay" );
+  // overlay.target = document.querySelector( "#dialog" );
+
   document.querySelector( "#toggle" ).addEventListener( "click", function() {
     var popup = document.querySelector( "#popup" );
     // popup.opened = !popup.opened;
     popup.toggle();
+    // overlay.toggle();
   });
 });
 </script>
@@ -39,6 +44,12 @@ window.addEventListener( "WebComponentsReady", function() {
 <body>
   <quetzal-button id="toggle">Toggle popup</quetzal-button>
   <quetzal-popup2 id="popup">Popup content</quetzal-popup2>
+<!--
+   <div id="dialog">
+    <polymer-overlay id="overlay"></polymer-overlay>
+    <div>Hello?</div>
+  </div>
+ -->
 </body>
 
 </html>

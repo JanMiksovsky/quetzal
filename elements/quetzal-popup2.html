@@ -4,7 +4,7 @@
 <polymer-element name="quetzal-popup2" extends="quetzal-element" attributes="opened">
 
 <template>
-  <polymer-overlay id="overlay" opened="opened"></polymer-overlay>
+  <polymer-overlay id="overlay" opened="{{opened}}"></polymer-overlay>
   <content></content>
 </template>
 
@@ -12,11 +12,8 @@
 Polymer( "quetzal-popup2", {
 
   created: function() {
-    this.opened = false;
     this.$.overlay.target = this;
   },
-
-  opened: false,
 
   toggle: Quetzal.alias( "$.overlay.toggle" )
 

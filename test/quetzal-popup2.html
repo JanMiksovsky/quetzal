@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>quetzal-popup2</title>
+
+<script src="http://www.polymer-project.org/polymer/polymer.min.js"></script>
+
+<link rel="import" href="../elements/quetzal.collection.html">
+<link rel="import" href="../elements/quetzal-popup2.html">
+
+<style>
+body,
+button,
+input {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+
+body {
+  margin: 0.5in;
+}
+</style>
+
+<script>
+window.addEventListener( "WebComponentsReady", function() {
+  document.querySelector( "#toggle" ).addEventListener( "click", function() {
+    var popup = document.querySelector( "#popup" );
+    // popup.opened = !popup.opened;
+    popup.toggle();
+  });
+});
+</script>
+
+</head>
+
+<body>
+  <quetzal-button id="toggle">Toggle popup</quetzal-button>
+  <quetzal-popup2 id="popup">Popup content</quetzal-popup2>
+</body>
+
+</html>

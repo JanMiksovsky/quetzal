@@ -20,22 +20,17 @@ The selection behavior generally follows that of Microsoft Windows:
 <template>
 
 <style>
-@host {
+:host {
+  display: block;
+  outline: none;
+  overflow-y: auto;
+}
 
-  :scope {
-    display: block;
-    outline: none;
-    overflow-y: auto;
-  }
-
-  /* Generic appearance */
-  /*&.generic {*/
-  :scope {
-    border: 1px solid lightgray;
-    box-sizing: border-box;
-    cursor: default;
-  }
-
+/* Generic appearance */
+:host {
+  border: 1px solid lightgray;
+  box-sizing: border-box;
+  cursor: default;
 }
 
 ::content > * {
@@ -45,7 +40,7 @@ The selection behavior generally follows that of Microsoft Windows:
   user-select: none;
 }
 
-::content .polymer-selected {
+::content > .polymer-selected {
   background: highlight;
   color: highlighttext;
 }

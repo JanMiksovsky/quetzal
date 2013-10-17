@@ -7,36 +7,32 @@
 <template>
 
 <style>
-@host {
+:host {
+  display: block;
+  position: absolute;
+  /* REVIEW: Shouldn't need this, but without it, plain text popups wrap. */
+  white-space: nowrap;
+  z-index: 1;
+}
 
-  * {
-    display: block;
-    position: absolute;
-    /* REVIEW: Shouldn't need this, but without it, plain text popups wrap. */
-    white-space: nowrap;
-    z-index: 1;
-  }
+:host:not(.opened) {
+  /*
+  Use visibility: hidden instead of display: none so that we can inspect the
+  popup size for layout purposes before the popup is made visible.
+  */
+  visibility: hidden;
+}
 
-  *:not(.opened) {
-    /*
-    Use visibility: hidden instead of display: none so that we can inspect the
-    popup size for layout purposes before the popup is made visible.
-    */
-    visibility: hidden;
-  }
-
-  /* Generic appearance */
-  /* &.generic { */
-  * {
-    background: white;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );
-    box-sizing: border-box;
-    padding: .25em;
-    -webkit-user-select: none;
-    user-select: none;
-  }
-
+/* Generic appearance */
+/* &.generic { */
+:host {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );
+  box-sizing: border-box;
+  padding: .25em;
+  -webkit-user-select: none;
+  user-select: none;
 }
 </style>
 

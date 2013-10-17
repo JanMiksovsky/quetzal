@@ -8,7 +8,7 @@ stretch the text box.
 
 <link rel="import" href="quetzal-element.html">
 
-<polymer-element name="quetzal-auto-size-text-box" extends="quetzal-element" attributes="minimumLines placeholder spellcheck">
+<polymer-element name="quetzal-auto-size-text-box" extends="quetzal-element" attributes="minimumLines placeholder">
 
 <template>
 
@@ -100,7 +100,7 @@ Polymer( "quetzal-auto-size-text-box", {
     }
   },
 
-  enteredDocumentCallback: function() {
+  enteredDocument: function() {
 
     // For auto-sizing to work, we need the text copy to have the same border,
     // padding, and other relevant characteristics as the original text area.

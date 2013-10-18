@@ -10,6 +10,10 @@
   position: relative;
 }
 
+#popup {
+  position: absolute;
+}
+
 #container {
   -webkit-user-select: none;
   user-select: none;
@@ -17,7 +21,6 @@
 </style>
 
 <div id="positioner">
-  <!-- closeOnInsideClick="{{closeOnInsideClick}}" openOnClick="{{openOnClick}}"  -->
   <quetzal-popup2 id="popup" opened="{{opened}}" tabindex="-1">
     <content select="property[name='popup']"></content>
   </quetzal-popup2>
@@ -44,20 +47,27 @@ Polymer( "quetzal-popup-source", {
 
   created: function() {
     this.super();
-    this.$.container.addEventListener( "mousedown", function() {
+    this.$.container.addEventListener( "mousedown", function( event ) {
+      this.log( "mousedown" );
       if ( this.openOnMouseDown ) {
         this.open();
+        event.stopPropagation();
       }
     }.bind( this ));
-    this._focusContainer.addEventListener( "focusin", function( event ) {
+    this._focusContainer.addEventListener( "focusin", function() {
+      this.log( "focusin" );
       if ( this.openOnFocus && !this.opened ) {
         this.open();
       }
     }.bind( this ));
-    // this.shadowRoot.addEventListener( "polymer-overlay-open", ... );
-    // this.$.popup.resizeHandler = function() {
-    //   this.positionPopup();
-    // }.bind( this ) ;
+    this.shadowRoot.addEventListener( "polymer-overlay-open", function() {
+      this.log( "open" );
+      if ( this.opened ) {
+        this.positionPopup();
+      } else {
+        debugger;
+      }
+    }.bind( this ));
   },
 
   open: Quetzal.alias( "$.popup.open" ),
@@ -70,8 +80,6 @@ Polymer( "quetzal-popup-source", {
   openedChanged: function() {
     this.$.container.classList.toggle( "opened", this.opened );
   },
-
-  openOnClick: true,
 
   openOnFocus: false,
 

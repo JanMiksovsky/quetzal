@@ -52,7 +52,7 @@ The selection behavior generally follows that of Microsoft Windows:
 <script>
 Polymer( "quetzal-list-box", {
 
-  ready: function() {
+  created: function() {
     this.super();
     if ( this.tabIndex == -1 /* Default value */ ) {
       // Try to convince the browser that the list is focusable, but without

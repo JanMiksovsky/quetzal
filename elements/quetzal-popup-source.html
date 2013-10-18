@@ -42,6 +42,24 @@ Polymer( "quetzal-popup-source", {
 
   close: Quetzal.alias( "$.popup.close" ),
 
+  created: function() {
+    this.super();
+    this.$.container.addEventListener( "mousedown", function() {
+      if ( this.openOnMouseDown ) {
+        this.open();
+      }
+    }.bind( this ));
+    this._focusContainer.addEventListener( "focusin", function( event ) {
+      if ( this.openOnFocus && !this.opened ) {
+        this.open();
+      }
+    }.bind( this ));
+    // this.shadowRoot.addEventListener( "polymer-overlay-open", ... );
+    // this.$.popup.resizeHandler = function() {
+    //   this.positionPopup();
+    // }.bind( this ) ;
+  },
+
   open: Quetzal.alias( "$.popup.open" ),
 
   // REVIEW: Not sure why we need to explicitly set the default value of opened
@@ -60,7 +78,6 @@ Polymer( "quetzal-popup-source", {
   openOnMouseDown: true,
 
   positionPopup: function() {
-    debugger;
     var rect = this.getBoundingClientRect();
     var top = rect.top;
     var left = rect.left;
@@ -90,23 +107,6 @@ Polymer( "quetzal-popup-source", {
     classList.toggle( "popupAppearsBelow", popupAppearsBelow );
     classList.toggle( "popupAlignLeft", popupAlignLeft );
     classList.toggle( "popupAlignRight", !popupAlignLeft );
-  },
-
-  ready: function() {
-    this.super();
-    this.$.container.addEventListener( "mousedown", function() {
-      if ( this.openOnMouseDown ) {
-        this.open();
-      }
-    }.bind( this ));
-    this._focusContainer.addEventListener( "focusin", function( event ) {
-      if ( this.openOnFocus && !this.opened ) {
-        this.open();
-      }
-    }.bind( this ));
-    this.$.popup.resizeHandler = function() {
-      this.positionPopup();
-    }.bind( this ) ;
   },
 
   // This returns the element used to listen to focusin events. Subclasses can

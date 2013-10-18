@@ -4,13 +4,13 @@
 
 <meta charset="utf-8">
 
-<title>color-swatch</title>
+<title>quetzal-popup-source</title>
 
-<!-- <script src="http://www.polymer-project.org/polymer/polymer.min.js"></script> -->
-<script src="../../../tools/polymer/polymer/polymer.js" debug="true"></script>
+<script src="http://www.polymer-project.org/polymer/polymer.min.js"></script>
+<!-- <script src="../bower_components/polymer/polymer.min.js"></script> -->
 
-<!-- <link rel="import" href="../elements/quetzal.collection.html"> -->
-<link rel="import" href="../elements/popup-button.html">
+<link rel="import" href="../elements/quetzal.collection.html">
+<!-- <link rel="import" href="../elements/quetzal-popup-button.html"> -->
 
 <style>
 body,
@@ -25,10 +25,11 @@ body {
 }
 
 #button {
-  margin-top: 6in;
+  /*margin-top: 6in;*/
 }
 
 #popup {
+  background: white;
   border: 1px solid gray;
   height: 400px;
   width: 400px;
@@ -44,12 +45,12 @@ body {
     Click me
   </popup-source>
  -->
-  <popup-button id="button">
+  <quetzal-popup-button id="button">
     <property name="popup">
       <div id="popup">Here's the popup</div>
     </property>
     Click me
-  </popup-button>
+  </quetzal-popup-button>
 </body>
 
 </html>

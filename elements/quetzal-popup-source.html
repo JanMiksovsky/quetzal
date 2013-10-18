@@ -1,5 +1,5 @@
 <link rel="import" href="quetzal-element.html">
-<link rel="import" href="quetzal-popup.html">
+<link rel="import" href="quetzal-popup2.html">
 
 <polymer-element name="quetzal-popup-source" extends="quetzal-element" attributes="closeOnInsideClick opened openOnClick openOnFocus">
 
@@ -17,9 +17,10 @@
 </style>
 
 <div id="positioner">
-  <quetzal-popup id="popup" closeOnInsideClick="{{closeOnInsideClick}}" opened="{{opened}}" openOnClick="{{openOnClick}}" tabindex="-1">
+  <!-- closeOnInsideClick="{{closeOnInsideClick}}" openOnClick="{{openOnClick}}"  -->
+  <quetzal-popup2 id="popup" opened="{{opened}}" tabindex="-1">
     <content select="property[name='popup']"></content>
-  </quetzal-popup>
+  </quetzal-popup2>
   <!--
   BUG: The container of the real content of the popup source (the thing you can click on to open
   the popup) should go before the popup so that it can get covered by the popup.
@@ -59,6 +60,7 @@ Polymer( "quetzal-popup-source", {
   openOnMouseDown: true,
 
   positionPopup: function() {
+    debugger;
     var rect = this.getBoundingClientRect();
     var top = rect.top;
     var left = rect.left;
@@ -102,7 +104,7 @@ Polymer( "quetzal-popup-source", {
         this.open();
       }
     }.bind( this ));
-    this.$.popup.positionPopup = function() {
+    this.$.popup.resizeHandler = function() {
       this.positionPopup();
     }.bind( this ) ;
   },

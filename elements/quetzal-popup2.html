@@ -4,8 +4,23 @@
 <polymer-element name="quetzal-popup2" extends="quetzal-element" attributes="opened resizeHandler">
 
 <template>
-  <polymer-overlay id="overlay" opened="{{opened}}" resizeHandler="{{resizeHandler}}"></polymer-overlay>
-  <content></content>
+
+<style>
+  /* Generic appearance */
+:host {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );
+  box-sizing: border-box;
+  padding: .25em;
+  -webkit-user-select: none;
+  user-select: none;
+}
+</style>
+
+<polymer-overlay id="overlay" opened="{{opened}}" resizeHandler="{{resizeHandler}}"></polymer-overlay>
+<content></content>
+
 </template>
 
 <script>

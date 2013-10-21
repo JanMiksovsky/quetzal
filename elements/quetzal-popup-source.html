@@ -47,9 +47,13 @@ Polymer( "quetzal-popup-source", {
 
   created: function() {
     this.super();
-    this.$.container.addEventListener( "mousedown", function( event ) {
-      this.log( "mousedown" );
-      if ( this.openOnMouseDown ) {
+    // TODO: Would prefer to use "mousedown" instead of "tap" to open the popup.
+    // Unfortunately, if mousedown is used, the subsequent mouseup event may
+    // immediately trigger a tap event. In the case of a polymer-overlay with
+    // auto-close on, this will immediately dismiss the popup.
+    this.$.container.addEventListener( "tap", function( event ) {
+      this.log( "tap" );
+      if ( this.openOnMouseDown && !this.opened ) {
         this.open();
         event.stopPropagation();
       }
@@ -61,11 +65,9 @@ Polymer( "quetzal-popup-source", {
       }
     }.bind( this ));
     this.shadowRoot.addEventListener( "polymer-overlay-open", function() {
-      this.log( "open" );
       if ( this.opened ) {
+        this.log( "open" );
         this.positionPopup();
-      } else {
-        debugger;
       }
     }.bind( this ));
   },
@@ -78,7 +80,7 @@ Polymer( "quetzal-popup-source", {
   opened: false,
 
   openedChanged: function() {
-    this.$.container.classList.toggle( "opened", this.opened );
+    // this.$.container.classList.toggle( "opened", this.opened );
   },
 
   openOnFocus: false,

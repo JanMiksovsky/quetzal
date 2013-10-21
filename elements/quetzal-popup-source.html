@@ -1,5 +1,9 @@
+<!--
+An element with an associated popup which will appear above or below.
+-->
+
 <link rel="import" href="quetzal-element.html">
-<link rel="import" href="quetzal-popup2.html">
+<link rel="import" href="quetzal-popup.html">
 
 <polymer-element name="quetzal-popup-source" extends="quetzal-element" attributes="closeOnInsideClick opened openOnClick openOnFocus">
 
@@ -21,15 +25,15 @@
 </style>
 
 <div id="positioner">
-  <quetzal-popup2 id="popup" opened="{{opened}}" tabindex="-1">
+  <quetzal-popup id="popup" opened="{{opened}}" tabindex="-1">
     <content select="property[name='popup']"></content>
-  </quetzal-popup2>
+  </quetzal-popup>
   <!--
-  BUG: The container of the real content of the popup source (the thing you can click on to open
-  the popup) should go before the popup so that it can get covered by the popup.
-  Unfortunately, a limitation on the use of a plain content element means that
-  it has to go last (so that the popup property gets appropriately distributed
-  to the popup via the select attribute).
+  BUG: The container of the real content of the popup source (the thing you can
+  click on to open the popup) should go before the popup so that it can get
+  covered by the popup. Unfortunately, a limitation on the use of a plain
+  content element means that it has to go last (so that the popup property gets
+  appropriately distributed to the popup via the select attribute).
   -->
   <div id="container">
     <content></content>
@@ -40,8 +44,6 @@
 
 <script>
 Polymer( "quetzal-popup-source", {
-
-  cancel: Quetzal.alias( "$.popup.cancel" ),
 
   close: Quetzal.alias( "$.popup.close" ),
 
@@ -57,6 +59,9 @@ Polymer( "quetzal-popup-source", {
         this.open();
         event.stopPropagation();
       }
+    }.bind( this ));
+    this.$.container.addEventListener( "mouseup", function( event ) {
+      this.log( "mouseup" );
     }.bind( this ));
     this._focusContainer.addEventListener( "focusin", function() {
       this.log( "focusin" );

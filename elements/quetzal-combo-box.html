@@ -126,7 +126,7 @@ Polymer( "quetzal-combo-box", {
       }
     }.bind( this ));
 
-    this.$.dropdownButton.addEventListener( "mousedown", function( event ) {
+    this.$.dropdownButton.addEventListener( "tap", function( event ) {
       if ( this.opened ) {
         this.close();
       } else {

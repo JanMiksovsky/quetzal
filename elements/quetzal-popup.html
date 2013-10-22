@@ -36,6 +36,10 @@ Polymer( "quetzal-popup", {
   },
 
   created: function() {
+    this.addEventListener( "polymer-overlay-open", function() {
+      var eventName = this.opened ? "quetzal-popup-opened" : "quetzal-popup-closed";
+      this.dispatchEvent( new CustomEvent( eventName ));
+    });
     this.$.overlay.target = this;
   },
 

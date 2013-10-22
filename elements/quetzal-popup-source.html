@@ -1,5 +1,7 @@
 <!--
-An element with an associated popup which will appear above or below.
+An element whose content is associated with a popup. This element does two jobs:
+1) Open the popup when the element content is tapped.
+2) Position the popup below or above the content as appropriate.
 -->
 
 <link rel="import" href="quetzal-element.html">
@@ -85,20 +87,12 @@ Polymer( "quetzal-popup-source", {
 
   open: Quetzal.alias( "$.popup.open" ),
 
-  // REVIEW: Not sure why we need to explicitly set the default value of opened
-  // to false. The attribute should be bound to the popup's opened value, and
-  // that value should already be false by default.
-  opened: false,
-
-  openedChanged: function() {
-    // this.$.container.classList.toggle( "opened", this.opened );
-  },
-
   openOnFocus: false,
 
   openOnMouseDown: true,
 
   positionPopup: function() {
+    this.log( "positionPopup" );
     var rect = this.getBoundingClientRect();
     var top = rect.top;
     var left = rect.left;

@@ -59,7 +59,7 @@
     <content select="property[name='popup']"></content>
   </property>
   <div id="comboContainer">
-    <input id="textBox" type="text" value="{{value}}"/>
+    <input id="textBox" type="text" value="{{value}}" autofocus/>
     <!--
     REVIEW: Because of hacks in quetzal-toggle-button, tabindex="-1" doesn't
     actually remove element from tab order.
@@ -108,12 +108,12 @@ Polymer( "quetzal-combo-box", {
       // the popup). If it's *not*, we've really lost the focus, so we can
       // implicitly close the popup.
       if ( this.opened ) {
-        this._waitForFocusedElement( function() {
-          // Still open?
-          if ( this.opened && !this.contains( document.activeElement )) {
-            this.close();
-          }
-        }.bind( this ));
+        // this._waitForFocusedElement( function() {
+        //   // Still open?
+        //   if ( this.opened && !this.contains( document.activeElement )) {
+        //     this.close();
+        //   }
+        // }.bind( this ));
       }
     }.bind( this ));
 
@@ -135,10 +135,10 @@ Polymer( "quetzal-combo-box", {
       event.stopPropagation();
     }.bind( this ));
 
-    this.$.popup.addEventListener( "canceled", function() {
-      this.$.dropdownButton.selected = false;
-    }.bind( this ));
-    this.$.popup.addEventListener( "closed", function() {
+    // this.$.popup.addEventListener( "canceled", function() {
+    //   this.$.dropdownButton.selected = false;
+    // }.bind( this ));
+    this.$.popup.addEventListener( "quetzal-popup-closed", function() {
       // Closing the popup leaves the text selected.
       this.selectTextAll();
       this.$.dropdownButton.selected = false;

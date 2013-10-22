@@ -40,13 +40,36 @@ Polymer( "quetzal-popup", {
 
   created: function() {
     this.super();
-    // this.addEventListener( "polymer-overlay-open", function() {
-    //   var eventName = this.opened ? "quetzal-popup-opened" : "quetzal-popup-closed";
-    //   this.dispatchEvent( new CustomEvent( eventName ));
-    // });
     if ( !this.target ) {
+      // Default target is the popup itself.
       this.target = this;
     }
+  },
+
+  // Override base implementation to allow support for explicitly setting the
+  // element which will recieve the focus when the overlay is open or closed.
+  applyFocus: function() {
+    var element = this.opened ? this.focusNodeOpened : this.focusNodeClosed;
+    if ( element ) {
+      element.focus();
+    } else {
+      // No node explicitly specified; use default focus behavior.
+      this.super();
+    }
+  },
+
+  get focusNodeClosed() {
+    return this._focusNodeClosed;
+  },
+  set focusNodeClosed( element ) {
+    this._focusNodeClosed = element;
+  },
+
+  get focusNodeOpened() {
+    return this._focusNodeOpened;
+  },
+  set focusNodeOpened( element ) {
+    this._focusNodeOpened = element;
   },
 
   open: function() {

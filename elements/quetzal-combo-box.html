@@ -124,6 +124,11 @@ Polymer( "quetzal-combo-box", {
         this.selectTextAll();
       }
     }.bind( this ));
+
+    // The text box always gets the keyboard focus, regardless of whether the
+    // combo box's popup is opened or not.
+    this.$.popup.focusNodeOpened = this.$.textBox;
+    this.$.popup.focusNodeClosed = this.$.textBox;
   },
 
   positionPopup: function() {

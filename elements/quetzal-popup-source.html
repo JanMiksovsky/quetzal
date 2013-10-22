@@ -51,14 +51,12 @@ Polymer( "quetzal-popup-source", {
 
   created: function() {
 
-    var suppressAutoCloseUntilTap;
-    var autoCloseDisabled;
+    var autoCloseDisabled = null;
 
     this.super();
     this.$.container.addEventListener( "mousedown", function( event ) {
       this.log( "mousedown" );
       if ( this.openOnMouseDown && !this.opened ) {
-        suppressAutoCloseUntilTap = true;
         autoCloseDisabled = this.$.popup.autoCloseDisabled;
         this.$.popup.autoCloseDisabled = true;
         this.open();
@@ -71,14 +69,14 @@ Polymer( "quetzal-popup-source", {
     // always suppressing auto-close until we've received the first tap event.
     this.$.container.addEventListener( "tap", function( event ) {
       this.log( "tap" );
-      if ( suppressAutoCloseUntilTap ) {
+      if ( autoCloseDisabled != null ) {
         this.log( "restoring autoCloseDisabled" );
         this.$.popup.autoCloseDisabled = autoCloseDisabled;
         if ( !autoCloseDisabled ) {
           this.log( "enabling capture handler" )
           this.$.popup.enableCaptureHandler( this.opened );
         }
-        suppressAutoCloseUntilTap = false;
+        autoCloseDisabled = null;
       }
     }.bind( this ));
     this._focusContainer.addEventListener( "focusin", function() {

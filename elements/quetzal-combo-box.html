@@ -6,10 +6,6 @@
 <template>
 
 <style>
-:host {
-  display: inline-block;
-}
-
 #comboContainer {
   position: relative;
 }
@@ -128,16 +124,13 @@ Polymer( "quetzal-combo-box", {
     }.bind( this ));
   },
 
-  open: function() {
-    if ( !this.opened ) {
-      if ( this.generic ) {
-        // Make dropdown at least as wide as combo box.
-        var width = this.getBoundingClientRect().width;
-        this.$.popup.style.minWidth = width + "px";
-      }
-      this.$.dropdownButton.selected = true;
-    }
+  positionPopup: function() {
     this.super();
+    if ( this.generic ) {
+      // Make dropdown at least as wide as combo box.
+      var width = this.$.container.getBoundingClientRect().width;
+      this.$.popup.style.minWidth = width + "px";
+    }
   },
 
   // openOnFocus: true,

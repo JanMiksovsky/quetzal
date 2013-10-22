@@ -12,6 +12,10 @@ An element whose content is associated with a popup. This element does two jobs:
 <template>
 
 <style>
+:host {
+  display: inline-block;
+}
+
 #positioner {
   position: relative;
 }
@@ -89,7 +93,7 @@ Polymer( "quetzal-popup-source", {
   openOnMouseDown: true,
 
   positionPopup: function() {
-    var rect = this.getBoundingClientRect();
+    var rect = this.$.container.getBoundingClientRect();
     var top = rect.top;
     var left = rect.left;
     var height = rect.height;

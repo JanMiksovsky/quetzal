@@ -6,7 +6,7 @@ Examples: popups, menus, dialogs, combo boxes, tooltips.
 <link rel="import" href="quetzal-element.html">
 <link rel="import" href="../polymer-elements/polymer-overlay/polymer-overlay.html">
 
-<polymer-element name="quetzal-popup" extends="quetzal-element" attributes="opened">
+<polymer-element name="quetzal-popup" extends="quetzal-element" attributes="autoCloseDisabled opened">
 
 <template>
 
@@ -23,7 +23,7 @@ Examples: popups, menus, dialogs, combo boxes, tooltips.
 }
 </style>
 
-<polymer-overlay id="overlay" opened="{{opened}}"></polymer-overlay>
+<polymer-overlay id="overlay" autoCloseDisabled="{{autoCloseDisabled}}" opened="{{opened}}"></polymer-overlay>
 <content></content>
 
 </template>
@@ -42,6 +42,8 @@ Polymer( "quetzal-popup", {
     });
     this.$.overlay.target = this;
   },
+
+  enableCaptureHandler: Quetzal.alias( "$.overlay.enableCaptureHandler" ),
 
   open: function() {
     this.opened = true;

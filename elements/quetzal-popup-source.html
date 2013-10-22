@@ -50,25 +50,35 @@ Polymer( "quetzal-popup-source", {
   close: Quetzal.alias( "$.popup.close" ),
 
   created: function() {
+
+    var suppressAutoCloseUntilTap;
+    var autoCloseDisabled;
+
     this.super();
     this.$.container.addEventListener( "mousedown", function( event ) {
       this.log( "mousedown" );
       if ( this.openOnMouseDown && !this.opened ) {
+        suppressAutoCloseUntilTap = true;
+        autoCloseDisabled = this.$.popup.autoCloseDisabled;
+        this.$.popup.autoCloseDisabled = true;
         this.open();
-        event.stopPropagation();
       }
     }.bind( this ));
     // HACK: The base polymer-overlay element listens for "tap" events to
     // determine when to auto-close the popup. Unfortunately, a single click/tap
     // on a popup-source will both open the popup (on the mousedown) and then
-    // immediately close it (on the mouseup). For now, we work around this
-    // problem by swalling mouseup events that come before a popup is fully
-    // opened.
-    this.$.container.addEventListener( "mouseup", function( event ) {
-      this.log( "mouseup" );
-      if ( !this.classList.contains( "opened" ) ) {
-        event.stopPropagation();
-        console.log( "swallowed mouseup" );
+    // immediately close it (on the mouseup). For now, we hack around this by
+    // always suppressing auto-close until we've received the first tap event.
+    this.$.container.addEventListener( "tap", function( event ) {
+      this.log( "tap" );
+      if ( suppressAutoCloseUntilTap ) {
+        this.log( "restoring autoCloseDisabled" );
+        this.$.popup.autoCloseDisabled = autoCloseDisabled;
+        if ( !autoCloseDisabled ) {
+          this.log( "enabling capture handler" )
+          this.$.popup.enableCaptureHandler( this.opened );
+        }
+        suppressAutoCloseUntilTap = false;
       }
     }.bind( this ));
     this._focusContainer.addEventListener( "focusin", function() {
@@ -92,7 +102,6 @@ Polymer( "quetzal-popup-source", {
   openOnMouseDown: true,
 
   positionPopup: function() {
-    this.log( "positionPopup" );
     var rect = this.getBoundingClientRect();
     var top = rect.top;
     var left = rect.left;

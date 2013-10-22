@@ -64,7 +64,7 @@
     REVIEW: Because of hacks in quetzal-toggle-button, tabindex="-1" doesn't
     actually remove element from tab order.
     -->
-    <quetzal-toggle-button id="dropdownButton" autotoggle="false" on-click="open" tabindex="-1">▼</quetzal-toggle-button>
+    <quetzal-toggle-button id="dropdownButton" autoToggle="false" on-click="open" tabindex="-1">▼</quetzal-toggle-button>
   </div>
 </shadow>
 
@@ -74,26 +74,10 @@
 Polymer( "quetzal-combo-box", {
 
   closeOnEnter: true,
-
-  open: function() {
-    if ( !this.opened ) {
-      if ( this.generic ) {
-        // Make dropdown at least as wide as combo box.
-        var width = this.getBoundingClientRect().width;
-        this.$.popup.style.minWidth = width + "px";
-      }
-      this.$.dropdownButton.selected = true;
-    }
-    this.super();
-  },
-
-  // openOnFocus: true,
+  closeOnInsideClick: false,
 
   created: function() {
     this.super();
-
-    this.closeOnInsideClick = false;
-    this.openOnClick = false;
 
     // Close the popup when the combo box loses focus.
     this.addEventListener( "focusout", function( event ) {
@@ -127,11 +111,10 @@ Polymer( "quetzal-combo-box", {
     }.bind( this ));
 
     this.$.dropdownButton.addEventListener( "mousedown", function( event ) {
-      if ( this.opened ) {
-        this.close();
-      } else {
-        this.open();
+      if ( !this.opened ) {
+        this._suppressAutoCloseUntilNextTap();        
       }
+      this.toggle();
       event.stopPropagation();
     }.bind( this ));
 
@@ -144,6 +127,21 @@ Polymer( "quetzal-combo-box", {
       this.$.dropdownButton.selected = false;
     }.bind( this ));
   },
+
+  open: function() {
+    if ( !this.opened ) {
+      if ( this.generic ) {
+        // Make dropdown at least as wide as combo box.
+        var width = this.getBoundingClientRect().width;
+        this.$.popup.style.minWidth = width + "px";
+      }
+      this.$.dropdownButton.selected = true;
+    }
+    this.super();
+  },
+
+  // openOnFocus: true,
+  openOnMouseDown: false,
 
   selectTextAll: function() {
     this.selectTextRange( 0, this.$.textBox.value.length );

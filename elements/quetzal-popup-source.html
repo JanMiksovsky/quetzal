@@ -51,14 +51,11 @@ Polymer( "quetzal-popup-source", {
 
   created: function() {
 
-    var autoCloseDisabled = null;
-
     this.super();
     this.$.container.addEventListener( "mousedown", function( event ) {
       this.log( "mousedown" );
       if ( this.openOnMouseDown && !this.opened ) {
-        autoCloseDisabled = this.$.popup.autoCloseDisabled;
-        this.$.popup.autoCloseDisabled = true;
+        this._suppressAutoCloseUntilNextTap();
         this.open();
       }
     }.bind( this ));
@@ -69,15 +66,7 @@ Polymer( "quetzal-popup-source", {
     // always suppressing auto-close until we've received the first tap event.
     this.$.container.addEventListener( "tap", function( event ) {
       this.log( "tap" );
-      if ( autoCloseDisabled != null ) {
-        this.log( "restoring autoCloseDisabled" );
-        this.$.popup.autoCloseDisabled = autoCloseDisabled;
-        if ( !autoCloseDisabled ) {
-          this.log( "enabling capture handler" )
-          this.$.popup.enableCaptureHandler( this.opened );
-        }
-        autoCloseDisabled = null;
-      }
+      this._restoreAutoClose();
     }.bind( this ));
     this._focusContainer.addEventListener( "focusin", function() {
       this.log( "focusin" );
@@ -131,11 +120,35 @@ Polymer( "quetzal-popup-source", {
     classList.toggle( "popupAlignRight", !popupAlignLeft );
   },
 
+  toggle: Quetzal.alias( "$.popup.toggle" ),
+
+  _autoCloseDisabled: null,
+
   // This returns the element used to listen to focusin events. Subclasses can
   // override this if they only want to listen to focusin from within a specific
   // sub-element.
   get _focusContainer() {
     return this.$.container;
+  },
+
+  _restoreAutoClose: function() {
+    if ( this._autoCloseDisabled != null ) {
+      this.log( "restoring autoCloseDisabled" );
+      this.$.popup.autoCloseDisabled = this._autoCloseDisabled;
+      if ( !this.autoCloseDisabled ) {
+        this.log( "enabling capture handler" )
+        this.$.popup.enableCaptureHandler( this.opened );
+      }
+      // Ensure subsequent calls to _restoreAutoClose will have no effect.
+      this._autoCloseDisabled = null;
+    }
+  },
+
+  _suppressAutoCloseUntilNextTap: function() {
+    // Save the current state of the popup's autoCloseDisabled attribute.
+    this._autoCloseDisabled = this.$.popup.autoCloseDisabled;
+    // Override the current setting and disable auto-close.
+    this.$.popup.autoCloseDisabled = true;
   }
 
 });

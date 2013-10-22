@@ -60,7 +60,7 @@
     REVIEW: Because of hacks in quetzal-toggle-button, tabindex="-1" doesn't
     actually remove element from tab order.
     -->
-    <quetzal-toggle-button id="dropdownButton" autoToggle="false" on-click="open" tabindex="-1">▼</quetzal-toggle-button>
+    <quetzal-toggle-button id="dropdownButton" autoToggle="false" tabindex="-1">▼</quetzal-toggle-button>
   </div>
 </shadow>
 
@@ -117,10 +117,12 @@ Polymer( "quetzal-combo-box", {
     // this.$.popup.addEventListener( "canceled", function() {
     //   this.$.dropdownButton.selected = false;
     // }.bind( this ));
-    this.$.popup.addEventListener( "quetzal-popup-closed", function() {
-      // Closing the popup leaves the text selected.
-      this.selectTextAll();
-      this.$.dropdownButton.selected = false;
+    this.$.popup.addEventListener( "polymer-overlay-open", function() {
+      this.$.dropdownButton.selected = this.opened;
+      if ( !this.opened ) {
+        // Closing the popup leaves the text selected.
+        this.selectTextAll();
+      }
     }.bind( this ));
   },
 

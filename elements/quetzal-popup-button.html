@@ -34,11 +34,8 @@ Polymer( "quetzal-popup-button", {
 
   created: function() {
     this.super();
-    this.$.popup.addEventListener( "quetzal-popup-opened", function() {
-      this.$.button.selected = true;
-    }.bind( this ));
-    this.$.popup.addEventListener( "quetzal-popup-closed", function() {
-      this.$.button.selected = false;
+    this.$.popup.addEventListener( "polymer-overlay-open", function() {
+      this.$.button.selected = this.$.popup.opened;
     }.bind( this ));
   }
 

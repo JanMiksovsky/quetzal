@@ -1,12 +1,15 @@
 <!--
-A UI element that appears temporarily over other things.
-Examples: popups, menus, dialogs, combo boxes, tooltips.
+A UI element that appears temporarily over other things: popups, menus, dialogs,
+combo boxes, tooltips, etc.
+
+This extends polymer-overlay so that, if no target is supplied, the element
+becomes its own target. That is, the element's own content is shown as the
+popup.
 -->
 
-<link rel="import" href="quetzal-element.html">
 <link rel="import" href="../polymer-elements/polymer-overlay/polymer-overlay.html">
 
-<polymer-element name="quetzal-popup" extends="quetzal-element" attributes="autoCloseDisabled opened">
+<polymer-element name="quetzal-popup" extends="polymer-overlay">
 
 <template>
 
@@ -23,7 +26,7 @@ Examples: popups, menus, dialogs, combo boxes, tooltips.
 }
 </style>
 
-<polymer-overlay id="overlay" autoCloseDisabled="{{autoCloseDisabled}}" opened="{{opened}}"></polymer-overlay>
+<shadow></shadow>
 <content></content>
 
 </template>
@@ -36,20 +39,19 @@ Polymer( "quetzal-popup", {
   },
 
   created: function() {
-    this.addEventListener( "polymer-overlay-open", function() {
-      var eventName = this.opened ? "quetzal-popup-opened" : "quetzal-popup-closed";
-      this.dispatchEvent( new CustomEvent( eventName ));
-    });
-    this.$.overlay.target = this;
+    this.super();
+    // this.addEventListener( "polymer-overlay-open", function() {
+    //   var eventName = this.opened ? "quetzal-popup-opened" : "quetzal-popup-closed";
+    //   this.dispatchEvent( new CustomEvent( eventName ));
+    // });
+    if ( !this.target ) {
+      this.target = this;
+    }
   },
-
-  enableCaptureHandler: Quetzal.alias( "$.overlay.enableCaptureHandler" ),
 
   open: function() {
     this.opened = true;
-  },
-
-  toggle: Quetzal.alias( "$.overlay.toggle" )
+  }
 
 });
 </script>

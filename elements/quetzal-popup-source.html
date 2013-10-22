@@ -135,6 +135,8 @@ Polymer( "quetzal-popup-source", {
     return this.$.container;
   },
 
+  // REVIEW: Some portion of these can probably get folded into openOnMouseDown
+  // support within quetzal-popup itself.
   _restoreAutoClose: function() {
     if ( this._autoCloseDisabled != null ) {
       this.log( "restoring autoCloseDisabled" );

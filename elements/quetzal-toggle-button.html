@@ -1,7 +1,11 @@
+<!--
+A button with a selected state that can be toggled on and off.
+-->
+
 <link rel="import" href="quetzal-button.html">
 
 <!-- TODO: Restore extends="quetzal-button" once we have shadow distribution -->
-<polymer-element name="quetzal-toggle-button" attributes="autotoggle selected tabindex">
+<polymer-element name="quetzal-toggle-button" attributes="autoToggle selected tabindex">
 
 <template>
 
@@ -45,14 +49,14 @@
 <script>
 Polymer( "quetzal-toggle-button", {
 
-  autotoggle: true,
+  autoToggle: true,
 
   created: function() {
     this.super();
-    this.addEventListener( "click", function() {
+    this.addEventListener( "tap", function() {
       // TODO: if not disabled...
-      if ( this.autotoggle ) {
-        this.toggleSelected();
+      if ( this.autoToggle ) {
+        this.toggle();
       }
     }.bind( this ) );
   },
@@ -63,7 +67,7 @@ Polymer( "quetzal-toggle-button", {
     this.$.button.classList.toggle( "selected", this.selected );
   },
 
-  toggleSelected: function() {
+  toggle: function() {
     this.selected = !this.selected;
   }
 

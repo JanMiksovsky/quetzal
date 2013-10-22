@@ -1,6 +1,7 @@
 <!--
 A button that can be clicked to open a popup.
-As a visual cue, the button's content will include a dropdown arrow on the right.
+As a visual cue, the button's content will include a dropdown arrow on the
+right. The button will also appear depressed while the popup is open.
 -->
 
 <link rel="import" href="quetzal-popup-source.html">
@@ -20,16 +21,28 @@ As a visual cue, the button's content will include a dropdown arrow on the right
   <property name="popup">
     <content select="property[name='popup']"></content>
   </property>
-  <quetzal-button>
+  <quetzal-toggle-button id="button" autoToggle="false">
     <content></content>
     <span>▼</span>
-  </quetzal-button>
+  </quetzal-toggle-button>
 </shadow>
 
 </template>
 
 <script>
-Polymer( "quetzal-popup-button" );
+Polymer( "quetzal-popup-button", {
+
+  created: function() {
+    this.super();
+    this.$.popup.addEventListener( "quetzal-popup-opened", function() {
+      this.$.button.selected = true;
+    }.bind( this ));
+    this.$.popup.addEventListener( "quetzal-popup-closed", function() {
+      this.$.button.selected = false;
+    }.bind( this ));
+  }
+
+});
 </script>
 
 </polymer-element>

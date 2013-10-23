@@ -99,7 +99,7 @@ Polymer( "quetzal-combo-box", {
     }.bind( this ));
 
     this.addEventListener( "keydown", function( event ) {
-      if ( event.keyCode === 13 /* Enter */ && this.opened ) {
+      if ( this.closeOnEnter && event.keyCode === 13 /* Enter */ && this.opened ) {
         /* Enter key closes popup. */
         this.close();
         event.stopPropagation();

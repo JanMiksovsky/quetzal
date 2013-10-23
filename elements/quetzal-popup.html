@@ -73,7 +73,7 @@ Polymer( "quetzal-popup", {
     var y = event.pageY;
     var clickedInside = ( x >= bounds.left && x <= bounds.right && y >= bounds.top && y <= bounds.bottom );
     console.log( "quetzal-popup: clickedInside = " + clickedInside );
-    if ( !clickedInside && this.closeOnInsideClick ) {
+    if ( !clickedInside || this.closeOnInsideClick ) {
       // Invoke the superclass' captureHandler. Unfortunately, it doesn't appear
       // we can use this.super() because we need to pass it the event argument.
       var superProto = this.__proto__.__proto__;

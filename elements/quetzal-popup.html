@@ -34,6 +34,8 @@ popup.
 <script>
 Polymer( "quetzal-popup", {
 
+  captureEventType: "mousedown",
+
   close: function() {
     this.opened = false;
   },
@@ -49,13 +51,14 @@ Polymer( "quetzal-popup", {
   // Override base implementation to allow support for explicitly setting the
   // element which will recieve the focus when the overlay is open or closed.
   applyFocus: function() {
-    var element = this.opened ? this.focusNodeOpened : this.focusNodeClosed;
-    if ( element ) {
-      element.focus();
-    } else {
-      // No node explicitly specified; use default focus behavior.
-      this.super();
-    }
+    // var element = this.opened ? this.focusNodeOpened : this.focusNodeClosed;
+    // if ( element ) {
+    //   element.focus();
+    // } else {
+    //   // No node explicitly specified; use default focus behavior.
+    //   this.super();
+    // }
+    console.log( "quetzal-popup: suppressed applyFocus" );
   },
 
   get focusNodeClosed() {

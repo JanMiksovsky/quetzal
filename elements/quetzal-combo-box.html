@@ -88,12 +88,13 @@ Polymer( "quetzal-combo-box", {
       // the popup). If it's *not*, we've really lost the focus, so we can
       // implicitly close the popup.
       if ( this.opened ) {
-        // this._waitForFocusedElement( function() {
-        //   // Still open?
-        //   if ( this.opened && !this.contains( document.activeElement )) {
-        //     this.close();
-        //   }
-        // }.bind( this ));
+        this._waitForFocusedElement( function() {
+          // Still open?
+          if ( this.opened && !this.contains( document.activeElement )) {
+            this.log( "closing on focusout" );
+            this.close();
+          }
+        }.bind( this ));
       }
     }.bind( this ));
 
@@ -127,8 +128,8 @@ Polymer( "quetzal-combo-box", {
 
     // The text box always gets the keyboard focus, regardless of whether the
     // combo box's popup is opened or not.
-    this.$.popup.focusNodeOpened = this.$.textBox;
-    this.$.popup.focusNodeClosed = this.$.textBox;
+    // this.$.popup.focusNodeOpened = this.$.textBox;
+    // this.$.popup.focusNodeClosed = this.$.textBox;
   },
 
   positionPopup: function() {
@@ -140,7 +141,7 @@ Polymer( "quetzal-combo-box", {
     }
   },
 
-  // openOnFocus: true,
+  openOnFocus: true,
   openOnMouseDown: false,
 
   selectTextAll: function() {

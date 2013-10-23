@@ -31,7 +31,7 @@ An element whose content is associated with a popup. This element does two jobs:
 </style>
 
 <div id="positioner">
-  <quetzal-popup id="popup" opened="{{opened}}" tabindex="-1">
+  <quetzal-popup id="popup" closeOnInsideClick="{{closeOnInsideClick}}" opened="{{opened}}" tabindex="-1">
     <content select="property[name='popup']"></content>
   </quetzal-popup>
   <!--

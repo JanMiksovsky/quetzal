@@ -9,7 +9,7 @@ popup.
 
 <link rel="import" href="../polymer-elements/polymer-overlay/polymer-overlay.html">
 
-<polymer-element name="quetzal-popup" extends="polymer-overlay">
+<polymer-element name="quetzal-popup" extends="polymer-overlay" attributes="closeOnInsideClick">
 
 <template>
 
@@ -40,6 +40,8 @@ Polymer( "quetzal-popup", {
     this.opened = false;
   },
 
+  closeOnInsideClick: true,
+
   created: function() {
     this.super();
     if ( !this.target ) {
@@ -58,8 +60,24 @@ Polymer( "quetzal-popup", {
       console.log( document.activeElement );
     } else {
       // No node explicitly specified; use default focus behavior.
-      console.log( "quetzal-popup: suppressed applyFocus" );
-      // this.super();
+      // console.log( "quetzal-popup: suppressed applyFocus" );
+      this.super();
+    }
+  },
+
+  // HACK: Override polymer-overlay's capture handler so we can discriminate
+  // between clicks inside the popup and clicks outside the popup.
+  captureHandler: function( event ) {
+    var bounds = this.getBoundingClientRect();
+    var x = event.pageX;
+    var y = event.pageY;
+    var clickedInside = ( x >= bounds.left && x <= bounds.right && y >= bounds.top && y <= bounds.bottom );
+    console.log( "quetzal-popup: clickedInside = " + clickedInside );
+    if ( !clickedInside && this.closeOnInsideClick ) {
+      // Invoke the superclass' captureHandler. Unfortunately, it doesn't appear
+      // we can use this.super() because we need to pass it the event argument.
+      var superProto = this.__proto__.__proto__;
+      superProto.captureHandler.call( this, event );
     }
   },
 

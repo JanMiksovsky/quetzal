@@ -47,7 +47,7 @@ Polymer( "quetzal-list-combo-box", {
     this.$.textBox.addEventListener( "keydown", function( event ) {
       this._textBoxKeydown( event );
     }.bind( this ));
-    this.$.listBox.addEventListener( "click", function( event ) {
+    this.$.listBox.addEventListener( "tap", function( event ) {
       if ( event.target === this ) {
         // Clicked on list background.
         return;

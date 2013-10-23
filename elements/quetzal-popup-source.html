@@ -57,15 +57,15 @@ Polymer( "quetzal-popup-source", {
 
     this.super();
     this.$.container.addEventListener( "mousedown", function( event ) {
-      this.log( "mousedown" );
+      // this.log( "mousedown" );
       if ( this.openOnMouseDown && !this.opened ) {
         this.open();
       }
     }.bind( this ));
     this._focusContainer.addEventListener( "focusin", function() {
-      this.log( "focusin: " + this.opened );
+      // this.log( "focusin: " + this.opened );
       if ( this.openOnFocus && !this.opened ) {
-        this.log( "opening on focus" );
+        // this.log( "opening on focus" );
         this.open();
       }
     }.bind( this ));
@@ -81,7 +81,7 @@ Polymer( "quetzal-popup-source", {
     }.bind( this ));
     this.$.popup.addEventListener( "polymer-overlay-open", function() {
       if ( this.opened ) {
-        this.log( "opened" );
+        // this.log( "opened" );
         this.positionPopup();
       }
     }.bind( this ));

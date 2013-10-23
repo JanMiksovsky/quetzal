@@ -76,27 +76,27 @@ Polymer( "quetzal-combo-box", {
     this.super();
 
     // Close the popup when the combo box loses focus.
-    // this.addEventListener( "focusout", function( event ) {
-    //   // We want to close the popup if the focus moves completely outside the
-    //   // combo box; i.e., is not within the input box or the popup.
-    //   // Unfortunately, if the user clicks in the popup, the input will blur
-    //   // before we've had a chance to even register the click. And at the point
-    //   // the blur handler here is invoked, the new activeElement is not yet
-    //   // known, so we can't test that. Instead, we start polling to wait for
-    //   // a new element to get the focus. Once that happens, we see whether the
-    //   // newly-focused element is somewhere inside this element (probably in
-    //   // the popup). If it's *not*, we've really lost the focus, so we can
-    //   // implicitly close the popup.
-    //   if ( this.opened ) {
-    //     this._waitForFocusedElement( function() {
-    //       // Still open?
-    //       if ( this.opened && !this.contains( document.activeElement )) {
-    //         this.log( "closing on focusout" );
-    //         this.close();
-    //       }
-    //     }.bind( this ));
-    //   }
-    // }.bind( this ));
+    this.addEventListener( "focusout", function( event ) {
+      // We want to close the popup if the focus moves completely outside the
+      // combo box; i.e., is not within the input box or the popup.
+      // Unfortunately, if the user clicks in the popup, the input will blur
+      // before we've had a chance to even register the click. And at the point
+      // the blur handler here is invoked, the new activeElement is not yet
+      // known, so we can't test that. Instead, we start polling to wait for
+      // a new element to get the focus. Once that happens, we see whether the
+      // newly-focused element is somewhere inside this element (probably in
+      // the popup). If it's *not*, we've really lost the focus, so we can
+      // implicitly close the popup.
+      if ( this.opened ) {
+        this._waitForFocusedElement( function() {
+          // Still open?
+          if ( this.opened && !this.contains( document.activeElement )) {
+            this.log( "closing on focusout" );
+            this.close();
+          }
+        }.bind( this ));
+      }
+    }.bind( this ));
 
     this.addEventListener( "keydown", function( event ) {
       if ( event.keyCode === 13 /* Enter */ && this.opened ) {
@@ -112,13 +112,10 @@ Polymer( "quetzal-combo-box", {
       event.stopPropagation();
     }.bind( this ));
 
-    // this.$.popup.addEventListener( "canceled", function() {
-    //   this.$.dropdownButton.selected = false;
-    // }.bind( this ));
     this.$.popup.addEventListener( "polymer-overlay-open", function() {
       this.$.dropdownButton.selected = this.opened;
-      if ( !this.opened ) {
-        // Closing the popup leaves the text selected.
+      if ( !this.opened && this.contains( document.activeElement )) {
+        // Closing the popup leaves the text selected (if we still have focus).
         this.selectTextAll();
       }
     }.bind( this ));

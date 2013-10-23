@@ -62,13 +62,13 @@ Polymer( "quetzal-popup-source", {
         this.open();
       }
     }.bind( this ));
-    // this._focusContainer.addEventListener( "focusin", function() {
-    //   this.log( "focusin: " + this.opened );
-    //   if ( this.openOnFocus && !this.opened ) {
-    //     this.log( "opening on focus" );
-    //     this.open();
-    //   }
-    // }.bind( this ));
+    this._focusContainer.addEventListener( "focusin", function() {
+      this.log( "focusin: " + this.opened );
+      if ( this.openOnFocus && !this.opened ) {
+        this.log( "opening on focus" );
+        this.open();
+      }
+    }.bind( this ));
     // Close when the Escape key is pressed.
     // TODO: Rationalize this with the similar behavior inherited from polymer-
     // overlay. That handler currently doesn't work because the focus isn't set

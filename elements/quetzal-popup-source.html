@@ -7,7 +7,7 @@ An element whose content is associated with a popup. This element does two jobs:
 <link rel="import" href="quetzal-element.html">
 <link rel="import" href="quetzal-popup.html">
 
-<polymer-element name="quetzal-popup-source" extends="quetzal-element" attributes="closeOnInsideClick opened openOnClick openOnFocus">
+<polymer-element name="quetzal-popup-source" extends="quetzal-element" attributes="closeOnInsideClick opened openOnMouseDown openOnFocus">
 
 <template>
 
@@ -59,32 +59,34 @@ Polymer( "quetzal-popup-source", {
     this.$.container.addEventListener( "mousedown", function( event ) {
       this.log( "mousedown" );
       if ( this.openOnMouseDown && !this.opened ) {
-        // this._suppressAutoCloseUntilNextTap();
         this.open();
       }
     }.bind( this ));
-    // HACK: The base polymer-overlay element listens for "tap" events to
-    // determine when to auto-close the popup. Unfortunately, a single click/tap
-    // on a popup-source will both open the popup (on the mousedown) and then
-    // immediately close it (on the mouseup). For now, we hack around this by
-    // always suppressing auto-close until we've received the first tap event.
-    this.$.container.addEventListener( "tap", function( event ) {
-      this.log( "tap" );
-      // this._restoreAutoClose();
-    }.bind( this ));
-    this._focusContainer.addEventListener( "focusin", function() {
-      this.log( "focusin" );
-      if ( this.openOnFocus && !this.opened ) {
-        this.log( "opening on focus" );
-        this.open();
+    // this._focusContainer.addEventListener( "focusin", function() {
+    //   this.log( "focusin: " + this.opened );
+    //   if ( this.openOnFocus && !this.opened ) {
+    //     this.log( "opening on focus" );
+    //     this.open();
+    //   }
+    // }.bind( this ));
+    // Close when the Escape key is pressed.
+    // TODO: Rationalize this with the similar behavior inherited from polymer-
+    // overlay. That handler currently doesn't work because the focus isn't set
+    // to the target when the popup is open.
+    this.addEventListener( "keydown", function( event ) {
+      if ( event.keyCode === 27 && this.opened ) {
+        this.close();
+        event.stopPropagation();
       }
     }.bind( this ));
-    this.shadowRoot.addEventListener( "polymer-overlay-open", function() {
+    this.$.popup.addEventListener( "polymer-overlay-open", function() {
       if ( this.opened ) {
         this.log( "opened" );
         this.positionPopup();
       }
     }.bind( this ));
+
+    this.$.popup.focusNodeOpened = this.$.popup;
   },
 
   open: Quetzal.alias( "$.popup.open" ),
@@ -134,28 +136,6 @@ Polymer( "quetzal-popup-source", {
   // sub-element.
   get _focusContainer() {
     return this.$.container;
-  },
-
-  // REVIEW: Some portion of these can probably get folded into openOnMouseDown
-  // support within quetzal-popup itself.
-  _restoreAutoClose: function() {
-    if ( this._autoCloseDisabled != null ) {
-      this.log( "restoring autoCloseDisabled" );
-      this.$.popup.autoCloseDisabled = this._autoCloseDisabled;
-      if ( !this.autoCloseDisabled ) {
-        this.log( "enabling capture handler" )
-        this.$.popup.enableCaptureHandler( this.opened );
-      }
-      // Ensure subsequent calls to _restoreAutoClose will have no effect.
-      this._autoCloseDisabled = null;
-    }
-  },
-
-  _suppressAutoCloseUntilNextTap: function() {
-    // Save the current state of the popup's autoCloseDisabled attribute.
-    this._autoCloseDisabled = this.$.popup.autoCloseDisabled;
-    // Override the current setting and disable auto-close.
-    this.$.popup.autoCloseDisabled = true;
   }
 
 });

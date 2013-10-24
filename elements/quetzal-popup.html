@@ -42,14 +42,6 @@ Polymer( "quetzal-popup", {
 
   closeOnInsideClick: true,
 
-  created: function() {
-    this.super();
-    if ( !this.target ) {
-      // Default target is the popup itself.
-      this.target = this;
-    }
-  },
-
   // Override base implementation to allow support for explicitly setting the
   // element which will recieve the focus when the overlay is open or closed.
   applyFocus: function() {
@@ -102,6 +94,14 @@ Polymer( "quetzal-popup", {
 
   open: function() {
     this.opened = true;
+  },
+
+  ready: function() {
+    this.super();
+    if ( !this.target ) {
+      // Default target is the popup itself.
+      this.target = this;
+    }
   }
 
 });

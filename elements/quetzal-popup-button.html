@@ -32,7 +32,7 @@ right. The button will also appear depressed while the popup is open.
 <script>
 Polymer( "quetzal-popup-button", {
 
-  created: function() {
+  ready: function() {
     this.super();
     this.$.popup.addEventListener( "polymer-overlay-open", function() {
       this.$.button.selected = this.$.popup.opened;

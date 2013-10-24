@@ -52,7 +52,15 @@ The selection behavior generally follows that of Microsoft Windows:
 <script>
 Polymer( "quetzal-list-box", {
 
-  created: function() {
+  pageDown: function() {
+    return this._scrollOnePage( true );
+  },
+
+  pageUp: function() {
+    return this._scrollOnePage( false );
+  },
+
+  ready: function() {
     this.super();
     if ( this.tabIndex == -1 /* Default value */ ) {
       // Try to convince the browser that the list is focusable, but without
@@ -64,14 +72,6 @@ Polymer( "quetzal-list-box", {
     this.addEventListener( "keydown", function( event ) {
       this._keydown( event );
     }.bind( this ));
-  },
-
-  pageDown: function() {
-    return this._scrollOnePage( true );
-  },
-
-  pageUp: function() {
-    return this._scrollOnePage( false );
   },
 
   // TODO: Handle valueattr: selected indicates a value, not the index.

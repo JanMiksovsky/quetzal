@@ -20,7 +20,7 @@ Polymer( "lorem-pixel", {
     this.reload();
   },
 
-  created: function() {
+  ready: function() {
     this.super();
     if ( !this.height && !this.width ) {
       this.height = 300;

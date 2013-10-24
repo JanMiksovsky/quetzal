@@ -53,42 +53,6 @@ Polymer( "quetzal-popup-source", {
 
   close: Quetzal.alias( "$.popup.close" ),
 
-  created: function() {
-
-    this.super();
-    this.$.container.addEventListener( "mousedown", function( event ) {
-      // this.log( "mousedown" );
-      if ( this.openOnMouseDown && !this.opened ) {
-        this.open();
-      }
-    }.bind( this ));
-    this._focusContainer.addEventListener( "focusin", function() {
-      // this.log( "focusin: " + this.opened );
-      if ( this.openOnFocus && !this.opened ) {
-        // this.log( "opening on focus" );
-        this.open();
-      }
-    }.bind( this ));
-    // Close when the Escape key is pressed.
-    // TODO: Rationalize this with the similar behavior inherited from polymer-
-    // overlay. That handler currently doesn't work because the focus isn't set
-    // to the target when the popup is open.
-    this.addEventListener( "keydown", function( event ) {
-      if ( event.keyCode === 27 && this.opened ) {
-        this.close();
-        event.stopPropagation();
-      }
-    }.bind( this ));
-    this.$.popup.addEventListener( "polymer-overlay-open", function() {
-      if ( this.opened ) {
-        // this.log( "opened" );
-        this.positionPopup();
-      }
-    }.bind( this ));
-
-    this.$.popup.focusNodeOpened = this.$.popup;
-  },
-
   open: Quetzal.alias( "$.popup.open" ),
 
   openOnFocus: false,
@@ -125,6 +89,42 @@ Polymer( "quetzal-popup-source", {
     classList.toggle( "popupAppearsBelow", popupAppearsBelow );
     classList.toggle( "popupAlignLeft", popupAlignLeft );
     classList.toggle( "popupAlignRight", !popupAlignLeft );
+  },
+
+  ready: function() {
+
+    this.super();
+    this.$.container.addEventListener( "mousedown", function( event ) {
+      // this.log( "mousedown" );
+      if ( this.openOnMouseDown && !this.opened ) {
+        this.open();
+      }
+    }.bind( this ));
+    this._focusContainer.addEventListener( "focusin", function() {
+      // this.log( "focusin: " + this.opened );
+      if ( this.openOnFocus && !this.opened ) {
+        // this.log( "opening on focus" );
+        this.open();
+      }
+    }.bind( this ));
+    // Close when the Escape key is pressed.
+    // TODO: Rationalize this with the similar behavior inherited from polymer-
+    // overlay. That handler currently doesn't work because the focus isn't set
+    // to the target when the popup is open.
+    this.addEventListener( "keydown", function( event ) {
+      if ( event.keyCode === 27 && this.opened ) {
+        this.close();
+        event.stopPropagation();
+      }
+    }.bind( this ));
+    this.$.popup.addEventListener( "polymer-overlay-open", function() {
+      if ( this.opened ) {
+        // this.log( "opened" );
+        this.positionPopup();
+      }
+    }.bind( this ));
+
+    this.$.popup.focusNodeOpened = this.$.popup;
   },
 
   toggle: Quetzal.alias( "$.popup.toggle" ),

@@ -71,8 +71,19 @@ Polymer( "quetzal-combo-box", {
 
   closeOnEnter: true,
   closeOnInsideClick: false,
+  openOnFocus: true,
+  openOnMouseDown: false,
 
-  created: function() {
+  positionPopup: function() {
+    this.super();
+    if ( this.generic ) {
+      // Make dropdown at least as wide as combo box.
+      var width = this.$.container.getBoundingClientRect().width;
+      this.$.popup.style.minWidth = width + "px";
+    }
+  },
+
+  ready: function() {
     this.super();
 
     // Close the popup when the combo box loses focus.
@@ -125,18 +136,6 @@ Polymer( "quetzal-combo-box", {
     this.$.popup.focusNodeOpened = this.$.textBox;
     // this.$.popup.focusNodeClosed = this.$.textBox;
   },
-
-  positionPopup: function() {
-    this.super();
-    if ( this.generic ) {
-      // Make dropdown at least as wide as combo box.
-      var width = this.$.container.getBoundingClientRect().width;
-      this.$.popup.style.minWidth = width + "px";
-    }
-  },
-
-  openOnFocus: true,
-  openOnMouseDown: false,
 
   selectTextAll: function() {
     this.selectTextRange( 0, this.$.textBox.value.length );

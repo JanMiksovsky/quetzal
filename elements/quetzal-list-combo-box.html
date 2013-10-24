@@ -42,7 +42,19 @@ Polymer( "quetzal-list-combo-box", {
    this._selectTextInList();
   },
 
-  created: function() {
+  open: function() {
+    // If the current text is in the list, select that item before opening.
+    this._selectTextInList();
+    this.super();
+
+    // Give the input control focus.
+    // if ( document.activeElement !== this.$.textBox ) {
+      // console.log( document.activeElement );
+      // this.$.textBox.focus();
+    // }
+  },
+
+  ready: function() {
     this.super();
     this.$.textBox.addEventListener( "keydown", function( event ) {
       this._textBoxKeydown( event );
@@ -67,18 +79,6 @@ Polymer( "quetzal-list-combo-box", {
         this._itemSelected( event.detail.item );
       }
     }.bind( this ));
-  },
-
-  open: function() {
-    // If the current text is in the list, select that item before opening.
-    this._selectTextInList();
-    this.super();
-
-    // Give the input control focus.
-    // if ( document.activeElement !== this.$.textBox ) {
-      // console.log( document.activeElement );
-      // this.$.textBox.focus();
-    // }
   },
 
   get selected() {

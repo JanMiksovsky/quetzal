@@ -75,7 +75,7 @@ Polymer( "demo-tile", {
     this.$.code.textContent = code;
   },
 
-  created: function() {
+  ready: function() {
     this.super();
     this.contentChanged();
     this.$.codeToggle.href = "javascript:";

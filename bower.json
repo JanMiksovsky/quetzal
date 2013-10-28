@@ -2,7 +2,7 @@
   "name": "quetzal",
   "version": "0.0.2",
   "dependencies": {
-    "polymer": "0.0.20131010"
+    "polymer": "*"
   },
   "ignore": [
     "**/.*",

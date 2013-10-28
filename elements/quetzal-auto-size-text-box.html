@@ -51,7 +51,7 @@ stretch the text box.
   </style>
 
   <div id="container">
-    <textarea id="textBox" on-change="autoSize" on-keypress="_keypress" on-keyup="autoSize" placeholder="{{placeholder}}" spellcheck="{{spellcheck}}"></textarea>
+    <textarea id="textBox" on-change="{{autoSize}}" on-keypress="{{_keypress}}" on-keyup="{{autoSize}}" placeholder="{{placeholder}}" spellcheck="{{spellcheck}}"></textarea>
     <!--
     Use a pre element to hold the copied text in order to automatically convert
     breaks, etc.
@@ -100,43 +100,53 @@ Polymer( "quetzal-auto-size-text-box", {
     }
   },
 
-  enteredDocument: function() {
-
-    // For auto-sizing to work, we need the text copy to have the same border,
-    // padding, and other relevant characteristics as the original text area.
-    // Since those aspects are affected by CSS, we have to wait until the
-    // element is in the document before we can update the text copy.
-    var textBoxStyle = getComputedStyle( this.$.textBox );
-    var textCopyStyle = this.$.textCopy.style;
-    textCopyStyle.borderBottomWidth  = textBoxStyle.borderBottomWidth;
-    textCopyStyle.borderLeftWidth    = textBoxStyle.borderLeftWidth;
-    textCopyStyle.borderRightWidth   = textBoxStyle.borderRightWidth;
-    textCopyStyle.borderTopWidth     = textBoxStyle.borderTopWidth;
-    textCopyStyle.paddingBottom      = textBoxStyle.paddingBottom;
-    textCopyStyle.paddingLeft        = textBoxStyle.paddingLeft;
-    textCopyStyle.paddingRight       = textBoxStyle.paddingRight;
-    textCopyStyle.paddingTop         = textBoxStyle.paddingTop;
-
-    // TODO: On Mozilla, an item which is in the document but not yet visible
-    // will report its padding as zero. Since we don't know the real padding,
-    // we need to take a guess that it's the standard padding.
-    // if (paddingBottom === "0px" && paddingLeft === "0px" && paddingRight === "0px" && paddingTop === "0px") {
-    //   paddingBottom = "2px";
-    //   paddingLeft = "2px";
-    //   paddingRight = "2px";
-    //   paddingTop = "2px";
-    // }
-
-    // Use the extraLine member to gauge the expected height of a single line of
-    // text. We can't use lineHeight, because that can be reported as "normal",
-    // and we want to know the actual pixel height.
-    this._lineHeight = this.$.extraLine.clientHeight;
-
-    // Now that we know the lineheight, we can hide the extra line.
-    this.$.extraLine.style.display = "none";
-
-    this._setMinimumHeight();
+  enteredView: function() {
+    debugger;
   },
+
+  // enteredViewCallback: function() {
+  //   debugger;
+  // },
+
+  // enteredDocument: function() {
+
+  //   debugger;
+
+  //   // For auto-sizing to work, we need the text copy to have the same border,
+  //   // padding, and other relevant characteristics as the original text area.
+  //   // Since those aspects are affected by CSS, we have to wait until the
+  //   // element is in the document before we can update the text copy.
+  //   var textBoxStyle = getComputedStyle( this.$.textBox );
+  //   var textCopyStyle = this.$.textCopy.style;
+  //   textCopyStyle.borderBottomWidth  = textBoxStyle.borderBottomWidth;
+  //   textCopyStyle.borderLeftWidth    = textBoxStyle.borderLeftWidth;
+  //   textCopyStyle.borderRightWidth   = textBoxStyle.borderRightWidth;
+  //   textCopyStyle.borderTopWidth     = textBoxStyle.borderTopWidth;
+  //   textCopyStyle.paddingBottom      = textBoxStyle.paddingBottom;
+  //   textCopyStyle.paddingLeft        = textBoxStyle.paddingLeft;
+  //   textCopyStyle.paddingRight       = textBoxStyle.paddingRight;
+  //   textCopyStyle.paddingTop         = textBoxStyle.paddingTop;
+
+  //   // TODO: On Mozilla, an item which is in the document but not yet visible
+  //   // will report its padding as zero. Since we don't know the real padding,
+  //   // we need to take a guess that it's the standard padding.
+  //   // if (paddingBottom === "0px" && paddingLeft === "0px" && paddingRight === "0px" && paddingTop === "0px") {
+  //   //   paddingBottom = "2px";
+  //   //   paddingLeft = "2px";
+  //   //   paddingRight = "2px";
+  //   //   paddingTop = "2px";
+  //   // }
+
+  //   // Use the extraLine member to gauge the expected height of a single line of
+  //   // text. We can't use lineHeight, because that can be reported as "normal",
+  //   // and we want to know the actual pixel height.
+  //   this._lineHeight = this.$.extraLine.clientHeight;
+
+  //   // Now that we know the lineheight, we can hide the extra line.
+  //   this.$.extraLine.style.display = "none";
+
+  //   this._setMinimumHeight();
+  // },
 
   minimumLines: 1,
 

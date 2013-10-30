@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>quetzal-calendar-month</title>
+
+<!-- <script src="http://www.polymer-project.org/polymer/polymer.min.js"></script> -->
+<!-- <script src="../../../tools/polymer/polymer/polymer.js"></script> -->
+<script src="../bower_components/polymer/polymer.min.js"></script>
+
+<link rel="import" href="../elements/quetzal.collection.html">
+
+<style>
+body,
+button,
+input {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+
+body {
+  margin: 0.5in;
+}
+</style>
+
+<script>
+window.addEventListener( "WebComponentsReady", function() {
+  var day = document.querySelector( "#day" );
+  var date = new Date();
+  day.date = date;
+});
+</script>
+
+</head>
+
+<body>
+  <quetzal-calendar-day id="day"></quetzal-calendar-day>
+</body>
+
+</html>

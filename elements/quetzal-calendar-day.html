@@ -1,0 +1,19 @@
+<link rel="import" href="quetzal-element.html">
+
+<polymer-element name="quetzal-calendar-day" extends="quetzal-element" attributes="date">
+
+<template>
+  <div id="date"></div>
+</template>
+
+<script>
+Polymer( "quetzal-calendar-day", {
+
+  dateChanged: function() {
+    this.$.date.textContent = this.date.getDate();
+  }
+
+});
+</script>
+
+</polymer-element>

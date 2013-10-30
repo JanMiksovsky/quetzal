@@ -8,13 +8,32 @@ Shows a single calendar week.
 <polymer-element name="quetzal-calendar-week" extends="quetzal-element" attributes="culture date" constructor="QuetzalCalendarWeek">
 
 <template>
-  <quetzal-calendar-day></quetzal-calendar-day>
-  <quetzal-calendar-day></quetzal-calendar-day>
-  <quetzal-calendar-day></quetzal-calendar-day>
-  <quetzal-calendar-day></quetzal-calendar-day>
-  <quetzal-calendar-day></quetzal-calendar-day>
-  <quetzal-calendar-day></quetzal-calendar-day>
-  <quetzal-calendar-day></quetzal-calendar-day>
+
+<style>
+:host {
+  display: table-row;
+}
+
+quetzal-calendar-day {
+  display: table-cell;
+  width: 14.2%; /* One seventh */
+}
+
+/* TODO: Generic */
+quetzal-calendar-day {
+  padding: 4px;
+  text-align: right;
+}
+</style>
+
+<quetzal-calendar-day></quetzal-calendar-day>
+<quetzal-calendar-day></quetzal-calendar-day>
+<quetzal-calendar-day></quetzal-calendar-day>
+<quetzal-calendar-day></quetzal-calendar-day>
+<quetzal-calendar-day></quetzal-calendar-day>
+<quetzal-calendar-day></quetzal-calendar-day>
+<quetzal-calendar-day></quetzal-calendar-day>
+
 </template>
 
 <script>

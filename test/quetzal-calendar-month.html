@@ -27,16 +27,16 @@ body {
 
 <script>
 window.addEventListener( "WebComponentsReady", function() {
-  var day = document.querySelector( "#day" );
+  var week = document.querySelector( "#week" );
   var date = new Date();
-  day.date = date;
+  // week.date = date;
 });
 </script>
 
 </head>
 
 <body>
-  <quetzal-calendar-day id="day"></quetzal-calendar-day>
+  <quetzal-calendar-week id="week"></quetzal-calendar-week>
 </body>
 
 </html>

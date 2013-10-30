@@ -1,7 +1,11 @@
+<!--
+Shows a single calendar week.
+-->
+
 <link rel="import" href="quetzal-element.html">
 <link rel="import" href="quetzal-calendar-day.html">
 
-<polymer-element name="quetzal-calendar-week" extends="quetzal-element">
+<polymer-element name="quetzal-calendar-week" extends="quetzal-element" attributes="culture date">
 
 <template>
   <quetzal-calendar-day></quetzal-calendar-day>
@@ -15,6 +19,85 @@
 
 <script>
 Polymer( "quetzal-calendar-week", {
+
+  // culture: function(culture) {
+  //   var result;
+  //   result = culture.__super__.constructor.call(this, culture);
+  //   if (culture !== void 0) {
+  //     this._refresh();
+  //   }
+  //   return result;
+  // },
+  culture: null,
+
+  dateChanged: function() {
+    this._refresh();
+  },
+
+  // dayControlForDate: function(date) {
+  //   var dayIndex, days, week;
+  //   days = (function() {
+  //     var _i, _len, _ref, _results;
+  //     _ref = this.segments();
+  //     _results = [];
+  //     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+  //       week = _ref[_i];
+  //       dayIndex = week.daysSinceFirstDayOfWeek(date);
+  //       _results.push(week.days()[dayIndex]);
+  //     }
+  //     return _results;
+  //   }).call(this);
+  //   return $().add(days).control();
+  // },
+  // dayClass: Control.iterator(function(dayClass) {
+  //   var days;
+  //   if (dayClass === void 0) {
+  //     return this.days().constructor;
+  //   } else {
+  //     this.days().transmute(dayClass);
+  //     days = this.days();
+  //     days.eq(0).addClass("firstDayOfWeek");
+  //     days.eq(6).addClass("lastDayOfWeek");
+  //     this._refresh();
+  //     return this;
+  //   }
+  // }),
+
+  dayElements: function() {
+    // TODO: Make this only pick up children.
+    return this.shadowRoot.querySelectorAll( "quetzal-calendar-day" );
+  },
+
+  ready: function() {
+    if ( !this.date ) {
+      // If no date is supplied, default to the current week.
+      // REVIEW: This default behavior can cause unnecessary recalcs if a week
+      // is created and then shortly thereafter a different date is set.
+      this.date = QuetzalCalendarDay.today();
+    }
+  },
+
+  daysSinceFirstDayOfWeek: function( date ) {
+    return ( date.getDay() - this.firstDayOfWeek() + 7 ) % 7;
+  },
+
+  // Return the index of the "first" day of the week in the current culture.
+  // In the U.S., this is 0 ( Sunday ), but in many places it's 1 (Monday).
+  firstDayOfWeek: function() {
+    var culture = this.culture;
+    return culture ? culture.firstDay : 0;
+  },
+
+  // Set the dates on all controls in the week.
+  _refresh: function() {
+    var date = QuetzalCalendarDay.midnightOnDate( this.date );
+    var dateStart = QuetzalCalendarDay.offsetDateByDays( date, -this.daysSinceFirstDayOfWeek( date ) );
+    var dayElements = this.dayElements();
+    for ( var i = 0, length = dayElements.length; i < length; i++ ) {
+      var dayElement = dayElements[i];
+      dayElement.date = QuetzalCalendarDay.offsetDateByDays( dateStart, i );
+    }
+  }
 
 });
 </script>

@@ -5,7 +5,7 @@ Shows a single calendar week.
 <link rel="import" href="quetzal-element.html">
 <link rel="import" href="quetzal-calendar-day.html">
 
-<polymer-element name="quetzal-calendar-week" extends="quetzal-element" attributes="culture date">
+<polymer-element name="quetzal-calendar-week" extends="quetzal-element" attributes="culture date" constructor="QuetzalCalendarWeek">
 
 <template>
   <quetzal-calendar-day></quetzal-calendar-day>
@@ -63,9 +63,26 @@ Polymer( "quetzal-calendar-week", {
   //   }
   // }),
 
-  dayElements: function() {
-    // TODO: Make this only pick up children.
+  // The elements for the days in the week.
+  days: function() {
     return this.shadowRoot.querySelectorAll( "quetzal-calendar-day" );
+  },
+
+  daysSinceFirstDayOfWeek: function( date ) {
+    return ( date.getDay() - this.firstDayOfWeek() + 7 ) % 7;
+  },
+
+  // Return the date of the first day of the week that contains the given date.
+  firstDateOfWeek: function( date ) {
+    var d = QuetzalCalendarDay.offsetDateByDays( date, -this.daysSinceFirstDayOfWeek( date ) );
+    return QuetzalCalendarDay.midnightOnDate( d );
+  },
+
+  // Return the index of the "first" day of the week in the current culture.
+  // In the U.S., this is 0 ( Sunday ), but in many places it's 1 (Monday).
+  firstDayOfWeek: function() {
+    var culture = this.culture;
+    return culture ? culture.firstDay : 0;
   },
 
   ready: function() {
@@ -77,25 +94,13 @@ Polymer( "quetzal-calendar-week", {
     }
   },
 
-  daysSinceFirstDayOfWeek: function( date ) {
-    return ( date.getDay() - this.firstDayOfWeek() + 7 ) % 7;
-  },
-
-  // Return the index of the "first" day of the week in the current culture.
-  // In the U.S., this is 0 ( Sunday ), but in many places it's 1 (Monday).
-  firstDayOfWeek: function() {
-    var culture = this.culture;
-    return culture ? culture.firstDay : 0;
-  },
-
   // Set the dates on all controls in the week.
   _refresh: function() {
-    var date = QuetzalCalendarDay.midnightOnDate( this.date );
-    var dateStart = QuetzalCalendarDay.offsetDateByDays( date, -this.daysSinceFirstDayOfWeek( date ) );
-    var dayElements = this.dayElements();
-    for ( var i = 0, length = dayElements.length; i < length; i++ ) {
-      var dayElement = dayElements[i];
-      dayElement.date = QuetzalCalendarDay.offsetDateByDays( dateStart, i );
+    var dateStart = this.firstDateOfWeek( this.date );
+    var days = this.days();
+    for ( var i = 0, length = days.length; i < length; i++ ) {
+      var day = days[i];
+      day.date = QuetzalCalendarDay.offsetDateByDays( dateStart, i );
     }
   }
 

@@ -5,21 +5,129 @@ A month in a calendar
 <link rel="import" href="quetzal-element.html">
 <link rel="import" href="quetzal-calendar-week.html">
 
-<polymer-element name="quetzal-calendar-month" extends="quetzal-element">
+<polymer-element name="quetzal-calendar-month" extends="quetzal-element" attributes="culture date">
 
 <template>
-  <quetzal-calendar-week></quetzal-calendar-week>
-  <quetzal-calendar-week></quetzal-calendar-week>
-  <quetzal-calendar-week></quetzal-calendar-week>
-  <quetzal-calendar-week></quetzal-calendar-week>
-  <quetzal-calendar-week></quetzal-calendar-week>
-  <quetzal-calendar-week></quetzal-calendar-week>
+
+<style>
+:host {
+  display: inline-block;
+}
+
+quetzal-calendar-week {
+  display: block;
+}
+</style>
+
+<quetzal-calendar-week></quetzal-calendar-week>
+<quetzal-calendar-week></quetzal-calendar-week>
+<quetzal-calendar-week></quetzal-calendar-week>
+<quetzal-calendar-week></quetzal-calendar-week>
+<quetzal-calendar-week></quetzal-calendar-week>
+<quetzal-calendar-week></quetzal-calendar-week>
+
 </template>
 
 <script>
-Polymer( "quetzal-calendar-month", {
+Polymer(  "quetzal-calendar-month", {
 
-});
+  // days: Control.chain( "find/.QuetzalCalendarDay", "control" ),
+
+  // culture: function( culture ) {
+  //   var result;
+  //   result = culture.__super__.constructor.call( this, culture );
+  //   if ( culture !== void 0 ) {
+  //     this.weeks().culture( culture );
+  //     this._refresh();
+  //   }
+  //   return result;
+  // },
+  culture: null,
+
+  // dayClass: Control.chain( "weeks", "dayClass", function() {
+  //   return this._refresh();
+  // } ),
+
+  dateChanged: function() {
+    this._refresh();
+    // trigger( "dateChanged", [this.date()] );
+  },
+
+  // dayControlForDate: function( date ) {
+  //   return this.weekControlForDate( date ).dayControlForDate( date );
+  // },
+
+  ready: function() {
+    if ( !this.date ) {
+      // If no date is supplied, default to the current month.
+      this.date = QuetzalCalendarDay.today();
+    }
+  },
+
+  // weekControlForDate: function( date ) {
+  //   var firstDayOfMonth, month, offset, weekIndex, weeks, weeksWithDate;
+  //   weeksWithDate = ( function() {
+  //     var _i, _len, _ref, _results;
+  //     _ref = this.segments();
+  //     _results = [];
+  //     for ( _i = 0, _len = _ref.length; _i < _len; _i++ ) {
+  //       month = _ref[_i];
+  //       weeks = month.weeks();
+  //       firstDayOfMonth = new Date( date.getTime() );
+  //       firstDayOfMonth.setDate( 1 );
+  //       offset = weeks.daysSinceFirstDayOfWeek( firstDayOfMonth );
+  //       weekIndex = Math.floor( ( date.getDate() + offset - 1 ) / 7 );
+  //       _results.push( weeks[weekIndex] );
+  //     }
+  //     return _results;
+  //   } ).call( this );
+  //   return $().add( weeksWithDate ).control();
+  // },
+
+  // The elements for the weeks in the month.
+  weeks: function() {
+    return this.shadowRoot.querySelectorAll( "quetzal-calendar-week" );
+  },
+
+  _refresh: function() {
+
+    // Use midnight on the given date as a reference point.
+    var firstDayOfMonth = QuetzalCalendarDay.midnightOnDate( this.date );
+    firstDayOfMonth.setDate( 1 );
+
+    // Get last day of month by going to first day of next month and backing up a day.
+    var lastDayOfMonth = new Date( firstDayOfMonth.getTime() );
+    lastDayOfMonth.setMonth( lastDayOfMonth.getMonth() + 1 );
+    lastDayOfMonth.setDate( lastDayOfMonth.getDate() - 1 );
+
+    // Fill in the weeks.
+    var month = firstDayOfMonth.getMonth();
+    var weeks = this.weeks();
+    for ( i = 0, length = weeks.length; i < length; i++ ) {
+      var week = weeks[i];
+      var dateInWeek = QuetzalCalendarDay.offsetDateByDays( firstDayOfMonth, 7 * i );
+      var firstDateOfWeek = week.firstDateOfWeek( dateInWeek );
+      var lastDateOfWeek = QuetzalCalendarDay.offsetDateByDays( firstDateOfWeek, 6 );
+      week.date = firstDateOfWeek;
+      // Hide weeks completely in another month (i.e., the next month).
+      // Apply "hidden" class to preserve week's original "display" property.
+      // var days = week.days();
+      // var isWeekInMonth = firstDayOfWeek.getMonth() === month || lastDayOfWeek.getMonth() === month;
+      // week.toggleClass( "hidden", !isWeekInMonth );
+    }
+
+    // Paint days inside and outside range.
+    // _ref1 = this.days().segments();
+    // for ( _j = 0, _len1 = _ref1.length; _j < _len1; _j++ ) {
+    //   day = _ref1[_j];
+    //   date = day.date();
+    //   insideMonth = ( date != null ) && date >= firstDayOfMonth && date <= lastDayOfMonth;
+    //   day.toggleClass( "insideMonth", insideMonth );
+    //   day.toggleClass( "outsideMonth", !insideMonth );
+    // }
+  }
+
+} );
 </script>
 
 </polymer-element>

@@ -15,12 +15,6 @@
   #monthAndYear {
     display: block;
   }
-  /* TODO: Generic */
-  #monthAndYear {
-    font-weight: bold;
-    padding: 4px;
-    text-align: center;
-  }
 
   #monthTable {
     border-collapse: collapse;
@@ -31,11 +25,25 @@
   #daysOfWeek {
     display: table-header-group;
   }
+
+  /* TODO: Generic */
+  #monthAndYear {
+    font-weight: bold;
+    padding: 4px;
+    text-align: center;
+  }
+  #daysOfWeek {
+    font-size: smaller;
+    text-align: center;
+  }
+  .dayOfWeek {
+    padding: 4px;
+  }
   </style>
 
   <quetzal-month-and-year id="monthAndYear"></quetzal-month-and-year>
   <div id="monthTable">
-    <quetzal-days-of-week id="daysOfWeek"></quetzal-days-of-week>
+    <quetzal-days-of-week id="daysOfWeek" format="namesShort"></quetzal-days-of-week>
     <quetzal-calendar-month id="calendar"></quetzal-calendar-month>
   </div>
 

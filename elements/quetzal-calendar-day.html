@@ -11,23 +11,23 @@ styling common sorts of calendars.
 
 <template>
 
-<style>
-/* TODO: Generic */
-:host {
-  padding: 4px;
-  text-align: right;
-}
-
-// TODO: Change to :host(.today:host) when bug in Blink is fixed.
-@host {
-  *.today {
-    color: darkred;
-    font-weight: bold;
+  <style>
+  /* TODO: Generic */
+  :host {
+    padding: 4px;
+    text-align: right;
   }
-}
-</style>
 
-<div id="date"></div>
+  // TODO: Change to :host(.today:host) when bug in Blink is fixed.
+  @host {
+    *.today {
+      color: darkred;
+      font-weight: bold;
+    }
+  }
+  </style>
+
+  <div id="date"></div>
 
 </template>
 

@@ -13,6 +13,14 @@ A month in a calendar
 :host {
   display: table-row-group;
 }
+
+quetzal-calendar-week.outsideMonth {
+  display: none;
+}
+
+quetzal-calendar-day.outsideMonth {
+  visibility: hidden;
+}
 </style>
 
 <quetzal-calendar-week></quetzal-calendar-week>
@@ -26,6 +34,8 @@ A month in a calendar
 
 <script>
 Polymer(  "quetzal-calendar-month", {
+
+  applyAuthorStyles: true,
 
   // days: Control.chain( "find/.QuetzalCalendarDay", "control" ),
 
@@ -81,7 +91,7 @@ Polymer(  "quetzal-calendar-month", {
   // },
 
   // The elements for the weeks in the month.
-  weeks: function() {
+  get weeks() {
     return this.shadowRoot.querySelectorAll( "quetzal-calendar-week" );
   },
 
@@ -98,19 +108,17 @@ Polymer(  "quetzal-calendar-month", {
 
     // Fill in the weeks.
     var month = firstDayOfMonth.getMonth();
-    var weeks = this.weeks();
-    for ( i = 0, length = weeks.length; i < length; i++ ) {
-      var week = weeks[i];
+    this.weeks.array().forEach( function( week, i ) {
       var dateInWeek = QuetzalCalendarDay.offsetDateByDays( firstDayOfMonth, 7 * i );
       var firstDateOfWeek = week.firstDateOfWeek( dateInWeek );
       var lastDateOfWeek = QuetzalCalendarDay.offsetDateByDays( firstDateOfWeek, 6 );
       week.date = firstDateOfWeek;
       // Hide weeks completely in another month (i.e., the next month).
       // Apply "hidden" class to preserve week's original "display" property.
-      // var days = week.days();
-      // var isWeekInMonth = firstDayOfWeek.getMonth() === month || lastDayOfWeek.getMonth() === month;
-      // week.toggleClass( "hidden", !isWeekInMonth );
-    }
+      var days = week.days;
+      var isWeekInMonth = ( firstDateOfWeek.getMonth() === month || lastDateOfWeek.getMonth() === month );
+      week.classList.toggle( "outsideMonth", !isWeekInMonth );
+    });
 
     // Paint days inside and outside range.
     // _ref1 = this.days().segments();

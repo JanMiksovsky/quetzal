@@ -17,9 +17,13 @@ styling common sorts of calendars.
   padding: 4px;
   text-align: right;
 }
-#date.today {
-  color: darkred;
-  font-weight: bold;
+
+// TODO: Change to :host(.today:host) when bug in Blink is fixed.
+@host {
+  *.today {
+    color: darkred;
+    font-weight: bold;
+  }
 }
 </style>
 
@@ -29,6 +33,8 @@ styling common sorts of calendars.
 
 <script>
 Polymer( "quetzal-calendar-day", {
+  
+  applyAuthorStyles: true,
 
   // TODO: publish() date and accept both Date objects and date strings.
   dateChanged: function() {
@@ -39,7 +45,7 @@ Polymer( "quetzal-calendar-day", {
     var dayOfMonth = date.getDate();
     var nextDate = QuetzalCalendarDay.offsetDateByDays( date, 1 );
     var daysFromToday = Math.round( date.getTime() - today.getTime() ) / QuetzalCalendarDay.MILLISECONDS_IN_DAY;
-    var classList = this.$.date.classList;
+    var classList = this.classList;
     classList.toggle( "past", date < today );
     classList.toggle( "today", daysFromToday == 0 );
     classList.toggle( "future", date > today );

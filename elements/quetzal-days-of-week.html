@@ -1,0 +1,97 @@
+<link rel="import" href="quetzal-element.html">
+
+<polymer-element name="quetzal-days-of-week" extends="quetzal-element" attributes="culture format" constructor="QuetzalDaysOfWeek">
+
+<template>
+
+  <style>
+  :host {
+    display: table-row;
+  }
+
+  .dayOfWeek {
+    display: table-cell;
+  }
+
+  /* TODO: Generic */
+  .dayOfWeek {
+    text-align: center;
+  }
+  </style>
+
+  <div class="dayOfWeek"></div>
+  <div class="dayOfWeek"></div>
+  <div class="dayOfWeek"></div>
+  <div class="dayOfWeek"></div>
+  <div class="dayOfWeek"></div>
+  <div class="dayOfWeek"></div>
+  <div class="dayOfWeek"></div>
+
+</template>
+
+<script>
+Polymer( "quetzal-days-of-week", {
+
+  // Foo.prototype.culture = function(culture) {
+  //   var result;
+  //   result = Foo.__super__.culture.call(this, culture);
+  //   if (culture !== void 0) {
+  //     this.format(this.format());
+  //   }
+  //   return result;
+  // };
+  culture: null,
+
+  format: "namesAbbr",
+
+  formatChanged: function() {
+    var culture = this.culture;
+    var dayNameEnum = culture ? culture.calendar.days : QuetzalDaysOfWeek.days;
+    var dayNames = dayNameEnum[ this.format ];
+    var firstDay = culture ? culture.calendar.firstDay : 0;
+    var daysOfWeek = this.shadowRoot.querySelectorAll( ".dayOfWeek" );
+    daysOfWeek.array().forEach( function( day, i ) {
+      day.textContent = dayName = dayNames[i];
+    });
+  },
+
+  ready: function() {
+    // Force format.
+    this.formatChanged();
+  }
+
+});
+
+// Defaults used if Globalize is not loaded.
+QuetzalDaysOfWeek.days = {
+  names: [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ],
+  namesAbbr: [
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat"
+  ],
+  namesShort: [
+    "Su",
+    "Mo",
+    "Tu",
+    "We",
+    "Th",
+    "Fr",
+    "Sa"
+  ]
+};
+</script>
+
+</polymer-element>

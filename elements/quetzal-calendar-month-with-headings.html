@@ -1,5 +1,6 @@
 <link rel="import" href="quetzal-element.html">
 <link rel="import" href="quetzal-month-and-year.html">
+<link rel="import" href="quetzal-days-of-week.html">
 <link rel="import" href="quetzal-calendar-month.html">
 
 <polymer-element name="quetzal-calendar-month-with-headings" extends="quetzal-element" attributes="culture date">
@@ -26,10 +27,15 @@
     display: table;
     width: 100%;
   }
+
+  #daysOfWeek {
+    display: table-header-group;
+  }
   </style>
 
   <quetzal-month-and-year id="monthAndYear"></quetzal-month-and-year>
   <div id="monthTable">
+    <quetzal-days-of-week id="daysOfWeek"></quetzal-days-of-week>
     <quetzal-calendar-month id="calendar"></quetzal-calendar-month>
   </div>
 

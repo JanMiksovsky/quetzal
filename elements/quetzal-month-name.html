@@ -1,0 +1,57 @@
+<link rel="import" href="quetzal-element.html">
+
+<polymer-element name="quetzal-month-name" extends="quetzal-element" attributes="culture month" constructor="QuetzalMonthName">
+
+<template>
+</template>
+
+<script>
+Polymer( "quetzal-month-name", {
+
+  // culture: function(culture) {
+  //   var result;
+  //   result = culture.__super__.constructor.call(this, culture);
+  //   if (culture !== void 0) {
+  //     this.monthChanged();
+  //   }
+  //   return result;
+  // },
+  culture: null,
+
+  // The index of the month to show: 0 = January, 1 = February, etc.
+  monthChanged: function() {
+    culture = this.culture;
+    monthNameEnum = culture ? culture.calendar.months.names : QuetzalMonthName.names;
+    monthName = monthNameEnum[ this.month ];
+    this.shadowRoot.innerHTML = monthName;
+  },
+
+  ready: function() {
+    this.super();
+    if ( !this.month ) {
+      // If no month is supplied, default to the current month.
+      this.month = ( new Date() ).getMonth();
+    }
+  }
+
+});
+
+// Default names, used if Globalize is not avaialble.
+QuetzalMonthName.names =[
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
+
+</script>
+
+</polymer-element>

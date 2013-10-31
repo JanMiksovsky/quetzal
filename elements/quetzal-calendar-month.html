@@ -37,8 +37,6 @@ Polymer(  "quetzal-calendar-month", {
 
   applyAuthorStyles: true,
 
-  // days: Control.chain( "find/.QuetzalCalendarDay", "control" ),
-
   // culture: function( culture ) {
   //   var result;
   //   result = culture.__super__.constructor.call( this, culture );
@@ -53,6 +51,15 @@ Polymer(  "quetzal-calendar-month", {
   // dayClass: Control.chain( "weeks", "dayClass", function() {
   //   return this._refresh();
   // } ),
+
+  // The day elements in the month, returned as an array.
+  get days() {
+    var days = [];
+    this.weeks.forEach( function( week ) {
+      days = days.concat( week.days );
+    });
+    return days;
+  },
 
   dateChanged: function() {
     this._refresh();
@@ -90,26 +97,26 @@ Polymer(  "quetzal-calendar-month", {
   //   return $().add( weeksWithDate ).control();
   // },
 
-  // The elements for the weeks in the month.
+  // The elements for the weeks in the month, returned as an array.
   get weeks() {
-    return this.shadowRoot.querySelectorAll( "quetzal-calendar-week" );
+    return this.shadowRoot.querySelectorAll( "quetzal-calendar-week" ).array();
   },
 
   _refresh: function() {
 
     // Use midnight on the given date as a reference point.
-    var firstDayOfMonth = QuetzalCalendarDay.midnightOnDate( this.date );
-    firstDayOfMonth.setDate( 1 );
+    var firstDateOfMonth = QuetzalCalendarDay.midnightOnDate( this.date );
+    firstDateOfMonth.setDate( 1 );
 
     // Get last day of month by going to first day of next month and backing up a day.
-    var lastDayOfMonth = new Date( firstDayOfMonth.getTime() );
-    lastDayOfMonth.setMonth( lastDayOfMonth.getMonth() + 1 );
-    lastDayOfMonth.setDate( lastDayOfMonth.getDate() - 1 );
+    var lastDateOfMonth = new Date( firstDateOfMonth.getTime() );
+    lastDateOfMonth.setMonth( lastDateOfMonth.getMonth() + 1 );
+    lastDateOfMonth.setDate( lastDateOfMonth.getDate() - 1 );
 
     // Fill in the weeks.
-    var month = firstDayOfMonth.getMonth();
-    this.weeks.array().forEach( function( week, i ) {
-      var dateInWeek = QuetzalCalendarDay.offsetDateByDays( firstDayOfMonth, 7 * i );
+    var month = firstDateOfMonth.getMonth();
+    this.weeks.forEach( function( week, i ) {
+      var dateInWeek = QuetzalCalendarDay.offsetDateByDays( firstDateOfMonth, 7 * i );
       var firstDateOfWeek = week.firstDateOfWeek( dateInWeek );
       var lastDateOfWeek = QuetzalCalendarDay.offsetDateByDays( firstDateOfWeek, 6 );
       week.date = firstDateOfWeek;
@@ -121,14 +128,12 @@ Polymer(  "quetzal-calendar-month", {
     });
 
     // Paint days inside and outside range.
-    // _ref1 = this.days().segments();
-    // for ( _j = 0, _len1 = _ref1.length; _j < _len1; _j++ ) {
-    //   day = _ref1[_j];
-    //   date = day.date();
-    //   insideMonth = ( date != null ) && date >= firstDayOfMonth && date <= lastDayOfMonth;
-    //   day.toggleClass( "insideMonth", insideMonth );
-    //   day.toggleClass( "outsideMonth", !insideMonth );
-    // }
+    this.days.forEach( function( day ) {
+      date = day.date;
+      var insideMonth = ( date != null && date >= firstDateOfMonth && date <= lastDateOfMonth );
+      day.classList.toggle( "insideMonth", insideMonth );
+      day.classList.toggle( "outsideMonth", !insideMonth );
+    });
   }
 
 } );

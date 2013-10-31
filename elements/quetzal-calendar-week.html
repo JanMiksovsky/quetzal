@@ -78,9 +78,9 @@ Polymer( "quetzal-calendar-week", {
   //   }
   // }),
 
-  // The elements for the days in the week.
+  // The elements for the days in the week, returned as an array.
   get days() {
-    return this.shadowRoot.querySelectorAll( "quetzal-calendar-day" );
+    return this.shadowRoot.querySelectorAll( "quetzal-calendar-day" ).array();
   },
 
   daysSinceFirstDayOfWeek: function( date ) {
@@ -112,7 +112,7 @@ Polymer( "quetzal-calendar-week", {
   // Set the dates on all controls in the week.
   _refresh: function() {
     var dateStart = this.firstDateOfWeek( this.date );
-    this.days.array().forEach( function( day, i ) {
+    this.days.forEach( function( day, i ) {
       day.date = QuetzalCalendarDay.offsetDateByDays( dateStart, i );
     });
   }

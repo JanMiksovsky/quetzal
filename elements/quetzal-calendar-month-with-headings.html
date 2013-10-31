@@ -52,7 +52,14 @@
 <script>
 Polymer( "quetzal-calendar-month-with-headings", {
 
-  culture: null,
+  cultureChanged: function() {
+    var culture = this.culture;
+    if ( culture ) {
+      this.$.monthAndYear.culture = culture;
+      this.$.daysOfWeek.culture = culture;
+      this.$.calendar.culture = culture;
+    }
+  },
 
   dateChanged: function() {
     var date = this.date;

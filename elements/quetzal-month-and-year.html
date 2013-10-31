@@ -15,7 +15,9 @@ Shows the name of the current month and the year.
 <script>
 Polymer( "quetzal-month-and-year", {
 
-  culture: null,
+  cultureChanged: function() {
+    this.$.monthName.culture = this.culture;
+  },
 
   dateChanged: function() {
     var date = this.date;

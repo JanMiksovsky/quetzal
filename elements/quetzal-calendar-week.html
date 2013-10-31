@@ -35,15 +35,9 @@ Polymer( "quetzal-calendar-week", {
 
   applyAuthorStyles: true,
 
-  // culture: function(culture) {
-  //   var result;
-  //   result = culture.__super__.constructor.call(this, culture);
-  //   if (culture !== void 0) {
-  //     this._refresh();
-  //   }
-  //   return result;
-  // },
-  culture: null,
+  cultureChanged: function() {
+    this._refresh();
+  },
 
   dateChanged: function() {
     this._refresh();
@@ -97,7 +91,7 @@ Polymer( "quetzal-calendar-week", {
   // In the U.S., this is 0 ( Sunday ), but in many places it's 1 (Monday).
   firstDayOfWeek: function() {
     var culture = this.culture;
-    return culture ? culture.firstDay : 0;
+    return culture ? culture.calendar.firstDay : 0;
   },
 
   ready: function() {

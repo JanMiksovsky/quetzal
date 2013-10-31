@@ -34,15 +34,10 @@ Polymer( "quetzal-days-of-week", {
 
   applyAuthorStyles: true,
 
-  // Foo.prototype.culture = function(culture) {
-  //   var result;
-  //   result = Foo.__super__.culture.call(this, culture);
-  //   if (culture !== void 0) {
-  //     this.format(this.format());
-  //   }
-  //   return result;
-  // };
-  culture: null,
+  cultureChanged: function() {
+    // Force format.
+    this.formatChanged();
+  },
 
   format: "namesAbbr",
 
@@ -50,10 +45,12 @@ Polymer( "quetzal-days-of-week", {
     var culture = this.culture;
     var dayNameEnum = culture ? culture.calendar.days : QuetzalDaysOfWeek.days;
     var dayNames = dayNameEnum[ this.format ];
-    var firstDay = culture ? culture.calendar.firstDay : 0;
+    var firstDayOfWeek = culture ? culture.calendar.firstDay : 0;
     var daysOfWeek = this.shadowRoot.querySelectorAll( ".dayOfWeek" );
     daysOfWeek.array().forEach( function( day, i ) {
-      day.textContent = dayName = dayNames[i];
+      var dayOfWeek = ( firstDayOfWeek + i ) % 7;
+      var dayName = dayNames[ dayOfWeek ];
+      day.textContent = dayName;
     });
   },
 

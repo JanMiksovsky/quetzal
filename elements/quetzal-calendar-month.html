@@ -37,16 +37,13 @@ Polymer(  "quetzal-calendar-month", {
 
   applyAuthorStyles: true,
 
-  // culture: function( culture ) {
-  //   var result;
-  //   result = culture.__super__.constructor.call( this, culture );
-  //   if ( culture !== void 0 ) {
-  //     this.weeks().culture( culture );
-  //     this._refresh();
-  //   }
-  //   return result;
-  // },
-  culture: null,
+  cultureChanged: function() {
+    var culture = this.culture;
+    this.weeks.forEach( function( week ) {
+      week.culture = culture;
+    });
+    this._refresh();
+  },
 
   // dayClass: Control.chain( "weeks", "dayClass", function() {
   //   return this._refresh();

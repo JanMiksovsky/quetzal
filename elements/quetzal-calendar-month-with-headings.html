@@ -1,5 +1,5 @@
 <link rel="import" href="quetzal-element.html">
-<link rel="import" href="quetzal-month-name.html">
+<link rel="import" href="quetzal-month-and-year.html">
 <link rel="import" href="quetzal-calendar-month.html">
 
 <polymer-element name="quetzal-calendar-month-with-headings" extends="quetzal-element" attributes="culture date">
@@ -10,12 +10,12 @@
   :host {
     display: inline-block;
   }
-  
-  #monthName {
+
+  #monthAndYear {
     display: block;
   }
   /* TODO: Generic */
-  #monthName {
+  #monthAndYear {
     font-weight: bold;
     padding: 4px;
     text-align: center;
@@ -28,7 +28,7 @@
   }
   </style>
 
-  <quetzal-month-name id="monthName"></quetzal-month-name>
+  <quetzal-month-and-year id="monthAndYear"></quetzal-month-and-year>
   <div id="monthTable">
     <quetzal-calendar-month id="calendar"></quetzal-calendar-month>
   </div>
@@ -42,7 +42,7 @@ Polymer( "quetzal-calendar-month-with-headings", {
 
   dateChanged: function() {
     var date = this.date;
-    this.$.monthName.month = date.getMonth();
+    this.$.monthAndYear.date = date;
     this.$.calendar.date = date;
   },
 

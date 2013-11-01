@@ -10,6 +10,9 @@
 <!-- <script src="../polymer/polymer/polymer.js" debug="true"></script> -->
 <script src="bower_components/polymer/polymer.min.js"></script>
 
+<link rel="import" href="demos/demo-tile.html">
+<link rel="import" href="demos/color-swatch.html">
+<link rel="import" href="demos/labeled-color-swatch.html">
 <link rel="import" href="elements/quetzal.collection.html">
 
 <style>
@@ -78,22 +81,6 @@ Experimental Platform Features</b>.
 </property>
 </demo-tile>
 -->
-
-<demo-tile>
-<property name="classname">lorem-pixel</property>
-<property name="description">Selects a random photo from lorempixel.com.</property>
-<property name="demo">
-<lorem-pixel height="225" width="300"></lorem-pixel>
-</property>
-</demo-tile>
-
-<demo-tile>
-<property name="classname">markup-tag</property>
-<property name="description">Formats its contents as an HTML/XML tag.</property>
-<property name="demo">
-Here's a reference to the <markup-tag>script</markup-tag> tag.
-</property>
-</demo-tile>
 
 <demo-tile>
 <property name="classname">quetzal-auto-size-text-box</property>
@@ -219,6 +206,14 @@ A combo box in which choices are rendered in a dropdown list box.
   <labeled-color-swatch>Tan</labeled-color-swatch>
   <labeled-color-swatch>Yellow</labeled-color-swatch>
 </quetzal-list-combo-box>
+</property>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-lorem-pixel</property>
+<property name="description">Selects a random photo from lorempixel.com.</property>
+<property name="demo">
+<quetzal-lorem-pixel height="225" width="300"></quetzal-lorem-pixel>
 </property>
 </demo-tile>
 

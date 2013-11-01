@@ -7,14 +7,14 @@ Position Only) artwork.
 
 <link rel="import" href="quetzal-element.html">
 
-<polymer-element name="lorem-pixel" extends="quetzal-element" attributes="height width">
+<polymer-element name="quetzal-lorem-pixel" extends="quetzal-element" attributes="height width">
 
 <template>
   <img id="image" height="{{height}}" width="{{width}}"/>
 </template>
 
 <script>
-Polymer( "lorem-pixel", {
+Polymer( "quetzal-lorem-pixel", {
 
   heightChanged: function() {
     this.reload();

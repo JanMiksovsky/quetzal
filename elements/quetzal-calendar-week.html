@@ -5,7 +5,7 @@ Shows a single calendar week.
 <link rel="import" href="quetzal-element.html">
 <link rel="import" href="quetzal-calendar-day.html">
 
-<polymer-element name="quetzal-calendar-week" extends="quetzal-element" attributes="culture date" constructor="QuetzalCalendarWeek">
+<polymer-element name="quetzal-calendar-week" extends="quetzal-element" attributes="culture date dayElementTag" constructor="QuetzalCalendarWeek">
 
 <template>
 
@@ -20,13 +20,13 @@ Shows a single calendar week.
   }
   </style>
 
+  <quetzal-calendar-day class="firstDayOfWeek"></quetzal-calendar-day>
   <quetzal-calendar-day></quetzal-calendar-day>
   <quetzal-calendar-day></quetzal-calendar-day>
   <quetzal-calendar-day></quetzal-calendar-day>
   <quetzal-calendar-day></quetzal-calendar-day>
   <quetzal-calendar-day></quetzal-calendar-day>
-  <quetzal-calendar-day></quetzal-calendar-day>
-  <quetzal-calendar-day></quetzal-calendar-day>
+  <quetzal-calendar-day class="lastDayOfWeek"></quetzal-calendar-day>
 
 </template>
 
@@ -58,23 +58,25 @@ Polymer( "quetzal-calendar-week", {
   //   }).call(this);
   //   return $().add(days).control();
   // },
-  // dayClass: Control.iterator(function(dayClass) {
-  //   var days;
-  //   if (dayClass === void 0) {
-  //     return this.days().constructor;
-  //   } else {
-  //     this.days().transmute(dayClass);
-  //     days = this.days();
-  //     days.eq(0).addClass("firstDayOfWeek");
-  //     days.eq(6).addClass("lastDayOfWeek");
-  //     this._refresh();
-  //     return this;
-  //   }
-  // }),
 
   // The elements for the days in the week, returned as an array.
   get days() {
-    return this.shadowRoot.querySelectorAll( "quetzal-calendar-day" ).array();
+    // Return all children but the style node.
+    return this.shadowRoot.querySelectorAll( ":not(style)").array();
+  },
+
+  dayElementTag: "quetzal-calendar-day",
+
+  dayElementTagChanged: function() {
+    var dayTemplate = document.createElement( this.dayElementTag );
+    var shadowRoot = this.shadowRoot;
+    this.days.forEach( function( day, i ) {
+      var newDay = dayTemplate.cloneNode();
+      newDay.classList.toggle( "firstDayOfWeek", i === 0 );
+      newDay.classList.toggle( "lastDayOfWeek", i === 6 );
+      shadowRoot.replaceChild( newDay, day );
+    }.bind( this ));
+    this._refresh();
   },
 
   daysSinceFirstDayOfWeek: function( date ) {

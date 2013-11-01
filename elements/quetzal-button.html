@@ -4,7 +4,7 @@ A button with a simple generic style.
 
 <link rel="import" href="quetzal-element.html">
 
-<polymer-element name="quetzal-button" extends="quetzal-element" attributes="tabindex">
+<polymer-element name="quetzal-button" extends="quetzal-element" attributes="quiet tabindex">
 
 <template>
 
@@ -84,6 +84,13 @@ button.generic[disabled] {
   text-shadow: none;
 }
 
+/* HACK: Use :host syntax once the styling-the-host-with-a-class bug is fixed. */
+button.quiet {
+  /* Opt-out of border, etc., in normal state. */
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+}
 </style>
 
 <button id="button" pseudo="x-button" tabindex="{{tabindex}}">
@@ -95,10 +102,21 @@ button.generic[disabled] {
 <script>
 Polymer( "quetzal-button", {
 
+  applyAuthorStyles: true,
+
   genericChanged: function() {
     var generic = ( String( this.generic ) === "true" );
     this.$.button.classList.toggle( "generic", generic );
-  }  
+  },
+
+  quiet: false,
+
+  // TODO: Remove this attribute and just rely on class once Blink styling
+  // bug is fixed (see note above in styles).
+  quietChanged: function() {
+    var quiet = ( String( this.quiet ) === "true" );
+    this.$.button.classList.toggle( "quiet", quiet );
+  }
 
 });
 </script>

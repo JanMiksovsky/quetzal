@@ -25,6 +25,10 @@ h3 {
   padding-top: 0.5em;
 }
 
+#demo {
+  color: black;
+}
+
 #codeToggleContainer {
   margin-bottom: 0;
 }
@@ -55,7 +59,9 @@ h3 {
   <p>
     <content select="property[name='description']"></content>
   </p>
-  <content select="property[name='demo']"></content>
+  <div id="demo">
+    <content select="property[name='demo']"></content>
+  </div>
   <p id="codeToggleContainer">
     <a id="codeToggle" on-click="{{_codeToggleClick}}">View code</a>
   </p>

@@ -56,6 +56,14 @@ Polymer( "quetzal-calendar-day", {
     classList.toggle( "saturday", dayOfWeek === 6 );
     classList.toggle( "weekday", dayOfWeek > 0 && dayOfWeek < 6 );
     classList.toggle( "alternateMonth", Math.abs( date.getMonth() - today.getMonth() ) % 2 === 1 );
+  },
+
+  ready: function() {
+    this.super();
+    if ( !this.date ) {
+      // By default, show today.
+      this.date = QuetzalCalendarDay.today();
+    }
   }
 
 });

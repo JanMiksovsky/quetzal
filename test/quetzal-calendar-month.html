@@ -31,15 +31,16 @@ body {
 </style>
 
 <script>
-window.addEventListener( "WebComponentsReady", function() {
-  var calendar = document.querySelector( "#calendar" );
-  calendar.culture = Globalize.cultures.fr;
-});
+// window.addEventListener( "WebComponentsReady", function() {
+//   var calendar = document.querySelector( "#calendar" );
+//   calendar.culture = Globalize.cultures.fr;
+// });
 </script>
 
 </head>
 
 <body>
+  <quetzal-calendar-day-button></quetzal-calendar-day-button>
   <quetzal-calendar-month-with-headings id="calendar"></quetzal-calendar-month-with-headings>
 </body>
 

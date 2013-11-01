@@ -4,6 +4,17 @@
 <polymer-element name="quetzal-calendar-day-button" extends="quetzal-calendar-day">
 
 <template>
+  <style>
+  quetzal-button {
+    width: 100%;
+  }
+
+  /* HACK while we're still using Quetzal's properitary shadow-filling code.
+  This should go away once Blink supports distribution to shadow nodes. */
+  quetzal-button shadow-modified {
+    padding: 0 !important;
+  }
+  </style>
   <quetzal-button>
     <shadow></shadow>
   </quetzal-button>
@@ -11,6 +22,8 @@
 
 <script>
 Polymer( "quetzal-calendar-day-button", {
+
+  applyAuthorStyles: true
 
 });
 </script>

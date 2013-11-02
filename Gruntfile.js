@@ -14,7 +14,9 @@ module.exports = function(grunt) {
           paths: ".",
           outdir: "docs",
           linkNatives: "true",
-          tabtospace: 2        }
+          tabtospace: 2,
+          themedir: "themes/bootstrap"
+        }
       }
     },
     pkg: grunt.file.readJSON( "package.json" )

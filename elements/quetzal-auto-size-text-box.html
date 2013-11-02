@@ -1,9 +1,13 @@
 <!--
-A text box that makes itself big enough to show its content.
-
-This works by copying the text to an invisible element which will automatically
-grow in size; the expanding copy will expand the container, which in turn
-stretch the text box.
+/**
+ * A text box that makes itself big enough to show its content.
+ * 
+ * This works by copying the text to an invisible element which will automatically
+ * grow in size; the expanding copy will expand the container, which in turn
+ * stretch the text box.
+ *
+ * @class quetzal-auto-size-text-box
+ */
 -->
 
 <link rel="import" href="quetzal-element.html">
@@ -79,7 +83,12 @@ stretch the text box.
 <script>
 Polymer( "quetzal-auto-size-text-box", {
 
-  // Resize the element such that the text box can exactly contain its content.
+  /**
+   * Resize the element such that the text box can exactly contain its content.
+   * By default, this method is invoked whenever the text content changes.
+   *
+   * @method autoSize
+   */
   autoSize: function() {
     // If we had speculatively added an extra line because of an Enter keypress,
     // we can now hide the extra line.
@@ -138,6 +147,13 @@ Polymer( "quetzal-auto-size-text-box", {
     this._setMinimumHeight();
   },
 
+  /**
+   * Determines the minimum height of the text box in lines.
+   *
+   * @attribute minimumLines
+   * @type integer
+   * @default 1
+   */
   minimumLines: 1,
 
   // BUG: Setting the minimumLines attribute after creation doesn't seem to

@@ -9,7 +9,7 @@ module.exports = function(grunt) {
         version: "<%= pkg.version %>",
         url: "<%= pkg.homepage %>",
         options: {
-          exclude: "polymer-elements",
+          exclude: "docs,polymer-elements",
           extension: ".js,.html",
           paths: ".",
           outdir: "docs",

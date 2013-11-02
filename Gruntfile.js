@@ -9,9 +9,8 @@ module.exports = function(grunt) {
         version: "<%= pkg.version %>",
         url: "<%= pkg.homepage %>",
         options: {
-          exclude: "docs,polymer-elements",
           extension: ".js,.html",
-          paths: ".",
+          paths: "elements",
           outdir: "docs",
           linkNatives: "true",
           tabtospace: 2,

@@ -24,14 +24,25 @@ body {
 }
 </style>
 
+<polymer-element name="button-container" noscript>
+<template>
+  <button is="quetzal-button2" class="generic">
+    <content></content>
+  </quetzal-button2>
+</template>
+</polymer-element>
+
 </head>
 
 <body>
-  <button is="quetzal-button2">Plain</button>
-  <quetzal-button quiet>Quiet</quetzal-button>
+  <button is="quetzal-button2" class="generic">Plain 1</button>
+  <quetzal-button2 class="generic">Plain 2</quetzal-button2>
+  <quetzal-button quiet>Quiet 1</quetzal-button>
+  <button is="quetzal-button2" class="generic quiet">Quiet 2</button>
   <quetzal-toggle-button>Toggle</quetzal-toggle-button>
   <quetzal-toggle-button selected="true">Toggle</quetzal-toggle-button>
   <quetzal-icon-button icon="../resources/reload_12x14.png">Icon Button</quetzal-icon-button>
+  <button-container>Hello?</button-container>
 </body>
 
 </html>

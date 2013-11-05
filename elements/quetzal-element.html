@@ -2,8 +2,6 @@
 Base class for elements in the Quetzal collection.
 -->
 
-<link rel="import" href="shadowDistribution.html">
-
 <polymer-element name="quetzal-element" attributes="generic" constructor="QuetzalElement">
 
 <script>
@@ -63,7 +61,6 @@ window.Quetzal = {
   },
 
   setup: function() {
-    distributeShadowContent( this );
     if ( this.contentChangedCallback ) {
       this._observeContentChanged();
       if ( this.childNodes.length > 0 ) {

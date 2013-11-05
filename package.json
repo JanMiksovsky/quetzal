@@ -1,10 +1,10 @@
 {
-    "name": "quetzal",
-    "title": "Quetzal",
-    "description": "Ready-to-use custom elements, including base classes and samples",
-    "version": "0.0.2",
-    "devDependencies": {
-        "grunt": "~0.4.1",
-        "grunt-contrib-yuidoc": "*"
-    }
+  "name": "quetzal",
+  "title": "Quetzal",
+  "description": "Ready-to-use custom elements, including base classes and samples",
+  "version": "0.0.2",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-yuidoc": "*"
+  }
 }

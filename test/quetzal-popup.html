@@ -4,10 +4,12 @@
 
 <meta charset="utf-8">
 
-<title>quetzal-popup2</title>
+<title>quetzal-popup</title>
 
-<script src="http://www.polymer-project.org/polymer/polymer.min.js"></script>
+<!-- <script src="http://www.polymer-project.org/polymer/polymer.min.js"></script> -->
+<script src="../bower_components/polymer/polymer.min.js"></script>
 
+<link rel="import" href="../polymer-elements/polymer-overlay/polymer-overlay.html">
 <link rel="import" href="../elements/quetzal.collection.html">
 
 <style>
@@ -52,7 +54,7 @@ window.addEventListener( "WebComponentsReady", function() {
 
   <quetzal-button id="togglePopup">Toggle popup</quetzal-button>
   <quetzal-popup id="popup">Popup content</quetzal-popup>
-
+  
 </body>
 
 </html>

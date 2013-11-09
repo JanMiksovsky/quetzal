@@ -7,9 +7,7 @@
     overflow-y: auto;
   }
   </style>
-  <content id="itemTemplate">
-    <div></div>
-  </content>
+  <content id="itemTemplate"><div></div></content>
 </template>
 
 <script>
@@ -20,11 +18,14 @@ Polymer( "quetzal-infinite-scroll", {
   },
 
   addElementToBottom: function() {
-    var copied = this.$.itemTemplate.cloneNode( true );
-    var children = copied.children.array();
-    this.addedElements( children );
-    children.forEach( function( child ) {
-      this.shadowRoot.appendChild( child );    
+    var template = this.$.itemTemplate.getDistributedNodes().array();
+    var newElements = [];
+    template.forEach( function( templateNode ) {
+      newElements.push( templateNode.cloneNode( true ));
+    });
+    this.addedElements( newElements );
+    newElements.forEach( function( newElement ) {
+      this.shadowRoot.appendChild( newElement );    
     }.bind( this ));
   },
 

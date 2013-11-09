@@ -9,6 +9,7 @@
 <script src="../bower_components/polymer/polymer.min.js"></script>
 
 <link rel="import" href="../elements/quetzal.collection.html">
+<link rel="import" href="../elements/quetzal-infinite-scroll.html">
 <link rel="import" href="../demos/infinite-integers">
 
 <style>
@@ -23,15 +24,19 @@ body {
   margin: 0.5in;
 }
 
-infinite-integers {
+.infinite {
   border: 1px solid lightgray;
   box-sizing: border-box;
   height: 200px;
+  margin-bottom: 1em;
 }
 </style>
 
 <body>
-  <infinite-integers></infinite-integers>
+  <quetzal-infinite-scroll class="infinite">
+    <div>Hello!</div>
+  </quetzal-infinite-scroll>
+  <infinite-integers class="infinite"></infinite-integers>
 </body>
 
 </html>

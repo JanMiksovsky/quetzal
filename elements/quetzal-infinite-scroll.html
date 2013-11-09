@@ -7,19 +7,28 @@
     overflow-y: auto;
   }
   </style>
+  <content id="itemTemplate">
+    <div></div>
+  </content>
 </template>
 
 <script>
 Polymer( "quetzal-infinite-scroll", {
 
+  addedElements: function() {
+    // Subclasses can override to set up new elements.
+  },
+
   addElementToBottom: function() {
-    var div = document.createElement( "div" );
-    div.appendChild( new Text( ++this._counter ) );
-    this.shadowRoot.appendChild( div );
+    var copied = this.$.itemTemplate.cloneNode( true );
+    var children = copied.children.array();
+    this.addedElements( children );
+    children.forEach( function( child ) {
+      this.shadowRoot.appendChild( child );    
+    }.bind( this ));
   },
 
   addPageToBottom: function() {
-    console.log( "adding" );
     for ( var i = 0; i < 25; i++ ) {
       this.addElementToBottom();
     }
@@ -38,9 +47,7 @@ Polymer( "quetzal-infinite-scroll", {
     if ( belowView < this.clientHeight ) {
       this.addPageToBottom();
     }
-  },
-
-  _counter: 0
+  }
 
 });
 </script>

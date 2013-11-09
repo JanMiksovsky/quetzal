@@ -1,0 +1,28 @@
+<polymer-element name="infinite-scroll">
+
+<template>
+<!--   <template id="source">
+    <div>Hello</div>
+  </template> -->
+</template>
+
+<script>
+Polymer( "infinite-scroll", {
+
+  addElementToBottom: function() {
+    var node = new Text( "Hello" );
+    this.shadowRoot.appendChild( node );
+  },
+
+  addPageToBottom: function() {
+    this.addElementToBottom();
+  },
+
+  ready: function() {
+    this.addPageToBottom();
+  }
+
+});
+</script>
+
+</polymer-element>

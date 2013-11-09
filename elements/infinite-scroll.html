@@ -1,26 +1,47 @@
 <polymer-element name="infinite-scroll">
 
 <template>
-<!--   <template id="source">
-    <div>Hello</div>
-  </template> -->
+  <style>
+  :host {
+    display: block;
+    overflow-y: auto;
+  }
+  </style>
+  <!-- <div>Hello</div> -->
 </template>
 
 <script>
 Polymer( "infinite-scroll", {
 
   addElementToBottom: function() {
-    var node = new Text( "Hello" );
-    this.shadowRoot.appendChild( node );
+    var div = document.createElement( "div" );
+    div.appendChild( new Text( ++this._counter ) );
+    this.shadowRoot.appendChild( div );
   },
 
   addPageToBottom: function() {
-    this.addElementToBottom();
+    console.log( "adding" );
+    for ( var i = 0; i < 25; i++ ) {
+      this.addElementToBottom();
+    }
   },
 
   ready: function() {
+    this.addEventListener( "scroll", function() {
+      this.scrolled();
+    }.bind( this ));
     this.addPageToBottom();
-  }
+  },
+
+  scrolled: function() {
+    var scrollBottom = this.scrollTop + this.clientHeight;
+    var belowView = this.scrollHeight - scrollBottom;
+    if ( belowView < this.clientHeight ) {
+      this.addPageToBottom();
+    }
+  },
+
+  _counter: 0
 
 });
 </script>

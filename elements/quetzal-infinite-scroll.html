@@ -34,6 +34,7 @@ Polymer( "quetzal-infinite-scroll", {
   },
 
   addPageToBottom: function() {
+    console.log( "adding page" );
     for ( var i = 0; i < 10; i++ ) {
       this.addElementToBottom();
     }
@@ -43,7 +44,7 @@ Polymer( "quetzal-infinite-scroll", {
     this.addEventListener( "scroll", function() {
       this.scrolled();
     }.bind( this ));
-    this.addPageToBottom();
+    // this.addPageToBottom();
   },
 
   scrolled: function() {

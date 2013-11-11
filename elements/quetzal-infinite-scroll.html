@@ -1,4 +1,11 @@
-<polymer-element name="quetzal-infinite-scroll">
+<!--
+An infinite surface that generates addition elements as necessary to always
+permit scrolling.
+
+For now, this only handles infinite scrolling in one direction: down.
+-->
+
+<polymer-element name="quetzal-infinite-scroll" attributes="elementsPerPage">
 
 <template>
   <style>
@@ -34,14 +41,15 @@ Polymer( "quetzal-infinite-scroll", {
   },
 
   addPageToBottom: function() {
-    console.log( "adding page" );
-    for ( var i = 0; i < 10; i++ ) {
+    for ( var i = 0; i < this.elementsPerPage; i++ ) {
       this.addElementToBottom();
     }
     // HACK until bug https://code.google.com/p/chromium/issues/detail?id=317895
     // is fixed.
     this.$.itemTemplate.style.backgroundColor = "";
   },
+
+  elementsPerPage: 10,
 
   ready: function() {
     this.addEventListener( "scroll", function() {
@@ -61,7 +69,6 @@ Polymer( "quetzal-infinite-scroll", {
   _needsMoreElementsAtBottom: function() {
     var scrollBottom = this.scrollTop + this.clientHeight;
     var belowView = this.scrollHeight - scrollBottom;
-    console.log( belowView );
     return ( belowView < this.clientHeight );
   }
 

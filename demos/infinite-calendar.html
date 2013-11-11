@@ -1,0 +1,39 @@
+<link rel="import" href="../elements/quetzal-infinite-scroll.html">
+<link rel="import" href="../elements/quetzal-calendar-day.html">
+<link rel="import" href="../elements/quetzal-calendar-week.html">
+
+<polymer-element name="infinite-calendar" extends="quetzal-infinite-scroll">
+
+<template>
+  <style>
+  :host {
+    display: inline-block;
+  }
+
+  quetzal-calendar-day.alternateMonth {
+    background: #d8d8d8;
+  }
+  </style>
+  <shadow><quetzal-calendar-week></quetzal-calendar-week></shadow>
+</template>
+
+<script>
+Polymer( "infinite-calendar", {
+
+  addedElements: function( elements ) {
+    var week = elements[0];
+    week.date = this.date;
+    this.date = QuetzalCalendarDay.offsetDateByDays( this.date, 7 );
+  },
+
+  date: null,
+
+  ready: function() {
+    this.date = QuetzalCalendarDay.today();
+    this.super();
+  }
+
+});
+</script>
+
+</polymer-element>

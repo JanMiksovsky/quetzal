@@ -6,6 +6,10 @@
     display: block;
     overflow-y: auto;
   }
+
+  ::content > * {
+    display: none;
+  }
   </style>
   <content id="itemTemplate"><div></div></content>
 </template>
@@ -30,7 +34,7 @@ Polymer( "quetzal-infinite-scroll", {
   },
 
   addPageToBottom: function() {
-    for ( var i = 0; i < 25; i++ ) {
+    for ( var i = 0; i < 10; i++ ) {
       this.addElementToBottom();
     }
   },

@@ -38,21 +38,31 @@ Polymer( "quetzal-infinite-scroll", {
     for ( var i = 0; i < 10; i++ ) {
       this.addElementToBottom();
     }
+    // HACK until bug https://code.google.com/p/chromium/issues/detail?id=317895
+    // is fixed.
+    this.$.itemTemplate.style.backgroundColor = "";
   },
 
   ready: function() {
     this.addEventListener( "scroll", function() {
       this.scrolled();
     }.bind( this ));
-    // this.addPageToBottom();
+    while ( this._needsMoreElementsAtBottom() ) {
+      this.addPageToBottom();
+    }
   },
 
   scrolled: function() {
-    var scrollBottom = this.scrollTop + this.clientHeight;
-    var belowView = this.scrollHeight - scrollBottom;
-    if ( belowView < this.clientHeight ) {
+    if ( this._needsMoreElementsAtBottom() ) {
       this.addPageToBottom();
     }
+  },
+
+  _needsMoreElementsAtBottom: function() {
+    var scrollBottom = this.scrollTop + this.clientHeight;
+    var belowView = this.scrollHeight - scrollBottom;
+    console.log( belowView );
+    return ( belowView < this.clientHeight );
   }
 
 });

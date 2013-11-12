@@ -4,14 +4,10 @@
 
 <script>
 Polymer( "infinite-integers", {
-
   addedElements: function( elements ) {
-    var div = elements[0];
-    div.textContent = ++this.counter;
+    elements[0].textContent = ++this.counter;
   },
-
   counter: 0
-
 });
 </script>
 

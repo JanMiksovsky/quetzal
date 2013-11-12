@@ -42,13 +42,6 @@ window.Quetzal = {
     return options;
   },
 
-  // generic: true,
-
-  genericChanged: function() {
-    var generic = ( String( this.generic ) === "true" );
-    this.classList.toggle( "generic", generic );
-  },
-
   log: function( s ) {
     if ( console ) {
       console.log( this.localName + ": " + s );

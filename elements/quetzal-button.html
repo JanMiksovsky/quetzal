@@ -36,6 +36,12 @@ button[disabled] {
   cursor: default; /* Re-set default cursor for disabled buttons */
 }
 
+/* Generic styling */
+/*
+TODO: Rewrite this as :host([generic]) once that works and we can cross the
+light/shadow boundary.
+*/
+
 button.generic {
   background: whitesmoke;
   background-image: -webkit-linear-gradient(top, white, #e6e6e6);
@@ -105,8 +111,7 @@ Polymer( "quetzal-button", {
   applyAuthorStyles: true,
 
   genericChanged: function() {
-    var generic = ( String( this.generic ) === "true" );
-    this.$.button.classList.toggle( "generic", generic );
+    this.$.button.classList.toggle( "generic", this.generic );
   },
 
   quiet: false,

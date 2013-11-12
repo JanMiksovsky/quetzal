@@ -26,6 +26,7 @@ Polymer( "quetzal-month-and-year", {
   },
 
   ready: function() {
+    this.super();
     if ( !this.date ) {
       // By default show the current month and year.
       this.date = new Date();

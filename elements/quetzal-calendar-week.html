@@ -62,7 +62,7 @@ Polymer( "quetzal-calendar-week", {
   // The elements for the days in the week, returned as an array.
   get days() {
     // Return all children but the style node.
-    return this.shadowRoot.querySelectorAll( ":not(style)").array();
+    return this.shadowRoot.querySelectorAll( ":not(style)" ).array();
   },
 
   dayElementTag: "quetzal-calendar-day",
@@ -97,6 +97,7 @@ Polymer( "quetzal-calendar-week", {
   },
 
   ready: function() {
+    this.super();
     if ( !this.date ) {
       // If no date is supplied, default to the current week.
       // REVIEW: This default behavior can cause unnecessary recalcs if a week

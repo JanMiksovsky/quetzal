@@ -6,10 +6,15 @@
   <style>
   :host {
     display: inline-block;
-    /* REVIEW: Why doesn't this work? */
-    text-transform: capitalize;
+  }
+
+  @host {
+    [generic] {
+      text-transform: capitalize;
+    }
   }
   </style>
+  <span id="name"></span>
 </template>
 
 <script>
@@ -25,7 +30,7 @@ Polymer( "quetzal-month-name", {
     culture = this.culture;
     monthNameEnum = culture ? culture.calendar.months.names : QuetzalMonthName.names;
     monthName = monthNameEnum[ this.month ];
-    this.shadowRoot.innerHTML = monthName;
+    this.$.name.textContent = monthName;
   },
 
   ready: function() {

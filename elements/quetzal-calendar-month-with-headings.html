@@ -26,7 +26,12 @@
     display: table-header-group;
   }
 
-  /* TODO: Generic */
+  @host {
+    [generic] #monthAndYear {
+      background: yellow;
+    }
+  }
+
   #monthAndYear {
     font-weight: bold;
     padding: 4px;
@@ -68,6 +73,7 @@ Polymer( "quetzal-calendar-month-with-headings", {
   },
 
   ready: function() {
+    this.super();
     if ( !this.date ) {
       // By default, show the current month.
       this.date = new Date();

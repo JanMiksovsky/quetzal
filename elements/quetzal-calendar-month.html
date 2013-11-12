@@ -33,7 +33,7 @@ A month in a calendar
 </template>
 
 <script>
-Polymer(  "quetzal-calendar-month", {
+Polymer( "quetzal-calendar-month", {
 
   applyAuthorStyles: true,
 
@@ -67,6 +67,7 @@ Polymer(  "quetzal-calendar-month", {
   // },
 
   ready: function() {
+    this.super();
     if ( !this.date ) {
       // If no date is supplied, default to the current month.
       this.date = QuetzalCalendarDay.today();

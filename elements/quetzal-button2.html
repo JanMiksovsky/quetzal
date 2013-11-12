@@ -26,7 +26,7 @@ A button with a simple generic style.
       vertical-align: baseline; /* Improves appearance and consistency in all browsers */
     }
 
-    .generic {
+    [generic] {
       background: whitesmoke;
       background-image: -webkit-linear-gradient(top, white, #e6e6e6);
       background-image: linear-gradient(top, white, #e6e6e6);
@@ -41,8 +41,8 @@ A button with a simple generic style.
       vertical-align: middle;
     }
 
-    .generic:hover,
-    .generic:focus {
+    [generic]:hover,
+    [generic]:focus {
       background-color: #e6e6e6;
       background-image: -webkit-linear-gradient(top, white, #eee);
       background-image: linear-gradient(top, white, #eee);
@@ -54,12 +54,12 @@ A button with a simple generic style.
       text-shadow: 0 1px 3px white;
     }
 
-    .generic:focus {
+    [generic]:focus {
       border-color: #4d90fe;
       outline: none;
     }
 
-    .generic:active {
+    [generic]:active {
       background-color: #d9d9d9;
       background-image: none;
       border-color: #aaa;
@@ -67,7 +67,7 @@ A button with a simple generic style.
       color: #111;
     }
 
-    .generic[disabled] {
+    [generic][disabled] {
       background: whitesmoke;
       border: 1px solid #ccc;
       box-shadow: none;
@@ -102,6 +102,15 @@ Polymer( "quetzal-button2", {
   quietChanged: function() {
     var quiet = ( String( this.quiet ) === "true" );
     this.$.button.classList.toggle( "quiet", quiet );
+  },
+
+  ready: function() {
+    if ( this.generic == null ) {
+      // Set generic attribute to its default value of true. We do this in code
+      // because setting generic: true as a default doesn't seem to actually
+      // set the attribute on the element.
+      this.generic = true;
+    }
   }
 
 });

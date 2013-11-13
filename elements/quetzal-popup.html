@@ -9,25 +9,30 @@ popup.
 
 <link rel="import" href="../polymer-elements/polymer-overlay/polymer-overlay.html">
 
-<polymer-element name="quetzal-popup" extends="polymer-overlay" attributes="closeOnInsideClick">
+<polymer-element name="quetzal-popup" extends="polymer-overlay" attributes="closeOnInsideClick generic">
 
 <template>
 
 <style>
-/* Generic appearance */
 :host {
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );
-  box-sizing: border-box;
-  padding: .25em;
   -webkit-user-select: none;
   user-select: none;
 }
+
+/* Generic appearance */
+@host {
+  [generic] {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );
+    box-sizing: border-box;
+    padding: .25em;
+  }
+}
 </style>
 
-<shadow></shadow>
 <content></content>
+<shadow></shadow>
 
 </template>
 
@@ -98,6 +103,12 @@ Polymer( "quetzal-popup", {
 
   ready: function() {
     this.super();
+    if ( this.generic == null ) {
+      // Set generic attribute to its default value of true. We do this in code
+      // because setting generic: true as a default doesn't seem to actually
+      // set the attribute on the element.
+      this.generic = true;
+    }
     if ( !this.target ) {
       // Default target is the popup itself.
       this.target = this;

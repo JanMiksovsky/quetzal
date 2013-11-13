@@ -14,7 +14,7 @@
   }
 
   /* TODO: Generic */
-  .dayOfWeek {
+ .dayOfWeek {
     text-align: center;
   }
   </style>
@@ -55,6 +55,7 @@ Polymer( "quetzal-days-of-week", {
   },
 
   ready: function() {
+    this.super();
     // Force format.
     this.formatChanged();
   }

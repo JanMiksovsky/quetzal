@@ -1,11 +1,13 @@
-<link rel="import" href="quetzal-button.html">
+<link rel="import" href="quetzal-element.html">
+<link rel="import" href="quetzal-button2.html">
 
-<polymer-element name="quetzal-icon-button" extends="quetzal-button" attributes="icon">
+<!-- TODO: Inherit from quetzal-button when that's possible. -->
+<polymer-element name="quetzal-icon-button" extends="quetzal-element" attributes="icon">
 
 <template>
-  <shadow>
+  <button is="quetzal-button2">
     <img src="{{icon}}"/>&nbsp;<content></content>
-  </shadow>
+  </button>
 </template>
 
 <script>

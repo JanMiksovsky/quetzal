@@ -6,7 +6,7 @@ TODO: Replace this with quetzal-toggle-button2 once that's unblocked.
 
 <link rel="import" href="quetzal-button2.html">
 
-<polymer-element name="quetzal-toggle-button" extends="quetzal-element" attributes="autoToggle selected tabindex">
+<polymer-element name="quetzal-toggle-button" extends="quetzal-element" attributes="autoToggle selected quiet tabindex">
 
 <template>
 
@@ -35,7 +35,7 @@ TODO: Replace this with quetzal-toggle-button2 once that's unblocked.
 }
 </style>
 
-<button is="quetzal-button2" id="button" pseudo="x-button" tabindex="{{tabindex}}">
+<button is="quetzal-button2" id="button" part="x-button" tabindex="{{tabindex}}">
   <content></content>
 </button>
 
@@ -45,6 +45,13 @@ TODO: Replace this with quetzal-toggle-button2 once that's unblocked.
 Polymer( "quetzal-toggle-button", {
 
   autoToggle: true,
+
+  /* TODO: Remove this and use style when this extends button */
+  quiet: false,
+
+  quietChanged: function() {
+    this.$.button.classList.toggle( "quiet", this.quiet );
+  },
 
   ready: function() {
     this.super();

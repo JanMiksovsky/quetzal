@@ -35,16 +35,20 @@
   border: 1px solid lightgray;
 }
 
-#dropdownButton::x-button::x-button {
-  background: none; /* REVIEW: Doesn't work */
+#dropdownButton::part(x-button) {
   border: none !important;
   border-left: 1px solid transparent !important;
   border-radius: 0 !important;
-  padding: 0 0.25em !important; /* Tighter padding that normal */
+  padding: 0 0.25em !important; /* Tighter padding than normal */
   text-align: center !important;
 }
 
-#comboContainer:hover #dropdownButton::x-button::x-button {
+/*
+BUG: This hover styling doesn't work. This may be related to general rendering
+problems in shadows:
+https://code.google.com/p/chromium/issues/detail?id=317895&can=4&colspec=ID%20Pri%20M%20Iteration%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified
+*/
+#comboContainer:hover #dropdownButton::part(x-button) {
   border-left-color: lightgray !important;
 }
 
@@ -60,7 +64,7 @@
     REVIEW: Because of hacks in quetzal-toggle-button, tabindex="-1" doesn't
     actually remove element from tab order.
     -->
-    <quetzal-toggle-button id="dropdownButton" autoToggle="false" tabindex="-1">▼</quetzal-toggle-button>
+    <quetzal-toggle-button id="dropdownButton" autoToggle="false" quiet tabindex="-1">▼</quetzal-toggle-button>
   </div>
 </shadow>
 

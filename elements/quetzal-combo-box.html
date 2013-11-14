@@ -85,6 +85,12 @@ Polymer( "quetzal-combo-box", {
       var width = this.$.container.getBoundingClientRect().width;
       this.$.popup.style.minWidth = width + "px";
     }
+    // HACK to force shadow to render.
+    // bug https://code.google.com/p/chromium/issues/detail?id=317895
+    var backgroundColor = getComputedStyle( this.$.popup ).backgroundColor;
+    window.setTimeout( function() {
+      this.$.popup.style.backgroundColor = backgroundColor;
+    }.bind( this ), 1 );
   },
 
   ready: function() {

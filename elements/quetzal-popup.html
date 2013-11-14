@@ -20,14 +20,12 @@ popup.
 }
 
 /* Generic appearance */
-@host {
-  [generic] {
-    background: white;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );
-    box-sizing: border-box;
-    padding: .25em;
-  }
+:host([generic]:host) {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba( 0, 0, 0, 0.2 );
+  box-sizing: border-box;
+  padding: .25em;
 }
 </style>
 

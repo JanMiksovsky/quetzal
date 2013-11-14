@@ -15,7 +15,7 @@ The selection behavior generally follows that of Microsoft Windows:
 
 <link rel="import" href="../polymer-elements/polymer-selector/polymer-selector.html">
 
-<polymer-element name="quetzal-list-box" extends="polymer-selector">
+<polymer-element name="quetzal-list-box" extends="polymer-selector" attributes="generic">
 
 <template>
 
@@ -27,7 +27,7 @@ The selection behavior generally follows that of Microsoft Windows:
 }
 
 /* Generic appearance */
-:host {
+:host([generic]:host) {
   border: 1px solid lightgray;
   box-sizing: border-box;
   cursor: default;
@@ -75,6 +75,9 @@ Polymer( "quetzal-list-box", {
     this.addEventListener( "keydown", function( event ) {
       this._keydown( event );
     }.bind( this ));
+    if ( this.generic == null ) {
+      this.generic = true;
+    }
   },
 
   // TODO: Handle valueattr: selected indicates a value, not the index.

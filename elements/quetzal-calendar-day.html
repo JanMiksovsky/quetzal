@@ -17,12 +17,9 @@ styling common sorts of calendars.
     text-align: right;
   }
 
-  /* TODO: Change to :host(.today:host) when bug in Blink is fixed. */
-  @host {
-    .today {
-      color: darkred;
-      font-weight: bold;
-    }
+  :host(.today:host) {
+    color: darkred;
+    font-weight: bold;
   }
   </style>
 

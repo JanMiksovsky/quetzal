@@ -34,7 +34,10 @@ The selection behavior generally follows that of Microsoft Windows:
 }
 
 ::content > * {
+  /* HACK: explicit background works around shadow reprojection rendering bug. */
+  background: white;
   box-sizing: border-box;
+  display: block;
   padding: 0.25em;
   -webkit-user-select: none;
   user-select: none;

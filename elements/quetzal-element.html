@@ -1,5 +1,16 @@
 <!--
-Base class for elements in the Quetzal collection.
+  
+Base class for some elements in the Quetzal collection.
+
+This provides some services which aren't provided by the browser or Polymer.
+Right now, this includes:
+
+* Generic styling. A "generic" attribute, which defaults to true, allows
+  elements to receive baseline styling that can easily be removed by setting
+  "generic" to false.
+
+* contentChangedCallback. Called when an element's light DOM content changes.
+
 -->
 
 <polymer-element name="quetzal-element" attributes="generic" constructor="QuetzalElement">

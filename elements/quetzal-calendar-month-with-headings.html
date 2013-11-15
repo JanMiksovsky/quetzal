@@ -26,17 +26,18 @@
     display: table-header-group;
   }
 
-  /* TODO: Generic styling once we can cross shadow boundary. */
-  #monthAndYear {
+  /* Generic styling */
+  :host([generic]:host) #monthAndYear {
     font-weight: bold;
     padding: 4px;
     text-align: center;
   }
-  #daysOfWeek {
+
+  :host([generic]:host) #daysOfWeek {
     font-size: smaller;
-    text-align: center;
   }
-  .dayOfWeek {
+
+  :host([generic]:host) .dayOfWeek {
     padding: 4px;
   }
   </style>

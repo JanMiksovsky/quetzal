@@ -31,11 +31,11 @@
 }
 
 /* TODO: Generic appearance */
-#comboContainer { 
+:host([generic]:host) #comboContainer {
   border: 1px solid lightgray;
 }
 
-#dropdownButton::part(x-button) {
+:host([generic]:host) #dropdownButton::part(x-button) {
   border: none !important;
   border-left: 1px solid transparent !important;
   border-radius: 0 !important;
@@ -48,7 +48,7 @@ BUG: This hover styling doesn't work. This may be related to general rendering
 problems in shadows:
 https://code.google.com/p/chromium/issues/detail?id=317895&can=4&colspec=ID%20Pri%20M%20Iteration%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified
 */
-#comboContainer:hover #dropdownButton::part(x-button) {
+:host([generic]:host) #comboContainer:hover #dropdownButton::part(x-button) {
   border-left-color: lightgray !important;
 }
 

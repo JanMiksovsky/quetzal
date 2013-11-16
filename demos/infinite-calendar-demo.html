@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>Infinite Calendar</title>
+
+<script src="../bower_components/polymer/polymer.min.js"></script>
+
+<link rel="import" href="../elements/quetzal.collection.html">
+<link rel="import" href="infinite-calendar.html">
+<link rel="import" href="calendar-detailed-day.html">
+
+<style>
+body,
+button,
+input {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+}
+
+infinite-calendar {
+  height: 100%;
+  width: 100%;
+}
+</style>
+
+<body>
+  <infinite-calendar dayElementTag="calendar-detailed-day"></infinite-calendar>
+</body>
+
+</html>

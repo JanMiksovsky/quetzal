@@ -1,0 +1,45 @@
+<link rel="import" href="../elements/quetzal-calendar-day.html">
+<link rel="import" href="../elements/quetzal-month-name.html">
+
+<polymer-element name="calendar-detailed-day" extends="quetzal-calendar-day">
+
+<template>
+
+  <style>
+  :host {
+    color: #333;
+    height: 4em;
+  }
+
+  #monthName {
+    font-weight: bold;
+  }
+
+  :host(.alternateMonth:host) {
+    background: #f0e8e8;
+  }
+
+  :host(:not(.firstDayOfMonth):host) #monthName {
+    display: none;
+  }
+  </style>
+
+  <shadow>
+    <quetzal-month-name id="monthName"></quetzal-month-name>
+    <div id="date"></div>
+  </shadow>
+
+</template>
+
+<script>
+Polymer( "calendar-detailed-day", {
+
+  dateChanged: function() {
+    this.super();
+    this.$.monthName.month = this.date.getMonth();
+  }
+
+});
+</script>
+
+</polymer-element>

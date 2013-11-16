@@ -2,7 +2,7 @@
 <link rel="import" href="../elements/quetzal-calendar-day.html">
 <link rel="import" href="../elements/quetzal-calendar-week.html">
 
-<polymer-element name="infinite-calendar" extends="quetzal-infinite-scroll">
+<polymer-element name="infinite-calendar" extends="quetzal-infinite-scroll" attributes="dayElementTag">
 
 <template>
   <style>
@@ -14,7 +14,7 @@
     background: #e4e4e4;
   }
   </style>
-  <shadow><quetzal-calendar-week></quetzal-calendar-week></shadow>
+  <shadow><quetzal-calendar-week dayElementTag="{{dayElementTag}}"></quetzal-calendar-week></shadow>
 </template>
 
 <script>

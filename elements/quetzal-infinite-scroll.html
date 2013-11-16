@@ -49,15 +49,25 @@ Polymer( "quetzal-infinite-scroll", {
     this.$.itemTemplate.style.backgroundColor = "";
   },
 
+  addPagesToBottom: function() {
+    if ( this._needsMoreElementsAtBottom() ) {
+      this.addPageToBottom();
+      window.setTimeout( function() {
+        this.addPagesToBottom();
+      }.bind( this ), 1 );
+    }
+  },
+
   elementsPerPage: 10,
+
+  enteredView: function() {
+    this.addPagesToBottom();
+  },
 
   ready: function() {
     this.addEventListener( "scroll", function() {
       this.scrolled();
     }.bind( this ));
-    while ( this._needsMoreElementsAtBottom() ) {
-      this.addPageToBottom();
-    }
   },
 
   scrolled: function() {

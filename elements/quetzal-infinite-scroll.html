@@ -12,6 +12,7 @@ For now, this only handles infinite scrolling in one direction: down.
   :host {
     display: block;
     overflow-y: auto;
+    visibility: hidden;
   }
 
   ::content > * {
@@ -50,9 +51,11 @@ Polymer( "quetzal-infinite-scroll", {
     this.$.itemTemplate.style.backgroundColor = "";
   },
 
-  elementsAdded: function() {
+  addPageIfNeeded: function() {
     if ( this._needsMoreElementsAtBottom() ) {
       this.addPageToBottom();
+    } else {
+      this.style.visibility = "inherit";
     }
   },
 
@@ -68,7 +71,7 @@ Polymer( "quetzal-infinite-scroll", {
     }.bind( this ));
     var observer = new MutationObserver( function() {
       window.setTimeout( function() {
-        this.elementsAdded();
+        this.addPageIfNeeded();
       }.bind( this ), 1 );
     }.bind( this ));
     observer.observe( this.shadowRoot, {
@@ -77,9 +80,7 @@ Polymer( "quetzal-infinite-scroll", {
   },
 
   scrolled: function() {
-    if ( this._needsMoreElementsAtBottom() ) {
-      this.addPageToBottom();
-    }
+    this.addPageIfNeeded();
   },
 
   _needsMoreElementsAtBottom: function() {

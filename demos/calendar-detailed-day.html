@@ -7,8 +7,11 @@
 
   <style>
   :host {
-    color: #333;
     height: 4em;
+  }
+
+  :host(:not(.today):host) {
+    color: #333;    
   }
 
   #monthName {

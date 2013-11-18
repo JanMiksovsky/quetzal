@@ -7,29 +7,35 @@
 
   <style>
   :host {
-    height: 4em;
+    height: 5em;
   }
 
   :host(:not(.today):host) {
     color: #333;    
   }
 
-  #monthName {
+  #monthAndYear {
+    display: block;
     font-weight: bold;
+    text-align: right;
+  }
+  :host(:not(.firstDayOfMonth):host) #monthAndYear {
+    display: none;
+  }
+
+  #date {
+    text-align: right;
   }
 
   :host(.alternateMonth:host) {
     background: #f0e8e8;
   }
-
-  :host(:not(.firstDayOfMonth):host) #monthName {
-    display: none;
-  }
   </style>
 
   <shadow>
-    <quetzal-month-name id="monthName"></quetzal-month-name>
+    <quetzal-month-and-year id="monthAndYear"></quetzal-month-and-year>
     <div id="date"></div>
+    <content></content>
   </shadow>
 
 </template>
@@ -39,7 +45,7 @@ Polymer( "calendar-detailed-day", {
 
   dateChanged: function() {
     this.super();
-    this.$.monthName.month = this.date.getMonth();
+    this.$.monthAndYear.date = this.date;
   }
 
 });

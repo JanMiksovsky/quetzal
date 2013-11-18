@@ -12,8 +12,10 @@ styling common sorts of calendars.
 <template>
 
   <style>
-  :host([generic]) {
+  :host([generic]:host) {
     padding: 4px;
+  }
+  :host([generic]:host) #date {
     text-align: right;
   }
 

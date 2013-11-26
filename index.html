@@ -35,9 +35,13 @@ p {
     max-width: 800px;
 }
 
-/* Override Polymer's veiled class. */
-:not(.notVeiled) {
+/* Override Polymer's veiled class. Otherwise, if there's a problem in loading
+on Chrome, the user won't be able to see our recommendation to use Canary. */
+.polymer-veiled {
   opacity: 1;
+}
+.polymer-veiled > :not(.notVeiled) {
+  visibility: hidden;
 }
 
 /*

@@ -98,7 +98,7 @@ Polymer( "quetzal-calendar-week", {
 
   ready: function() {
     this.super();
-    if ( !this.date ) {
+    if ( !this.date && typeof QuetzalCalendarDay.today !== "undefined" ) {
       // If no date is supplied, default to the current week.
       // REVIEW: This default behavior can cause unnecessary recalcs if a week
       // is created and then shortly thereafter a different date is set.

@@ -61,36 +61,42 @@ Polymer( "quetzal-days-of-week", {
 
 });
 
-// Defaults used if Globalize is not loaded.
-QuetzalDaysOfWeek.days = {
-  names: [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday"
-  ],
-  namesAbbr: [
-    "Sun",
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat"
-  ],
-  namesShort: [
-    "Su",
-    "Mo",
-    "Tu",
-    "We",
-    "Th",
-    "Fr",
-    "Sa"
-  ]
-};
+
+// TODO: Remove this check once Polymer defines constructor in time.
+if ( typeof QuetzalDaysOfWeek !== "undefined" ) {
+
+  // Defaults used if Globalize is not loaded.
+  QuetzalDaysOfWeek.days = {
+    names: [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday"
+    ],
+    namesAbbr: [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+    namesShort: [
+      "Su",
+      "Mo",
+      "Tu",
+      "We",
+      "Th",
+      "Fr",
+      "Sa"
+    ]
+  };
+}
+
 </script>
 
 </polymer-element>

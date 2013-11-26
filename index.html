@@ -7,8 +7,8 @@
 <title>Quetzal</title>
 
 <!-- <script src="http://www.polymer-project.org/polymer/polymer.min.js"></script> -->
-<!-- <script src="../polymer/polymer/polymer.js" debug="true"></script> -->
-<script src="bower_components/polymer/polymer.min.js"></script>
+<script src="../polymer/polymer/polymer.js" debug="true"></script>
+<!-- <script src="bower_components/polymer/polymer.min.js"></script> -->
 
 <link rel="import" href="demos/demo-tile.html">
 <link rel="import" href="demos/color-swatch.html">
@@ -35,6 +35,11 @@ p {
     max-width: 800px;
 }
 
+/* Override Polymer's veiled class. */
+:not(.notVeiled) {
+  opacity: 1;
+}
+
 /*
 :unresolved {
     display: none;
@@ -50,13 +55,13 @@ quetzal-list-box {
 
 <body>
 
+<div class="notVeiled">
 <h1 style="color: green; vertical-align: top;">
     <img style="height: 60px; width: 60px;" src="resources/quetzal.png"/>Quetzal
 </h1>
 
 <p>
-Quetzal is an experimental translation of concepts from the
-<a href="http://quickui.org">QuickUI</a> framework to HTML custom elements.
+Quetzal is an experimental set of HTML custom elements.
 This relies on Google's <a href="http://www.polymer-project.org">Polymer</a>
 project to support aspects of custom elements which are not yet supported in
 all browsers. The
@@ -64,13 +69,11 @@ all browsers. The
 available on GitHub.
 </p>
 <p>
-A small handful of initial, experimental custom elements created in Quetzal
-appear below. These are translations of some components from the
-<a href="http://quickui.org/catalog">QuickUI Catalog</a>. For the time being,
-<b>use Google Chrome Canary</b> to view this page.
+For the time being, <b>use Google Chrome Canary</b> to view this page.
 Results are also more predictable if you open chrome://flags and <b>Enable
 Experimental Platform Features</b>.
 </p>
+</div>
 
 <demo-tile>
 <property name="classname">quetzal-auto-size-text-box</property>

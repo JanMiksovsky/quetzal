@@ -37,21 +37,26 @@ Polymer( "quetzal-month-name", {
 
 });
 
-// Default names, used if Globalize is not avaialble.
-QuetzalMonthName.names =[
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-];
+// TODO: Remove this check once Polymer defines constructor in time.
+if ( typeof QuetzalMonthName !== "undefined" ) {
+
+  // Default names, used if Globalize is not avaialble.
+  QuetzalMonthName.names =[
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+
+}
 
 </script>
 

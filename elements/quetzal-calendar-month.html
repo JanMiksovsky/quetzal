@@ -68,7 +68,7 @@ Polymer( "quetzal-calendar-month", {
 
   ready: function() {
     this.super();
-    if ( !this.date ) {
+    if ( !this.date && typeof QuetzalCalendarDay.today !== "undefined" ) {
       // If no date is supplied, default to the current month.
       this.date = QuetzalCalendarDay.today();
     }

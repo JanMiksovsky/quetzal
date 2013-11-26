@@ -62,45 +62,51 @@ Polymer( "quetzal-calendar-day", {
     this.super();
     if ( !this.date ) {
       // By default, show today.
-      this.date = QuetzalCalendarDay.today();
+      if ( typeof QuetzalCalendarDay.today !== "undefined" ) {
+        this.date = QuetzalCalendarDay.today();
+      }
     }
   }
 
 });
 
-//
-// Static helpers
-//
+// TODO: Remove this check once Polymer defines constructor in time.
+if ( typeof QuetzalCalendarDay !== "undefined" ) {
 
-QuetzalCalendarDay.MILLISECONDS_IN_DAY = 24 * 60 * 60 * 1000;
+  //
+  // Static helpers
+  //
 
-QuetzalCalendarDay.midnightOnDate = function( date ) {
-  var d = new Date( date.getTime() );
-  d.setHours(0);
-  d.setMinutes(0);
-  d.setSeconds(0);
-  d.setMilliseconds(0);
-  return d;
-};
+  QuetzalCalendarDay.MILLISECONDS_IN_DAY = 24 * 60 * 60 * 1000;
 
-// Return the result of adding/subtracting a number of days to a date.
-QuetzalCalendarDay.offsetDateByDays = function( date, days ) {
-  // Use noon hour for date math, since adding/subtracting multiples of 24 hours
-  // starting from noon is guaranteed to end up on the correct date (although
-  // the hours might have changed).
-  var noon = new Date( date.getTime() );
-  noon.setHours( 11 );
-  var result = new Date( noon.getTime() + ( days * this.MILLISECONDS_IN_DAY ));
-  // Restore original hours
-  result.setHours( date.getHours() );
-  return result;
-};
+  QuetzalCalendarDay.midnightOnDate = function( date ) {
+    var d = new Date( date.getTime() );
+    d.setHours(0);
+    d.setMinutes(0);
+    d.setSeconds(0);
+    d.setMilliseconds(0);
+    return d;
+  };
 
-// Returns midnight today.
-QuetzalCalendarDay.today = function() {
-  return QuetzalCalendarDay.midnightOnDate( new Date() );
-};
+  // Return the result of adding/subtracting a number of days to a date.
+  QuetzalCalendarDay.offsetDateByDays = function( date, days ) {
+    // Use noon hour for date math, since adding/subtracting multiples of 24 hours
+    // starting from noon is guaranteed to end up on the correct date (although
+    // the hours might have changed).
+    var noon = new Date( date.getTime() );
+    noon.setHours( 11 );
+    var result = new Date( noon.getTime() + ( days * this.MILLISECONDS_IN_DAY ));
+    // Restore original hours
+    result.setHours( date.getHours() );
+    return result;
+  };
 
+  // Returns midnight today.
+  QuetzalCalendarDay.today = function() {
+    return QuetzalCalendarDay.midnightOnDate( new Date() );
+  };
+
+}
 </script>
 
 </polymer-element>

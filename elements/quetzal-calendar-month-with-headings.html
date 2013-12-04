@@ -3,7 +3,7 @@
 <link rel="import" href="quetzal-days-of-week.html">
 <link rel="import" href="quetzal-calendar-month.html">
 
-<polymer-element name="quetzal-calendar-month-with-headings" extends="quetzal-element" attributes="culture date">
+<polymer-element name="quetzal-calendar-month-with-headings" extends="quetzal-element" attributes="culture date daysOfWeekFormat">
 
 <template>
 
@@ -44,7 +44,7 @@
 
   <quetzal-month-and-year id="monthAndYear"></quetzal-month-and-year>
   <div id="monthTable">
-    <quetzal-days-of-week id="daysOfWeek" format="namesShort"></quetzal-days-of-week>
+    <quetzal-days-of-week id="daysOfWeek" format="{{daysOfWeekFormat}}"></quetzal-days-of-week>
     <quetzal-calendar-month id="calendar"></quetzal-calendar-month>
   </div>
 
@@ -52,6 +52,8 @@
 
 <script>
 Polymer( "quetzal-calendar-month-with-headings", {
+
+  applyAuthorStyles: true,
 
   cultureChanged: function() {
     var culture = this.culture;
@@ -67,6 +69,8 @@ Polymer( "quetzal-calendar-month-with-headings", {
     this.$.monthAndYear.date = date;
     this.$.calendar.date = date;
   },
+
+  daysOfWeekFormat: "namesShort",
 
   ready: function() {
     this.super();

@@ -114,6 +114,10 @@ Polymer( "quetzal-calendar-month", {
     var month = firstDateOfMonth.getMonth();
     this.weeks.forEach( function( week, i ) {
       var date = QuetzalCalendarDay.offsetDateByDays( firstDateOfMonth, 7 * i );
+      if ( i > 0 ) {
+        // Use first day of that week as reference.
+        date = week.firstDateOfWeek( date );
+      }
       week.date = date;
       // Hide weeks completely in another month (i.e., the next month).
       // Apply "hidden" class to preserve week's original "display" property.

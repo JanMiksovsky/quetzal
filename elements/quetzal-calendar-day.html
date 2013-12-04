@@ -45,6 +45,8 @@ Polymer( "quetzal-calendar-day", {
     var dayOfMonth = date.getDate();
     var nextDate = QuetzalCalendarDay.offsetDateByDays( date, 1 );
     var daysFromToday = Math.round( date.getTime() - today.getTime() ) / QuetzalCalendarDay.MILLISECONDS_IN_DAY;
+    // TODO: Is this day of week calculation correct for all cultures?
+    var weekend = ( dayOfWeek === 0 || dayOfWeek === 6 );
     var classList = this.classList;
     classList.toggle( "past", date < today );
     classList.toggle( "today", daysFromToday == 0 );
@@ -54,7 +56,8 @@ Polymer( "quetzal-calendar-day", {
     classList.toggle( "firstWeek", dayOfMonth <= 7 );
     classList.toggle( "sunday", dayOfWeek === 0 );
     classList.toggle( "saturday", dayOfWeek === 6 );
-    classList.toggle( "weekday", dayOfWeek > 0 && dayOfWeek < 6 );
+    classList.toggle( "weekend", weekend );
+    classList.toggle( "weekday", !weekend );
     classList.toggle( "alternateMonth", Math.abs( date.getMonth() - today.getMonth() ) % 2 === 1 );
   },
 

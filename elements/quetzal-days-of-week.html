@@ -19,13 +19,13 @@
   }
   </style>
 
-  <div class="dayOfWeek weekend"></div>
-  <div class="dayOfWeek weekday"></div>
-  <div class="dayOfWeek weekday"></div>
-  <div class="dayOfWeek weekday"></div>
-  <div class="dayOfWeek weekday"></div>
-  <div class="dayOfWeek weekday"></div>
-  <div class="dayOfWeek weekend"></div>
+  <div class="dayOfWeek"></div>
+  <div class="dayOfWeek"></div>
+  <div class="dayOfWeek"></div>
+  <div class="dayOfWeek"></div>
+  <div class="dayOfWeek"></div>
+  <div class="dayOfWeek"></div>
+  <div class="dayOfWeek"></div>
 
 </template>
 
@@ -35,29 +35,34 @@ Polymer( "quetzal-days-of-week", {
   applyAuthorStyles: true,
 
   cultureChanged: function() {
-    // Force format.
-    this.formatChanged();
+    this._refresh();
   },
 
   format: "namesAbbr",
 
   formatChanged: function() {
-    var culture = this.culture;
-    var dayNameEnum = culture ? culture.calendar.days : QuetzalDaysOfWeek.days;
-    var dayNames = dayNameEnum[ this.format ];
-    var firstDayOfWeek = culture ? culture.calendar.firstDay : 0;
-    var daysOfWeek = this.shadowRoot.querySelectorAll( ".dayOfWeek" );
-    daysOfWeek.array().forEach( function( day, i ) {
-      var dayOfWeek = ( firstDayOfWeek + i ) % 7;
-      var dayName = dayNames[ dayOfWeek ];
-      day.textContent = dayName;
-    });
+    this._refresh();
   },
 
   ready: function() {
     this.super();
-    // Force format.
-    this.formatChanged();
+    this._refresh();
+  },
+
+  _refresh: function() {
+    var culture = this.culture;
+    var dayNameEnum = culture ? culture.calendar.days : QuetzalDaysOfWeek.days;
+    var dayNames = dayNameEnum[ this.format ];
+    var firstDayOfWeek = culture ? culture.calendar.firstDay : 0;
+    var daysOfWeek = this.shadowRoot.querySelectorAll( ".dayOfWeek" ).array();
+    daysOfWeek.forEach( function( day, i ) {
+      var dayOfWeek = ( firstDayOfWeek + i ) % 7;
+      var weekend = ( dayOfWeek === 0 || dayOfWeek === 6 );
+      var dayName = dayNames[ dayOfWeek ];
+      day.textContent = dayName;
+      day.classList.toggle( "weekend", weekend );
+      day.classList.toggle( "weekday", !weekend );
+    });
   }
 
 });

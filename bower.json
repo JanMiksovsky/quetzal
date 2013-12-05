@@ -3,13 +3,12 @@
   "version": "0.0.2",
   "dependencies": {
     "globalize": "*",
-    "polymer": "*"
+    "polymer": "Polymer/polymer"
   },
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "components",
+    "test"
   ]
 }

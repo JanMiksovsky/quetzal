@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>globalize-culture</title>
+
+<script src="../bower_components/polymer/polymer.min.js"></script>
+
+<script src="../bower_components/globalize/lib/globalize.js"></script>
+<script src="../bower_components/globalize/lib/cultures/globalize.culture.ar.js"></script>
+<script src="../bower_components/globalize/lib/cultures/globalize.culture.de.js"></script>
+<script src="../bower_components/globalize/lib/cultures/globalize.culture.es.js"></script>
+<script src="../bower_components/globalize/lib/cultures/globalize.culture.fr.js"></script>
+<script src="../bower_components/globalize/lib/cultures/globalize.culture.it.js"></script>
+<script src="../bower_components/globalize/lib/cultures/globalize.culture.ja.js"></script>
+<script src="../bower_components/globalize/lib/cultures/globalize.culture.th.js"></script>
+
+<link rel="import" href="../elements/globalize-culture.html">
+
+<style>
+body,
+button,
+input {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+
+body {
+  margin: 0.5in;
+}
+</style>
+
+<script>
+window.addEventListener( "WebComponentsReady", function() {
+  var culturePicker = document.querySelector( "#culturePicker" );
+  culturePicker.addEventListener( "cultureChanged", function() {
+    var culture = culturePicker.culture;
+    if ( console ) {
+      console.log( culture.englishName );
+    }
+  });
+});
+</script>
+
+</head>
+
+<body>
+  <globalize-culture id="culturePicker" culture="fr">Pick your preferred language/location settings:</globalize-culture>
+</body>
+
+</html>

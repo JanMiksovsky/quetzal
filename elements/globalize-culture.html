@@ -1,4 +1,4 @@
-<link rel="import" href="../components/globalize/globalize.js">
+<link rel="import" href="../bower_components/globalize/lib/globalize.js">
 
 <polymer-element name="globalize-culture" attributes="culture">
 
@@ -8,8 +8,15 @@
     display: inline-block;
   }
   </style>
-  <select id="culturePicker" onchange="culturePickerChanged">
-    <option value=""></option>
+  <content></content>
+  <select id="culturePicker" on-change="{{culturePickerChanged}}">
+    <option value="ar">العربية</option>
+    <option value="en" selected>English</option>
+    <option value="es">español</option>
+    <option value="fr">français</option>
+    <option value="it">italiano</option>
+    <option value="ja">日本語</option>
+    <option value="th">ไทย</option>
   </select>
 </template>
 
@@ -17,7 +24,9 @@
 Polymer( "globalize-culture", {
 
   culturePickerChanged: function() {
-    this.culture // = look up culture...
+    var cultureIdentifier = this.$.culturePicker.value;
+    this.culture = Globalize.cultures[ cultureIdentifier ];
+    this.dispatchEvent( new CustomEvent( "cultureChanged" ) );
   }
 
 });

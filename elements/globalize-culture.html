@@ -1,0 +1,26 @@
+<link rel="import" href="../components/globalize/globalize.js">
+
+<polymer-element name="globalize-culture" attributes="culture">
+
+<template>
+  <style>
+  :host {
+    display: inline-block;
+  }
+  </style>
+  <select id="culturePicker" onchange="culturePickerChanged">
+    <option value=""></option>
+  </select>
+</template>
+
+<script>
+Polymer( "globalize-culture", {
+
+  culturePickerChanged: function() {
+    this.culture // = look up culture...
+  }
+
+});
+</script>
+
+</polymer-element>

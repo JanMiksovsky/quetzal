@@ -3,7 +3,8 @@
   "version": "0.0.2",
   "dependencies": {
     "globalize": "*",
-    "polymer": "Polymer/polymer"
+    "polymer": "Polymer/polymer#master",
+    "polymer-ajax": "Polymer/polymer-ajax#master"
   },
   "ignore": [
     "**/.*",

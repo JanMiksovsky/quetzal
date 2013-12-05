@@ -1,7 +1,10 @@
 <link rel="import" href="../components/polymer/polymer.html">
-<!-- <link rel="import" href="../components/globalize/lib/globalize.js"> -->
-<script src="../components/globalize/lib/globalize.js"></script>
+<!-- <link rel="import" href="../components/polymer-ajax/polymer-ajax.html"> -->
 
+<!-- <link rel="import" href="../components/globalize/lib/globalize.js"> -->
+<!-- <script src="../components/globalize/lib/globalize.js"></script> -->
+
+<!--
 <script src="../components/globalize/lib/cultures/globalize.culture.ar.js"></script>
 <script src="../components/globalize/lib/cultures/globalize.culture.de.js"></script>
 <script src="../components/globalize/lib/cultures/globalize.culture.es.js"></script>
@@ -9,6 +12,7 @@
 <script src="../components/globalize/lib/cultures/globalize.culture.it.js"></script>
 <script src="../components/globalize/lib/cultures/globalize.culture.ja.js"></script>
 <script src="../components/globalize/lib/cultures/globalize.culture.th.js"></script>
+ -->
 
 <polymer-element name="globalize-culture" attributes="culture">
 
@@ -19,6 +23,7 @@
   }
   </style>
   <content></content>
+  <!-- <polymer-ajax id="ajax" auto="true" handleAs="json"></polymer-ajax> -->
   <select id="culturePicker" on-change="{{culturePickerChanged}}">
     <option value="ar">العربية</option>
     <option value="en" selected>English</option>
@@ -35,9 +40,17 @@ Polymer( "globalize-culture", {
 
   culturePickerChanged: function() {
     var cultureIdentifier = this.$.culturePicker.value;
-    this.culture = Globalize.cultures[ cultureIdentifier ];
-    this.dispatchEvent( new CustomEvent( "cultureChanged" ) );
-  }
+    var url = "../components/globalize/lib/cultures/globalize.culture." + cultureIdentifier + ".js";
+    this.$.ajax.url = url;
+  },
+
+  // ready: function() {
+  //   this.$.ajax.addEventListener( "polymer-complete", function() {
+  //     debugger;
+  //     // this.culture = Globalize.cultures[ cultureIdentifier ];
+  //     // this.dispatchEvent( new CustomEvent( "cultureChanged" ) );
+  //   }.bind( this ));
+  // }
 
 });
 </script>

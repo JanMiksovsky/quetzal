@@ -25,7 +25,7 @@ body {
 <script>
 window.addEventListener( "WebComponentsReady", function() {
   var culturePicker = document.querySelector( "#culturePicker" );
-  culturePicker.addEventListener( "cultureChanged", function() {
+  culturePicker.addEventListener( "globalize-culture-changed", function() {
     var culture = culturePicker.culture;
     if ( console ) {
       console.log( culture.englishName );

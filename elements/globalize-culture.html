@@ -1,18 +1,7 @@
 <link rel="import" href="../components/polymer/polymer.html">
-<!-- <link rel="import" href="../components/polymer-ajax/polymer-ajax.html"> -->
 
 <!-- <link rel="import" href="../components/globalize/lib/globalize.js"> -->
-<!-- <script src="../components/globalize/lib/globalize.js"></script> -->
-
-<!--
-<script src="../components/globalize/lib/cultures/globalize.culture.ar.js"></script>
-<script src="../components/globalize/lib/cultures/globalize.culture.de.js"></script>
-<script src="../components/globalize/lib/cultures/globalize.culture.es.js"></script>
-<script src="../components/globalize/lib/cultures/globalize.culture.fr.js"></script>
-<script src="../components/globalize/lib/cultures/globalize.culture.it.js"></script>
-<script src="../components/globalize/lib/cultures/globalize.culture.ja.js"></script>
-<script src="../components/globalize/lib/cultures/globalize.culture.th.js"></script>
- -->
+<script src="../components/globalize/lib/globalize.js"></script>
 
 <polymer-element name="globalize-culture" attributes="culture">
 
@@ -23,8 +12,7 @@
   }
   </style>
   <content></content>
-  <!-- <polymer-ajax id="ajax" auto="true" handleAs="json"></polymer-ajax> -->
-  <select id="culturePicker" on-change="{{culturePickerChanged}}">
+  <select id="culturePicker">
     <option value="ar">العربية</option>
     <option value="en" selected>English</option>
     <option value="es">español</option>
@@ -40,17 +28,38 @@ Polymer( "globalize-culture", {
 
   culturePickerChanged: function() {
     var cultureIdentifier = this.$.culturePicker.value;
-    var url = "../components/globalize/lib/cultures/globalize.culture." + cultureIdentifier + ".js";
-    this.$.ajax.url = url;
+    this._loadCulture( cultureIdentifier, function() {
+      this.culture = Globalize.cultures[ cultureIdentifier ];
+    }.bind( this ));
   },
 
-  // ready: function() {
-  //   this.$.ajax.addEventListener( "polymer-complete", function() {
-  //     debugger;
-  //     // this.culture = Globalize.cultures[ cultureIdentifier ];
-  //     // this.dispatchEvent( new CustomEvent( "cultureChanged" ) );
-  //   }.bind( this ));
-  // }
+  cultureChanged: function() {
+    this.dispatchEvent( new CustomEvent( "globalize-culture-changed" ) );
+  },
+
+  ready: function() {
+    // TODO (12/5/2013): Figure out why Polymer declarative event binding can't wire this up.
+    this.$.culturePicker.addEventListener( "change", function() {
+      this.culturePickerChanged();
+    }.bind( this ));
+  },
+
+  // Ensure the culture info for the given culture is loaded.
+  _loadCulture: function( cultureIdentifier, callback ) {
+    if ( Globalize.cultures[ cultureIdentifier] ) {
+      // Already loaded.
+      callback();
+    } else {    
+      // Dynamically load.
+      var url = "../components/globalize/lib/cultures/globalize.culture." + cultureIdentifier + ".js";
+      var script = document.createElement( "script" );
+      script.addEventListener( "load", function() {
+        callback();
+      }.bind( this ));
+      script.src = url;
+      document.head.appendChild( script );
+    }
+  }
 
 });
 </script>

@@ -3,7 +3,7 @@
 <!-- <link rel="import" href="../components/globalize/lib/globalize.js"> -->
 <script src="../components/globalize/lib/globalize.js"></script>
 
-<polymer-element name="globalize-culture" attributes="culture">
+<polymer-element name="globalize-culture" attributes="culture name">
 
 <template>
   <style>
@@ -12,9 +12,9 @@
   }
   </style>
   <content></content>
-  <select id="culturePicker">
+  <select id="culturePicker" value="{{name}}">
     <option value="ar">العربية</option>
-    <option value="en" selected>English</option>
+    <option value="en">English</option>
     <option value="es">español</option>
     <option value="fr">français</option>
     <option value="it">italiano</option>
@@ -26,21 +26,16 @@
 <script>
 Polymer( "globalize-culture", {
 
-  culturePickerChanged: function() {
-    var cultureIdentifier = this.$.culturePicker.value;
-    this._loadCulture( cultureIdentifier, function() {
-      this.culture = Globalize.cultures[ cultureIdentifier ];
-    }.bind( this ));
-  },
-
   cultureChanged: function() {
     this.dispatchEvent( new CustomEvent( "globalize-culture-changed" ) );
   },
 
-  ready: function() {
-    // TODO (12/5/2013): Figure out why Polymer declarative event binding can't wire this up.
-    this.$.culturePicker.addEventListener( "change", function() {
-      this.culturePickerChanged();
+  name: Globalize.cultures.default.name,
+
+  nameChanged: function() {
+    var cultureIdentifier = this.name;
+    this._loadCulture( cultureIdentifier, function() {
+      this.culture = Globalize.cultures[ cultureIdentifier ];
     }.bind( this ));
   },
 

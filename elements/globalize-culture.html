@@ -1,4 +1,4 @@
-<link rel="import" href="../components/polymer/polymer.html">
+<!-- <link rel="import" href="../components/polymer/polymer.html"> -->
 
 <!-- <link rel="import" href="../components/globalize/lib/globalize.js"> -->
 <script src="../components/globalize/lib/globalize.js"></script>
@@ -46,7 +46,9 @@ Polymer( "globalize-culture", {
       callback();
     } else {    
       // Dynamically load.
-      var url = "../components/globalize/lib/cultures/globalize.culture." + cultureIdentifier + ".js";
+      // TODO: How to get this URL relative correctly?
+      // var url = "../components/globalize/lib/cultures/globalize.culture." + cultureIdentifier + ".js";
+      var url = "components/globalize/lib/cultures/globalize.culture." + cultureIdentifier + ".js";
       var script = document.createElement( "script" );
       script.addEventListener( "load", function() {
         callback();

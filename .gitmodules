@@ -1,6 +1,3 @@
 [submodule "polymer-elements"]
 	path = polymer-elements
 	url = https://github.com/Polymer/polymer-elements.git
-[submodule "globalize-culture"]
-	path = globalize-culture
-	url = git@github.com:JanMiksovsky/globalize-culture.git

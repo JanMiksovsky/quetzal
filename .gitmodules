@@ -10,3 +10,15 @@
 [submodule "components/quetzal-days-of-week"]
 	path = components/quetzal-days-of-week
 	url = git@github.com:JanMiksovsky/quetzal-days-of-week.git
+[submodule "components/quetzal-calendar-day"]
+	path = components/quetzal-calendar-day
+	url = git@github.com:JanMiksovsky/quetzal-calendar-day.git
+[submodule "components/quetzal-calendar-month-with-headings"]
+	path = components/quetzal-calendar-month-with-headings
+	url = git@github.com:JanMiksovsky/quetzal-calendar-month-with-headings.git
+[submodule "components/quetzal-calendar-month"]
+	path = components/quetzal-calendar-month
+	url = git@github.com:JanMiksovsky/quetzal-calendar-month.git
+[submodule "components/quetzal-calendar-week"]
+	path = components/quetzal-calendar-week
+	url = git@github.com:JanMiksovsky/quetzal-calendar-week.git

@@ -1,6 +1,6 @@
 <link rel="import" href="quetzal-element.html">
 
-<polymer-element name="quetzal-days-of-week" extends="quetzal-element" attributes="culture format" constructor="QuetzalDaysOfWeek">
+<polymer-element name="quetzal-days-of-week" extends="quetzal-element" attributes="culture format">
 
 <template>
 
@@ -67,12 +67,12 @@ Polymer( "quetzal-days-of-week", {
 
 });
 
-
-// TODO: Remove this check once Polymer defines constructor in time.
-if ( typeof QuetzalDaysOfWeek !== "undefined" ) {
+// Static members
+// TODO: Once Polymer supports constructor access here, use that instead.
+QuetzalDaysOfWeek = {
 
   // Defaults used if Globalize is not loaded.
-  QuetzalDaysOfWeek.days = {
+  days: {
     names: [
       "Sunday",
       "Monday",
@@ -100,9 +100,9 @@ if ( typeof QuetzalDaysOfWeek !== "undefined" ) {
       "Fr",
       "Sa"
     ]
-  };
-}
+  }
 
+};
 </script>
 
 </polymer-element>

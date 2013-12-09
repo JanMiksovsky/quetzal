@@ -1,6 +1,6 @@
 <link rel="import" href="quetzal-element.html">
 
-<polymer-element name="quetzal-month-name" extends="quetzal-element" attributes="culture month" constructor="QuetzalMonthName">
+<polymer-element name="quetzal-month-name" extends="quetzal-element" attributes="culture month">
 
 <template>
   <style>
@@ -39,11 +39,12 @@ Polymer( "quetzal-month-name", {
 
 });
 
-// TODO: Remove this check once Polymer defines constructor in time.
-if ( typeof QuetzalMonthName !== "undefined" ) {
+// Static members
+// TODO: Once Polymer supports constructor access here, use that instead.
+QuetzalMonthName = {
 
   // Default names, used if Globalize is not avaialble.
-  QuetzalMonthName.names =[
+  names: [
     "January",
     "February",
     "March",
@@ -56,10 +57,9 @@ if ( typeof QuetzalMonthName !== "undefined" ) {
     "October",
     "November",
     "December"
-  ];
+  ]
 
-}
-
+};
 </script>
 
 </polymer-element>

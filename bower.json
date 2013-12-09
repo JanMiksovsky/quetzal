@@ -2,7 +2,6 @@
   "name": "quetzal",
   "version": "0.0.2",
   "dependencies": {
-    "globalize-culture": "JanMiksovsky/globalize-culture#master",
     "polymer": "Polymer/polymer#master"
   },
   "ignore": [

@@ -22,3 +22,9 @@
 [submodule "components/quetzal-calendar-week"]
 	path = components/quetzal-calendar-week
 	url = git@github.com:JanMiksovsky/quetzal-calendar-week.git
+[submodule "components/quetzal-month-and-year"]
+	path = components/quetzal-month-and-year
+	url = git@github.com:JanMiksovsky/quetzal-month-and-year.git
+[submodule "components/quetzal-month-name"]
+	path = components/quetzal-month-name
+	url = git@github.com:JanMiksovsky/quetzal-month-name.git

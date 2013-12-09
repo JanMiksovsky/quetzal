@@ -4,3 +4,6 @@
 [submodule "components/globalize-culture"]
 	path = components/globalize-culture
 	url = git@github.com:JanMiksovsky/globalize-culture.git
+[submodule "components/quetzal-element"]
+	path = components/quetzal-element
+	url = git@github.com:JanMiksovsky/quetzal-element.git

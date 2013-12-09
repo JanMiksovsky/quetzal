@@ -7,3 +7,6 @@
 [submodule "components/quetzal-element"]
 	path = components/quetzal-element
 	url = git@github.com:JanMiksovsky/quetzal-element.git
+[submodule "components/quetzal-days-of-week"]
+	path = components/quetzal-days-of-week
+	url = git@github.com:JanMiksovsky/quetzal-days-of-week.git

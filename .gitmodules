@@ -28,3 +28,6 @@
 [submodule "components/quetzal-month-name"]
 	path = components/quetzal-month-name
 	url = git@github.com:JanMiksovsky/quetzal-month-name.git
+[submodule "components/quetzal-button"]
+	path = components/quetzal-button
+	url = git@github.com:JanMiksovsky/quetzal-button.git

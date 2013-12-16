@@ -16,11 +16,11 @@
   "dependencies": {
     "platform": "Polymer/platform#master"
   },
-  "_release": "0dfada5fce",
+  "_release": "540ec33e9a",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "0dfada5fce6e245b11559e0dea94e058f2a8c693"
+    "commit": "540ec33e9ac15baf5df0a3e783a8a886a02b5cc0"
   },
   "_source": "git://github.com/Polymer/polymer.git",
   "_target": "master",

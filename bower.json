@@ -2,7 +2,9 @@
   "name": "quetzal",
   "version": "0.0.2",
   "dependencies": {
-    "polymer": "Polymer/polymer#master"
+    "polymer": "Polymer/polymer#master",
+    "polymer-overlay": "Polymer/polymer-overlay#master",
+    "polymer-selector": "Polymer/polymer-selector#master"
   },
   "ignore": [
     "**/.*",

@@ -31,3 +31,21 @@
 [submodule "components/quetzal-button"]
 	path = components/quetzal-button
 	url = git@github.com:JanMiksovsky/quetzal-button.git
+[submodule "quetzal-list-box"]
+	path = quetzal-list-box
+	url = git@github.com:JanMiksovsky/quetzal-list-box.git
+[submodule "components/quetzal-list-combo-box"]
+	path = components/quetzal-list-combo-box
+	url = git@github.com:JanMiksovsky/quetzal-list-combo-box.git
+[submodule "components/quetzal-list-box"]
+	path = components/quetzal-list-box
+	url = git@github.com:JanMiksovsky/quetzal-list-box.git
+[submodule "components/quetzal-popup-source"]
+	path = components/quetzal-popup-source
+	url = git@github.com:JanMiksovsky/quetzal-popup-source.git
+[submodule "components/quetzal-popup"]
+	path = components/quetzal-popup
+	url = git@github.com:JanMiksovsky/quetzal-popup.git
+[submodule "components/quetzal-combo-box"]
+	path = components/quetzal-combo-box
+	url = git@github.com:JanMiksovsky/quetzal-combo-box.git

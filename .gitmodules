@@ -49,3 +49,6 @@
 [submodule "components/quetzal-combo-box"]
 	path = components/quetzal-combo-box
 	url = git@github.com:JanMiksovsky/quetzal-combo-box.git
+[submodule "components/quetzal-toggle-button"]
+	path = components/quetzal-toggle-button
+	url = git@github.com:JanMiksovsky/quetzal-toggle-button.git

@@ -55,3 +55,15 @@
 [submodule "components/quetzal-auto-size-text-box"]
 	path = components/quetzal-auto-size-text-box
 	url = git@github.com:JanMiksovsky/quetzal-auto-size-text-box.git
+[submodule "components/quetzal-popup-button"]
+	path = components/quetzal-popup-button
+	url = git@github.com:JanMiksovsky/quetzal-popup-button.git
+[submodule "components/quetzal-fixed-aspect"]
+	path = components/quetzal-fixed-aspect
+	url = git@github.com:JanMiksovsky/quetzal-fixed-aspect.git
+[submodule "components/quetzal-infinite-scroll"]
+	path = components/quetzal-infinite-scroll
+	url = git@github.com:JanMiksovsky/quetzal-infinite-scroll.git
+[submodule "components/lorem-pixel"]
+	path = components/lorem-pixel
+	url = git@github.com:JanMiksovsky/lorem-pixel.git

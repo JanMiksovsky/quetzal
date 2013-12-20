@@ -9,10 +9,6 @@
 <script src="components/platform/platform.js"></script>
 
 <link rel="import" href="demos/demo-tile.html">
-<!--
-<link rel="import" href="demos/color-swatch.html">
-<link rel="import" href="demos/labeled-color-swatch.html">
--->
 <link rel="import" href="quetzal.html">
 
 <style>
@@ -79,7 +75,14 @@ Experimental Platform Features</b>.
 </p>
 </div>
 
-<!-- 
+<demo-tile>
+<property name="classname">lorem-pixel</property>
+<property name="description">Selects a random photo from lorempixel.com.</property>
+<property name="demo">
+<lorem-pixel height="225" width="300"></lorem-pixel>
+</property>
+</demo-tile>
+
 <demo-tile>
 <property name="classname">quetzal-auto-size-text-box</property>
 <property name="description">A text area that expands to contain its text.</property>
@@ -129,14 +132,6 @@ use as base class for custom combo boxes.
 <quetzal-combo-box value="Hello">
   <property name="popup">You can populate a popup like this with choices for the user to pick.</property>
 </quetzal-combo-box>
-</demo-tile>
-
-<demo-tile>
-<property name="classname">quetzal-icon-button</property>
-<property name="description">A button with an optional icon.</property>
-<property name="demo">
-<quetzal-icon-button icon="resources/reload_12x14.png">Reload</quetzal-icon-button>
-</property>
 </demo-tile>
 
 <demo-tile>
@@ -217,14 +212,6 @@ A combo box in which choices are rendered in a dropdown list box.
 </demo-tile>
 
 <demo-tile>
-<property name="classname">quetzal-lorem-pixel</property>
-<property name="description">Selects a random photo from lorempixel.com.</property>
-<property name="demo">
-<quetzal-lorem-pixel height="225" width="300"></quetzal-lorem-pixel>
-</property>
-</demo-tile>
-
-<demo-tile>
 <property name="classname">quetzal-popup-button</property>
 <property name="description">A button which, when clicked, shows a popup which
 is positioned above or below the button.</property>
@@ -257,7 +244,7 @@ A highly-customizable week calendar. See also quetzal-calendar-month.
 <quetzal-calendar-week></quetzal-calendar-week>
 </property>
 </demo-tile>
- -->
+
 </body>
 
 </html>

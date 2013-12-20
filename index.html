@@ -76,6 +76,14 @@ Experimental Platform Features</b>.
 </div>
 
 <demo-tile>
+<property name="classname">globalize-culture</property>
+<property name="description">Programmatic or user selection of a culture.</property>
+<property name="demo">
+<globalize-culture></globalize-culture>
+</property>
+</demo-tile>
+
+<demo-tile>
 <property name="classname">lorem-pixel</property>
 <property name="description">Selects a random photo from lorempixel.com.</property>
 <property name="demo">
@@ -132,6 +140,21 @@ use as base class for custom combo boxes.
 <quetzal-combo-box value="Hello">
   <property name="popup">You can populate a popup like this with choices for the user to pick.</property>
 </quetzal-combo-box>
+</demo-tile>
+
+<demo-tile>
+<property name="classname">quetzal-fixed-aspect</property>
+<property name="description">
+Shows its content at the largest size that maintains the aspect ratio
+specified by its aspect attribute.
+</property>
+<property name="demo">
+  <quetzal-fixed-aspect aspect="0.5" style="height: 100px; width: 100%;">
+    <div style="background: #eee; height: 100%; position: absolute; width: 100%;">
+      This box has a 1:2 aspect ratio.
+    </div>
+  </quetzal-fixed-aspect>
+</property>
 </demo-tile>
 
 <demo-tile>

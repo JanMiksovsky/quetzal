@@ -7,13 +7,13 @@
 <title>Quetzal</title>
 
 <script src="components/platform/platform.js"></script>
-<!-- TODO: Move Polymer reference to individual elements. -->
-<link rel="import" href="components/polymer/polymer.html">
 
 <link rel="import" href="demos/demo-tile.html">
+<!--
 <link rel="import" href="demos/color-swatch.html">
 <link rel="import" href="demos/labeled-color-swatch.html">
-<link rel="import" href="elements/quetzal.collection.html">
+-->
+<link rel="import" href="quetzal.html">
 
 <style>
 body,
@@ -79,6 +79,7 @@ Experimental Platform Features</b>.
 </p>
 </div>
 
+<!-- 
 <demo-tile>
 <property name="classname">quetzal-auto-size-text-box</property>
 <property name="description">A text area that expands to contain its text.</property>
@@ -129,14 +130,6 @@ use as base class for custom combo boxes.
   <property name="popup">You can populate a popup like this with choices for the user to pick.</property>
 </quetzal-combo-box>
 </demo-tile>
-
-<!--
-<demo-tile>
-<property name="classname">quetzal-element</property>
-<property name="description">A plain Quetzal element. This currently behaves like a
-<markup-tag>div</markup-tag>.</property>
-</demo-tile>
--->
 
 <demo-tile>
 <property name="classname">quetzal-icon-button</property>
@@ -264,7 +257,7 @@ A highly-customizable week calendar. See also quetzal-calendar-month.
 <quetzal-calendar-week></quetzal-calendar-week>
 </property>
 </demo-tile>
-
+ -->
 </body>
 
 </html>

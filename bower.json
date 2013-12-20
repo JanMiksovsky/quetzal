@@ -3,6 +3,7 @@
   "version": "0.0.2",
   "dependencies": {
     "polymer": "Polymer/polymer#master",
+    "polymer-collapse": "Polymer/polymer-collapse#master",
     "polymer-overlay": "Polymer/polymer-overlay#master",
     "polymer-selector": "Polymer/polymer-selector#master"
   },

@@ -52,3 +52,6 @@
 [submodule "components/quetzal-toggle-button"]
 	path = components/quetzal-toggle-button
 	url = git@github.com:JanMiksovsky/quetzal-toggle-button.git
+[submodule "components/quetzal-auto-size-text-box"]
+	path = components/quetzal-auto-size-text-box
+	url = git@github.com:JanMiksovsky/quetzal-auto-size-text-box.git

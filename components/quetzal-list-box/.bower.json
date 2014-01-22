@@ -10,11 +10,11 @@
     "**/.*"
   ],
   "homepage": "https://github.com/JanMiksovsky/quetzal-list-box",
-  "_release": "079ce6c1e4",
+  "_release": "a7a48baedc",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "079ce6c1e46b123d1c25f721135749aa435c3199"
+    "commit": "a7a48baedc17b97cc76df4c4943114f7d0e6c6e6"
   },
   "_source": "git://github.com/JanMiksovsky/quetzal-list-box.git",
   "_target": "master",

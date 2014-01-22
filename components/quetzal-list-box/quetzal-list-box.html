@@ -33,6 +33,7 @@ The selection behavior generally follows that of Microsoft Windows:
   cursor: default;
 }
 
+/* @polyfill quetzal-list-box > * */
 ::content > * {
   /* HACK: explicit background works around shadow reprojection rendering bug. */
   background: white;
@@ -43,15 +44,14 @@ The selection behavior generally follows that of Microsoft Windows:
   user-select: none;
 }
 
+/* @polyfill quetzal-list-box > .polymer-selected */
 ::content > .polymer-selected {
   background: highlight;
   color: highlighttext;
 }
 </style>
 
-<shadow>
-  <content></content>
-</shadow>
+<shadow></shadow>
 
 </template>
 

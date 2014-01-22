@@ -94,11 +94,11 @@ var TimingDict = function(timingInput) {
 
 TimingDict.prototype = {
   delay: 0,
+  endDelay: 0,
   fill: 'forwards',
   iterationStart: 0,
   iterations: 1,
   duration: 'auto',
-  activeDuration: 'auto',
   playbackRate: 1,
   direction: 'normal',
   easing: 'linear',
@@ -136,10 +136,6 @@ Timing.prototype = {
     var value = this._dict.duration;
     return typeof value === 'number' ? value : 'auto';
   },
-  _activeDuration: function() {
-    var value = this._dict.activeDuration;
-    return typeof value === 'number' ? value : 'auto';
-  },
   getEasingTimes: function() {
     return this._easingTimes;
   },
@@ -169,6 +165,12 @@ Timing._defineProperty = function(prop) {
     },
     set: function(value) {
       if (isDefinedAndNotNull(value)) {
+        if (prop == 'duration' && value == 'auto') {
+          // duration is not always a number
+        } else if (['delay', 'endDelay', 'iterationStart', 'iterations',
+                    'duration', 'playbackRate'].indexOf(prop) >= 0) {
+          value = Number(value);
+        }
         this._dict[prop] = value;
       } else {
         delete this._dict[prop];
@@ -486,18 +488,35 @@ TimedItem.prototype = {
     return result;
   },
   get activeDuration() {
-    var result = this.specified._activeDuration();
-    if (result === 'auto') {
-      var repeatedDuration = this.duration * this.specified._iterations();
-      result = repeatedDuration / Math.abs(this.specified.playbackRate);
-    }
-    return result;
+    var repeatedDuration = this.duration * this.specified._iterations();
+    return repeatedDuration / Math.abs(this.specified.playbackRate);
   },
   get endTime() {
-    return this._startTime + this.activeDuration + this.specified.delay;
+    return this._startTime + this.activeDuration + this.specified.delay +
+        this.specified.endDelay;
   },
   get parent() {
     return this._parent;
+  },
+  get previousSibling() {
+    if (!this.parent) {
+      return null;
+    }
+    var siblingIndex = this.parent.indexOf(this) - 1;
+    if (siblingIndex < 0) {
+      return null;
+    }
+    return this.parent.children[siblingIndex];
+  },
+  get nextSibling() {
+    if (!this.parent) {
+      return null;
+    }
+    var siblingIndex = this.parent.indexOf(this) + 1;
+    if (siblingIndex >= this.parent.children.length) {
+      return null;
+    }
+    return this.parent.children[siblingIndex];
   },
   _attach: function(player) {
     // Remove ourselves from our parent, if we have one. This also removes any
@@ -1066,7 +1085,7 @@ var interpretAnimationEffect = function(animationEffect) {
     // The spec requires animationEffect to be an instance of
     // OneOrMoreKeyframes, but this type is just a dictionary or a list of
     // dictionaries, so the best we can do is test for an object.
-    return new KeyframeAnimationEffect(animationEffect);
+    return new KeyframeEffect(animationEffect);
   }
   return null;
 };
@@ -1273,7 +1292,7 @@ TimingGroup.prototype = createObject(TimedItem.prototype, {
           child._updateInheritedTime(this._iterationTime);
         }
         cumulativeStartTime += Math.max(0, child.specified.delay +
-            child.activeDuration);
+            child.activeDuration + child.specified.endDelay);
       }
     }
   },
@@ -1300,7 +1319,7 @@ TimingGroup.prototype = createObject(TimedItem.prototype, {
       } else if (this.type === 'seq') {
         var result = 0;
         this._children.forEach(function(a) {
-          result += a.activeDuration + a.specified.delay;
+          result += a.activeDuration + a.specified.delay + a.specified.endDelay;
         });
         this._cachedIntrinsicDuration = result;
       } else {
@@ -1656,7 +1675,7 @@ var clamp = function(x, min, max) {
 
 
 /** @constructor */
-var PathAnimationEffect = function(path, autoRotate, angle, composite,
+var MotionPathEffect = function(path, autoRotate, angle, composite,
     accumulate) {
   enterModifyCurrentAnimationState();
   try {
@@ -1681,7 +1700,7 @@ var PathAnimationEffect = function(path, autoRotate, angle, composite,
   }
 };
 
-PathAnimationEffect.prototype = createObject(AnimationEffect.prototype, {
+MotionPathEffect.prototype = createObject(AnimationEffect.prototype, {
   get composite() {
     return this._composite;
   },
@@ -1726,16 +1745,16 @@ PathAnimationEffect.prototype = createObject(AnimationEffect.prototype, {
         this._cumulativeLengths[index + 1] - this._cumulativeLengths[index]));
   },
   clone: function() {
-    return new PathAnimationEffect(this._path.getAttribute('d'));
+    return new MotionPathEffect(this._path.getAttribute('d'));
   },
   _positionListForTiming: function() {
-    // TODO: Handle aligning chained function segments with PathAnimationEffect.
+    // TODO: Handle aligning chained function segments with MotionPathEffect.
     console.warn('Alignment of chained timing functions with path animation ' +
         'effects is not yet implemented');
     return [0, 1];
   },
   toString: function() {
-    return '<PathAnimationEffect>';
+    return '<MotionPathEffect>';
   },
   set autoRotate(autoRotate) {
     enterModifyCurrentAnimationState();
@@ -1934,7 +1953,7 @@ var normalizeKeyframeDictionary = function(properties) {
 
 
 /** @constructor */
-var KeyframeAnimationEffect = function(oneOrMoreKeyframeDictionaries,
+var KeyframeEffect = function(oneOrMoreKeyframeDictionaries,
     composite, accumulate) {
   enterModifyCurrentAnimationState();
   try {
@@ -1948,7 +1967,7 @@ var KeyframeAnimationEffect = function(oneOrMoreKeyframeDictionaries,
   }
 };
 
-KeyframeAnimationEffect.prototype = createObject(AnimationEffect.prototype, {
+KeyframeEffect.prototype = createObject(AnimationEffect.prototype, {
   get composite() {
     return this._composite;
   },
@@ -2125,13 +2144,13 @@ KeyframeAnimationEffect.prototype = createObject(AnimationEffect.prototype, {
     return this._cachedPropertySpecificKeyframes;
   },
   clone: function() {
-    var result = new KeyframeAnimationEffect([], this.composite,
+    var result = new KeyframeEffect([], this.composite,
         this.accumulate);
     result._keyframeDictionaries = this._keyframeDictionaries.slice(0);
     return result;
   },
   toString: function() {
-    return '<KeyframeAnimationEffect>';
+    return '<KeyframeEffect>';
   },
   _compositeForKeyframe: function(keyframe) {
     return isDefinedAndNotNull(keyframe.composite) ?
@@ -2412,8 +2431,8 @@ TimingFunction.createNormalizedPositionList = function(easingPoints,
     if (timedItem instanceof Animation &&
         // We have to test for keyframe or path effects because custom effects
         // may inherit from AnimationEffect.
-        (timedItem.effect instanceof KeyframeAnimationEffect ||
-         timedItem.effect instanceof PathAnimationEffect)) {
+        (timedItem.effect instanceof KeyframeEffect ||
+         timedItem.effect instanceof MotionPathEffect)) {
       return timedItem.effect._positionListForTiming();
     }
     return TimingFunction.generateDistributedPositionList(numTimingFunctions);
@@ -2459,7 +2478,7 @@ TimingFunction.createComponentFromString = function(spec, timedItem) {
   if (spec.indexOf('paced') === 0) {
     var remainingString = spec.substring(5);
     if (timedItem instanceof Animation &&
-        timedItem.effect instanceof PathAnimationEffect) {
+        timedItem.effect instanceof MotionPathEffect) {
       return {
         component: new PacedTimingFunction(timedItem.effect),
         remainingString: remainingString
@@ -2611,7 +2630,7 @@ var presetTimingFunctions = {
 
 /** @constructor */
 var PacedTimingFunction = function(pathEffect) {
-  ASSERT_ENABLED && assert(pathEffect instanceof PathAnimationEffect);
+  ASSERT_ENABLED && assert(pathEffect instanceof MotionPathEffect);
   this._pathEffect = pathEffect;
   // Range is the portion of the effect over which we pace, normalized to
   // [0, 1].
@@ -5349,10 +5368,10 @@ window.Element.prototype.getCurrentAnimations = function() {
 
 window.Animation = Animation;
 window.AnimationEffect = AnimationEffect;
-window.KeyframeAnimationEffect = KeyframeAnimationEffect;
+window.KeyframeEffect = KeyframeEffect;
 window.MediaReference = MediaReference;
 window.ParGroup = ParGroup;
-window.PathAnimationEffect = PathAnimationEffect;
+window.MotionPathEffect = MotionPathEffect;
 window.Player = Player;
 window.PseudoElementReference = PseudoElementReference;
 window.SeqGroup = SeqGroup;

@@ -95,15 +95,17 @@ license that can be found in the LICENSE file.
        */
       fixedSize: false,
       size: null,
-      enteredView: function() {
+      attached: function() {
         this.installControllerStyles();
         this.inDocument = true;
         this.async(function() {
           this.afterInitialUpdate = true;
         });
       },
-      leftView: function() {
-        this.removeListeners(this.target);
+      detached: function() {
+        if (this.target) {
+          this.removeListeners(this.target);
+        }
       },
       targetIdChanged: function() {
         var p = this.parentNode;

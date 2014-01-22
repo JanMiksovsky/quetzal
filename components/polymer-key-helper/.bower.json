@@ -5,11 +5,11 @@
     "polymer": "Polymer/polymer#master"
   },
   "homepage": "https://github.com/Polymer/polymer-key-helper",
-  "_release": "27bf4e12eb",
+  "_release": "7a6b0c52b9",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "27bf4e12eb44f103e70d6ddf3bcf762416f78332"
+    "commit": "7a6b0c52b93fe9342794ef2ed2a6066a1adb98b6"
   },
   "_source": "git://github.com/Polymer/polymer-key-helper.git",
   "_target": "master",

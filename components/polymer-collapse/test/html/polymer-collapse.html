@@ -17,7 +17,7 @@
   <script>
     var assert = chai.assert;
     var delay = 200;
-    document.addEventListener('WebComponentsReady', function() {
+    document.addEventListener('polymer-ready', function() {
       var c = document.querySelector('#collapse');
       assert.equal(c.closed, false);
       Platform.flush();

@@ -10,11 +10,11 @@
     "**/.*"
   ],
   "homepage": "https://github.com/JanMiksovsky/lorem-pixel",
-  "_release": "61bef8b2b5",
+  "_release": "1fef272053",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "61bef8b2b59e398a8a00324e7fb18efa98931294"
+    "commit": "1fef272053c1afa74888af24ccb9755347b1f061"
   },
   "_source": "git://github.com/JanMiksovsky/lorem-pixel.git",
   "_target": "master",

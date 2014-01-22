@@ -1,0 +1,14 @@
+{
+  "name": "quetzal-popup-button",
+  "description": "A button that can be clicked to open a popup",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "quetzal-button": "JanMiksovsky/quetzal-button#master",
+    "quetzal-popup-source": "JanMiksovsky/quetzal-popup-source#master"
+  },
+  "ignore": [
+    "**/.*"
+  ]
+}

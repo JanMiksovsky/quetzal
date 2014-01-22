@@ -1,0 +1,22 @@
+{
+  "name": "quetzal-element",
+  "description": "Base class for some elements in the Quetzal collection",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#master"
+  },
+  "ignore": [
+    "**/.*"
+  ],
+  "homepage": "https://github.com/JanMiksovsky/quetzal-element",
+  "_release": "ddc584d2d5",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "ddc584d2d501e22a234b045ae3f5b866f984bd0f"
+  },
+  "_source": "git://github.com/JanMiksovsky/quetzal-element.git",
+  "_target": "master",
+  "_originalSource": "JanMiksovsky/quetzal-element"
+}

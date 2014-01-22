@@ -1,0 +1,23 @@
+{
+  "name": "quetzal-popup-button",
+  "description": "A button that can be clicked to open a popup",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "quetzal-button": "JanMiksovsky/quetzal-button#master",
+    "quetzal-popup-source": "JanMiksovsky/quetzal-popup-source#master"
+  },
+  "ignore": [
+    "**/.*"
+  ],
+  "homepage": "https://github.com/JanMiksovsky/quetzal-popup-button",
+  "_release": "930d480426",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "930d48042625a688cb0bbbae262a9baffe9b95a3"
+  },
+  "_source": "git://github.com/JanMiksovsky/quetzal-popup-button.git",
+  "_target": "master",
+  "_originalSource": "JanMiksovsky/quetzal-popup-button"
+}

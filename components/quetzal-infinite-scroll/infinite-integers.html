@@ -1,0 +1,14 @@
+<link rel="import" href="quetzal-infinite-scroll.html">
+
+<polymer-element name="infinite-integers" extends="quetzal-infinite-scroll">
+
+<script>
+Polymer( "infinite-integers", {
+  addedElements: function( elements ) {
+    elements[0].textContent = ++this.counter;
+  },
+  counter: 0
+});
+</script>
+
+</polymer-element>

@@ -1,0 +1,142 @@
+<!--
+Shows a single calendar week.
+-->
+
+<link rel="import" href="../quetzal-element/quetzal-element.html">
+<link rel="import" href="../quetzal-calendar-day/quetzal-calendar-day.html">
+
+<polymer-element name="quetzal-calendar-week" extends="quetzal-element" attributes="culture date dayElementTag">
+
+<template>
+
+  <style>
+  :host {
+    display: table-row;
+  }
+
+  :host > :not(style) {
+    display: table-cell;
+    width: 14.285%; /* One seventh */
+  }
+  </style>
+
+  <quetzal-calendar-day class="firstDayOfWeek"></quetzal-calendar-day>
+  <quetzal-calendar-day></quetzal-calendar-day>
+  <quetzal-calendar-day></quetzal-calendar-day>
+  <quetzal-calendar-day></quetzal-calendar-day>
+  <quetzal-calendar-day></quetzal-calendar-day>
+  <quetzal-calendar-day></quetzal-calendar-day>
+  <quetzal-calendar-day class="lastDayOfWeek"></quetzal-calendar-day>
+
+</template>
+
+<script>
+// Static members
+// TODO: Once Polymer supports constructor access here, use that instead.
+QuetzalCalendarWeek = {
+
+  daysSinceFirstDayOfWeek: function( date, culture ) {
+    var firstDayOfWeek = QuetzalCalendarWeek.firstDayOfWeek( culture );
+    return ( date.getDay() - firstDayOfWeek + 7 ) % 7;
+  },
+
+  // Return the index of the "first" day of the week in the indicated culture.
+  // In the U.S., this is 0 ( Sunday ), but in many places it's 1 (Monday).
+  // If no culture is supplied, the default culture is used.
+  firstDayOfWeek: function( culture ) {
+    return culture ? culture.calendar.firstDay : 0;
+  },
+
+  // Return the date of the first day of the week that contains the given date.
+  firstDateOfWeek: function( date, culture ) {
+    var daysSinceFirstDayOfWeek = this.daysSinceFirstDayOfWeek( date, culture );
+    var d = QuetzalCalendarDay.offsetDateByDays( date, -daysSinceFirstDayOfWeek );
+    return QuetzalCalendarDay.midnightOnDate( d );
+  }
+
+};
+
+
+Polymer( "quetzal-calendar-week", {
+
+  applyAuthorStyles: true,
+
+  cultureChanged: function() {
+    this._refresh();
+  },
+
+  dateChanged: function() {
+    this._refresh();
+  },
+
+  // Return the element showing the given date.
+  dayElementForDate: function( date ) {
+    var midnightOnDate = QuetzalCalendarDay.midnightOnDate( date );
+    if ( midnightOnDate >= this.firstDate && midnightOnDate <= this.lastDate ) {
+      var dayIndex = QuetzalCalendarWeek.daysSinceFirstDayOfWeek( date, this.culture );
+      return this.days[ dayIndex ];
+    } else {
+      // Date falls outside week.
+      return null;
+    }
+  },
+
+  // The elements for the days in the week, returned as an array.
+  get days() {
+    // Return all children but the style node.
+    return this.shadowRoot.querySelectorAll( ":not(style)" ).array();
+  },
+
+  dayElementTag: "quetzal-calendar-day",
+
+  dayElementTagChanged: function() {
+    var dayTemplate = document.createElement( this.dayElementTag );
+    var shadowRoot = this.shadowRoot;
+    this.days.forEach( function( day, i ) {
+      var newDay = dayTemplate.cloneNode();
+      newDay.classList.toggle( "firstDayOfWeek", i === 0 );
+      newDay.classList.toggle( "lastDayOfWeek", i === 6 );
+      shadowRoot.replaceChild( newDay, day );
+    }.bind( this ));
+    this._refresh();
+  },
+
+  get firstDate() {
+    return QuetzalCalendarDay.midnightOnDate( this.days[0].date );
+  },
+
+  get lastDate() {
+    return QuetzalCalendarDay.midnightOnDate( this.days[6].date );
+  },
+
+  ready: function() {
+    this.super();
+    if ( !this.date && typeof QuetzalCalendarDay.today !== "undefined" ) {
+      // If no date is supplied, default to the current week.
+      // REVIEW: This default behavior can cause unnecessary recalcs if a week
+      // is created and then shortly thereafter a different date is set.
+      this.date = QuetzalCalendarDay.today();
+    }
+  },
+
+  // Set the dates on all controls in the week.
+  _refresh: function() {
+    var referenceDate = this.date;
+    var referenceYear = referenceDate.getFullYear();
+    var referenceMonth = referenceDate.getMonth();
+    var dateStart = QuetzalCalendarWeek.firstDateOfWeek( referenceDate, this.culture );
+    this.days.forEach( function( day, i ) {
+      var date = QuetzalCalendarDay.offsetDateByDays( dateStart, i );
+      day.date = date;
+      // Apply inside/outside month styles to days that fall outside of the
+      // month of the reference date for this week.
+      var insideMonth = ( date.getFullYear() === referenceYear && date.getMonth() === referenceMonth );
+      day.classList.toggle( "insideMonth", insideMonth );
+      day.classList.toggle( "outsideMonth", !insideMonth );
+    });
+  }
+
+});
+</script>
+
+</polymer-element>

@@ -1,0 +1,13 @@
+{
+  "name": "quetzal-fixed-aspect",
+  "description": "Shows its content at the largest size that maintains a specified aspect ratio",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#master"
+  },
+  "ignore": [
+    "**/.*"
+  ]
+}

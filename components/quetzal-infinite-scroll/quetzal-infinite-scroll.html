@@ -1,0 +1,99 @@
+<!--
+An infinite surface that generates additional elements as necessary to always
+permit scrolling.
+
+For now, this only handles infinite scrolling in one direction: down.
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<polymer-element name="quetzal-infinite-scroll" attributes="elementsPerPage">
+
+<template>
+  <style>
+  :host {
+    display: block;
+    overflow-y: auto;
+    visibility: hidden;
+  }
+
+  ::content > * {
+    display: none;
+  }
+  </style>
+  <content id="itemTemplate"><div></div></content>
+</template>
+
+<script>
+Polymer( "quetzal-infinite-scroll", {
+
+  addedElements: function() {
+    // Subclasses can override to set up new elements.
+  },
+
+  addElementToBottom: function() {
+    var nodes = this.$.itemTemplate.getDistributedNodes();
+    // If we're polyfilled, nodes will already be an Array, not a NodeList.
+    var template = nodes.array ? nodes.array() : nodes;
+    var newElements = [];
+    template.forEach( function( templateNode ) {
+      newElements.push( templateNode.cloneNode( true ));
+    });
+    this.addedElements( newElements );
+    newElements.forEach( function( newElement ) {
+      this.shadowRoot.appendChild( newElement );    
+    }.bind( this ));
+  },
+
+  addPageToBottom: function() {
+    // console.log( "adding page" );
+    for ( var i = 0; i < this.elementsPerPage; i++ ) {
+      this.addElementToBottom();
+    }
+    // HACK until bug https://code.google.com/p/chromium/issues/detail?id=317895
+    // is fixed.
+    this.$.itemTemplate.style.backgroundColor = "";
+  },
+
+  addPageIfNeeded: function() {
+    if ( this._needsMoreElementsAtBottom() ) {
+      this.addPageToBottom();
+    } else {
+      this.style.visibility = "inherit";
+    }
+  },
+
+  elementsPerPage: 10,
+
+  enteredView: function() {
+    this.addPageToBottom();
+  },
+
+  ready: function() {
+    this.addEventListener( "scroll", function() {
+      this.scrolled();
+    }.bind( this ));
+    var observer = new MutationObserver( function() {
+      window.setTimeout( function() {
+        this.addPageIfNeeded();
+      }.bind( this ), 1 );
+    }.bind( this ));
+    observer.observe( this.shadowRoot, {
+      childList: true
+    });
+  },
+
+  scrolled: function() {
+    this.addPageIfNeeded();
+  },
+
+  _needsMoreElementsAtBottom: function() {
+    var scrollBottom = this.scrollTop + this.clientHeight;
+    var belowView = this.scrollHeight - scrollBottom;
+    return ( belowView < this.clientHeight );
+  }
+
+});
+</script>
+
+</polymer-element>

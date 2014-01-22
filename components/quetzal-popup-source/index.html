@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>quetzal-popup-source</title>
+
+<script src="../platform/platform.js"></script>
+
+<link rel="import" href="../quetzal-popup-source/quetzal-popup-source.html">
+
+<style>
+body,
+button,
+input {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+
+body {
+  margin: 0.5in;
+}
+
+#button {
+  /*margin-top: 6in;*/
+}
+
+#popup {
+  height: 400px;
+  width: 400px;
+}
+</style>
+
+</head>
+
+<body>
+  <quetzal-popup-source>
+    <property name="popup">Here's the popup</property>
+    Click me
+  </quetzal-popup-source>
+<!--
+  <quetzal-popup-button id="button">
+    <property name="popup">
+      <div id="popup">Here's the popup</div>
+    </property>
+    Click me
+  </quetzal-popup-button>
+ -->
+</body>
+
+</html>

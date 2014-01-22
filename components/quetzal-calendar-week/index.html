@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>quetzal-calendar-week</title>
+
+<script src="../platform/platform.js"></script>
+<link rel="import" href="quetzal-calendar-week.html">
+
+<style>
+body,
+button,
+input {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+
+body {
+  margin: 0.5in;
+}
+</style>
+
+<script>
+window.addEventListener( "WebComponentsReady", function() {
+  var calendar = document.querySelector( "#calendar" );
+  var date = new Date();
+  var day = calendar.dayElementForDate( date );
+  console.log( day );
+});
+</script>
+
+</head>
+
+<body>
+  <quetzal-calendar-week id="calendar"></quetzal-calendar-week>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "quetzal-popup",
+  "description": "A component for a user interface element that appears temporarily over other things",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "polymer-overlay": "Polymer/polymer-overlay#master"
+  },
+  "ignore": [
+    "**/.*"
+  ],
+  "homepage": "https://github.com/JanMiksovsky/quetzal-popup",
+  "_release": "515de6ad10",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "515de6ad10605c464a8e5bee93158e81f5b41644"
+  },
+  "_source": "git://github.com/JanMiksovsky/quetzal-popup.git",
+  "_target": "master",
+  "_originalSource": "JanMiksovsky/quetzal-popup"
+}

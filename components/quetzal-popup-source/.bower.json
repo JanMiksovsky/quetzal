@@ -1,0 +1,23 @@
+{
+  "name": "quetzal-popup-source",
+  "description": "A component for an element whose content is associated with a popup",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "quetzal-element": "JanMiksovsky/quetzal-element#master",
+    "quetzal-popup": "JanMiksovsky/quetzal-popup#master"
+  },
+  "ignore": [
+    "**/.*"
+  ],
+  "homepage": "https://github.com/JanMiksovsky/quetzal-popup-source",
+  "_release": "1a021cd73b",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "1a021cd73badcbfabcc58796f8250f20103f7a59"
+  },
+  "_source": "git://github.com/JanMiksovsky/quetzal-popup-source.git",
+  "_target": "master",
+  "_originalSource": "JanMiksovsky/quetzal-popup-source"
+}

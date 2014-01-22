@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>quetzal-calendar-month</title>
+
+<script src="../platform/platform.js"></script>
+<link rel="import" href="quetzal-calendar-month.html">
+<link rel="import" href="../quetzal-calendar-day/quetzal-calendar-day.html">
+
+<style>
+body,
+button,
+input {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+
+body {
+  margin: 0.5in;
+}
+</style>
+
+<!-- Sample custom day that just puts an asterisk after the date -->
+<polymer-element name="custom-calendar-day" extends="quetzal-calendar-day" noscript>
+<template>
+  <style>
+  :host([generic]:host) {
+    padding: 4px;
+  }
+  :host([generic]:host) #dateContainer {
+    text-align: right;
+  }
+  </style>
+  <div id="dateContainer">
+    <span id="date"></span>*
+  </div>
+</template>
+</polymer-element>
+
+<script>
+window.addEventListener( "WebComponentsReady", function() {
+  var calendar = document.querySelector( "#calendar" );
+  var date = new Date();
+  var week = calendar.weekElementForDate( date );
+  console.log( week );
+  var day = calendar.dayElementForDate( date );
+  console.log( day );
+});
+</script>
+</head>
+
+<body>
+  <quetzal-calendar-month id="calendar" dayElementTag="custom-calendar-day"></quetzal-calendar-month>
+</body>
+
+</html>

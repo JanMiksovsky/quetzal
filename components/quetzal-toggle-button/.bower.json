@@ -1,0 +1,22 @@
+{
+  "name": "quetzal-toggle-button",
+  "description": "A button component with a selected state that can be toggled on and off",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "quetzal-button": "JanMiksovsky/quetzal-button#master"
+  },
+  "ignore": [
+    "**/.*"
+  ],
+  "homepage": "https://github.com/JanMiksovsky/quetzal-toggle-button",
+  "_release": "dbac98bcd1",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "dbac98bcd1dcb397c27bd0d313602dea84d335a9"
+  },
+  "_source": "git://github.com/JanMiksovsky/quetzal-toggle-button.git",
+  "_target": "master",
+  "_originalSource": "JanMiksovsky/quetzal-toggle-button"
+}

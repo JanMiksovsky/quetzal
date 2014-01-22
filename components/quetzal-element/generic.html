@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>quetzal-element</title>
+
+<!--
+TODO: This file currently just tests generic styling, and even this needs to
+updated to match the new repo arrangement.
+-->
+
+<script src="../components/polymer/polymer.js"></script>
+
+<link rel="import" href="../elements/quetzal.collection.html">
+
+<style>
+body,
+button,
+input {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+
+body {
+  margin: 0.5in;
+}
+
+#list {
+  height: 200px;
+  width: 200px;
+}
+</style>
+
+</head>
+
+<body>
+  <button is="quetzal-button2">Generic</button>
+  <button is="quetzal-button2" plain>Plain</button>
+</body>
+
+</html>

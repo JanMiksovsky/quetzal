@@ -1,0 +1,227 @@
+<!--
+Renders a list of items in a combo box.
+
+The user can type arbitrary text; if they type the beginning of a list item's
+content, the remainder of the item's content is AutoCompleted.
+-->
+
+<link rel="import" href="../quetzal-combo-box/quetzal-combo-box.html">
+<link rel="import" href="../quetzal-list-box/quetzal-list-box.html">
+
+<polymer-element name="quetzal-list-combo-box" extends="quetzal-combo-box">
+
+<template>
+
+<style>
+#listBox {
+  border: none !important;
+}
+</style>
+
+<shadow>
+  <property name="popup">
+    <quetzal-list-box id="listBox">
+      <content></content>
+    </quetzal-list-box>
+  </property>
+</shadow>
+
+</template>
+
+<script>
+Polymer( "quetzal-list-combo-box", {
+
+  // Match the current text against the list items' text.
+  autoComplete: function() {
+    var typedText = this.$.textBox.value;
+    var match = this._completeWithPrefix( typedText );
+    if ( match ) {
+      this.$.textBox.value = match;
+      this.selectTextRange( typedText.length, match.length );
+    }
+   this._selectTextInList();
+  },
+
+  open: function() {
+    // If the current text is in the list, select that item before opening.
+    this._selectTextInList();
+    this.super();
+
+    // Give the input control focus.
+    // if ( document.activeElement !== this.$.textBox ) {
+      // console.log( document.activeElement );
+      // this.$.textBox.focus();
+    // }
+  },
+
+  ready: function() {
+    this.super();
+    this.$.textBox.addEventListener( "keydown", function( event ) {
+      this._textBoxKeydown( event );
+    }.bind( this ));
+    this.$.listBox.addEventListener( "tap", function( event ) {
+      if ( event.target === this ) {
+        // Clicked on list background.
+        return;
+      }
+      // Clicking a list item puts its content into the text box portion.
+      this._itemSelected( event.target );
+      // Close the list. Use a timeout to give the list a chance to update its
+      // selection. The user will see the selection change just before the list
+      // disappears. This lets them visually confirm they got what they wanted.
+      setTimeout( function() {
+        this.close();
+      }.bind( this ), 10 );
+    }.bind( this ));
+    this.$.listBox.addEventListener( "polymer-select", function( event ) {
+      // We only care about selections, not deselections.
+      if ( event.detail.isSelected ) {
+        this._itemSelected( event.detail.item );
+      }
+    }.bind( this ));
+  },
+
+  get selected() {
+    return this.$.listBox.selected;
+  },
+  set selected( value ) {
+    this.$.listBox.selected = value;
+  },
+
+  get selectedItem() {
+    return this.$.listBox.selectedItem;
+  },
+  set selectedItem( value ) {
+    this.$.listBox.selectedItem = value;
+  },
+
+  // Return the item whose prefix matches the given string, ignoring case.
+  // Return null if not found.
+  _completeWithPrefix: function( prefix ) {
+    var match = null;
+    var prefixLength = prefix.length;
+    if ( prefixLength > 0 ) {
+      var lowercasePrefix = prefix.toLowerCase();
+      // We want to be able to break out of the loop, so we use some() instead
+      // of forEach().
+      Array.prototype.some.call( this.children, function( child ) {
+        var childText = child.textContent;
+        if (prefixLength <= childText.length
+            && childText.substr( 0, prefixLength ).toLowerCase() === lowercasePrefix ) {
+          match = childText;
+          return true;
+        }
+      }.bind( this ));
+    }
+    return match;
+  },
+
+  // Forward the given keyboard event to the indicated target.
+  _forwardKeyboardEvent: function( event, target ) {
+    // Use generic events instead of keyboard events to work around a WebKit
+    // bug. See http://stackoverflow.com/a/14468563/76472.
+    var forwardedEvent = document.createEvent( "Events" );
+    forwardedEvent.initEvent(
+      "keydown",
+      true, // bubbles
+      true // cancelable
+    );
+    forwardedEvent.keyCode = event.keyCode;
+    forwardedEvent.which = event.which;
+    target.dispatchEvent( forwardedEvent );
+  },
+
+  // The given item in the list was selected. If this is different than the
+  // current text value, the text value will be updated to match, and the full
+  // text left selected.
+  _itemSelected: function( item ) {
+    var text = item.textContent;
+    if ( this.$.textBox.value !== text ) {
+      // Set the text box value directly. It'd be more elegant to set our own
+      // value attribute, which is bound to the text box value, but that binding
+      // is updated asynchronously -- not in time for the text selection which
+      // needs to immediately follow.
+      this.$.textBox.value = text;
+      this.selectTextAll();
+    }
+  },
+
+  // Select the current input text in the list if it's there.
+  // Clear the list selection if the text is not found.
+  _selectTextInList: function() {
+    var index = -1;
+    var text = this.$.textBox.value;
+    if ( text.length > 0 ) {
+      Array.prototype.some.call( this.children, function( child, childIndex ) {
+        if ( text === child.textContent ) {
+          index = childIndex;
+          return true;
+        }
+      }.bind( this ));
+    }
+    this.$.listBox.selectedIndex = index;
+  },
+
+  // Arrange for a callback to be performed via a timeout.
+  // See notes at _textBoxKeydown.
+  _setTimeout: function ( callback ) {
+    if ( this._timeout ) {
+      // Cancel pending AutoComplete timeout.
+      clearTimeout( this._timeout );
+    }
+    // Queue a new timeout.
+    this._timeout = setTimeout( callback, 1 );
+  },
+
+  // Handle a keydown event. Keydown gives the best AutoComplete performance and
+  // behavior: among other things, the AutoComplete happens as soon as the user
+  // begins typing. However, using keydown creates a problem that the input
+  // element's content won't actually reflect the effects key the user just
+  // pressed down. So we set a timeout to give the keydown event a chance to
+  // bubble up and do its work, then do our AutoComplete work against the
+  // resulting text.
+  _textBoxKeydown: function( event ) {
+
+    var handled = false;
+    var navigationKeys = [
+      33, // Page Up
+      34, // Page Down
+      38, // Up
+      40  // Down
+    ];
+
+    // Do AutoComplete on Space, or characters from zero (0) and up, ignoring
+    // any combinations that involve Alt or Ctrl.
+    if ( ( event.keyCode === 32 || event.keyCode >= 48 ) && !( event.altKey || event.ctrlKey || event.metaKey ) ) {
+      this._setTimeout( function() {
+        return this.autoComplete();
+      }.bind ( this ));
+    } else if ( this.opened && navigationKeys.indexOf( event.keyCode ) >= 0 ) {
+      // Forward navigation keys to the opened list.
+      this._forwardKeyboardEvent( event, this.$.listBox );
+      handled = true;
+    } else if ( event.keyCode === 8 || event.keyCode === 46 ) {
+      // On Backspace or Delete, clear list select if text is empty.
+      this._setTimeout( function() {
+        return this._selectTextInList();
+      }.bind( this ));
+    } else if ( event.keyCode === 40 /* Down */ ) {
+      // TODO: Move this Down key = open behavior to quetzal-combo-box.
+      this.open();
+      // If the text box is empty, select the first list item.
+      var value = this.$.textBox.value;
+      if ( !value || value.length === 0 ) {
+        this.$.listBox.selectedIndex = 0;
+      }
+      handled = true;
+    }
+    if ( handled ) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }
+
+});
+</script>
+
+</polymer-element>

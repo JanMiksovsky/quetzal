@@ -1,0 +1,201 @@
+<!--
+/**
+ * A text box that makes itself big enough to show its content.
+ * 
+ * This works by copying the text to an invisible element which will automatically
+ * grow in size; the expanding copy will expand the container, which in turn
+ * stretch the text box.
+ *
+ * @class quetzal-auto-size-text-box
+ */
+-->
+
+<link rel="import" href="../quetzal-element/quetzal-element.html">
+
+<polymer-element name="quetzal-auto-size-text-box" extends="quetzal-element" attributes="minimumLines placeholder">
+
+<template>
+
+  <style>
+  #container {
+    position: relative;
+  }
+
+  /*
+   * Ensure both the text area and copy end up with the element's own font
+   * metrics, so that text will lay out the same in both of them.
+   */
+  #textBox,
+  #textCopy {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    margin: 0;
+  }
+
+  #textBox {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    resize: none;
+    top: 0;
+    width: 100%;
+  }
+
+  #textCopy {
+    border-style: solid;
+    visibility: hidden;
+    width: 100%;
+    white-space: pre-wrap; /* So lines wrap */
+  }
+  </style>
+
+  <div id="container">
+    <textarea id="textBox" on-change="{{autoSize}}" on-keypress="{{_keypress}}" on-keyup="{{autoSize}}" placeholder="{{placeholder}}" spellcheck="{{spellcheck}}"></textarea>
+    <!--
+    Use a pre element to hold the copied text in order to automatically convert
+    breaks, etc.
+
+    This pre contains two additional elements:
+    1. The extraSpace element helps reduce jerkiness during typing. Without it,
+    if the user is typing near the end of the line, they may see the text jerk
+    up before the text box gets a chance to grow.  The extra space below is an
+    *em space*, which should be about as wide as the widest character (in
+    English, anyway). With that, when the user is within striking distance of
+    the end of the line, the text box will grow by a new line. The wider we make
+    this extra space, the less chance the user will see that jerkiness. The
+    trade-off is that the user will also see more false positives: cases where
+    the text box grows an extra line taller than it needs to be.
+
+    2. The extraLine element exists to deal with the fact that, if the user
+    presses the Enter key, the text box's value will move before the complete
+    text is available. See notes at _keypress.
+    -->
+    <pre id="textCopy"><content></content><span id="extraSpace">&emsp;</span><div id="extraLine">&nbsp;</div></pre>
+  </div>
+
+</template>
+
+<script>
+Polymer( "quetzal-auto-size-text-box", {
+
+  /**
+   * Resize the element such that the text box can exactly contain its content.
+   * By default, this method is invoked whenever the text content changes.
+   *
+   * @method autoSize
+   */
+  autoSize: function() {
+    // If we had speculatively added an extra line because of an Enter keypress,
+    // we can now hide the extra line.
+    this.$.extraLine.style.display = "none" ;
+
+    // We resize by copying the text box contents to the element itself; the
+    // text will then appear (via <content>) inside the invisible <pre>. If
+    // we've set things up correctly, this new content should take up the same
+    // amount of room as the same text in the text box. Updating the element's
+    // content adjusts the element's size, which in turn will make the text box
+    // the correct height.
+    this.innerHTML = this.$.textBox.value;
+  },
+
+  contentChangedCallback: function() {
+    if ( this.innerHTML !== this.$.textBox.value ) {
+      this.$.textBox.value = this.innerHTML;
+    }
+  },
+
+  enteredView: function() {
+
+    // For auto-sizing to work, we need the text copy to have the same border,
+    // padding, and other relevant characteristics as the original text area.
+    // Since those aspects are affected by CSS, we have to wait until the
+    // element is in the document before we can update the text copy.
+    var textBoxStyle = getComputedStyle( this.$.textBox );
+    var textCopyStyle = this.$.textCopy.style;
+    textCopyStyle.borderBottomWidth  = textBoxStyle.borderBottomWidth;
+    textCopyStyle.borderLeftWidth    = textBoxStyle.borderLeftWidth;
+    textCopyStyle.borderRightWidth   = textBoxStyle.borderRightWidth;
+    textCopyStyle.borderTopWidth     = textBoxStyle.borderTopWidth;
+    textCopyStyle.paddingBottom      = textBoxStyle.paddingBottom;
+    textCopyStyle.paddingLeft        = textBoxStyle.paddingLeft;
+    textCopyStyle.paddingRight       = textBoxStyle.paddingRight;
+    textCopyStyle.paddingTop         = textBoxStyle.paddingTop;
+
+    // TODO: On Mozilla, an item which is in the document but not yet visible
+    // will report its padding as zero. Since we don't know the real padding,
+    // we need to take a guess that it's the standard padding.
+    // if (paddingBottom === "0px" && paddingLeft === "0px" && paddingRight === "0px" && paddingTop === "0px") {
+    //   paddingBottom = "2px";
+    //   paddingLeft = "2px";
+    //   paddingRight = "2px";
+    //   paddingTop = "2px";
+    // }
+
+    // Use the extraLine member to gauge the expected height of a single line of
+    // text. We can't use lineHeight, because that can be reported as "normal",
+    // and we want to know the actual pixel height.
+    this._lineHeight = this.$.extraLine.clientHeight;
+
+    // Now that we know the lineheight, we can hide the extra line.
+    this.$.extraLine.style.display = "none";
+
+    this._setMinimumHeight();
+  },
+
+  /**
+   * Determines the minimum height of the text box in lines.
+   *
+   * @attribute minimumLines
+   * @type integer
+   * @default 1
+   */
+  minimumLines: 1,
+
+  // BUG: Setting the minimumLines attribute after creation doesn't seem to
+  // trigger this changed handler.
+  minimumLinesChanged: function() {
+    if ( this._lineHeight ) {
+      this._setMinimumHeight();
+    }
+  },
+
+  // Speculatively add a line to our copy of the text. We're not sure what the
+  // exact effect of typing this character will be, and at this point it's not
+  // reflected yet in the text box's content. We speculate that it will add a
+  // line to the text and size accordingly. (One other possibility is that the
+  // user's replacing a selected chunk of text with a newline.) In any event,
+  // once we get the keyup or change event, we'll make any final adjustments.
+  //
+  // TODO: If the user holds down the Enter key, we can get a bunch of keypress
+  // events before we get keyup. This causes flicker. Instead of supporting only
+  // a single extra speculative line, we should grow the speculative element to
+  // contain the number of Enter keypresses we've received.
+  _keypress: function( event ) {
+    if ( event.keyCode === 13 /* Enter */ ) {
+      this.$.extraLine.style.display = "inherit";
+    }
+  },
+
+  // Setting the minimumLines attribute translates into setting the minimum
+  // height on the text copy.
+  _setMinimumHeight: function() {
+    var textCopy = this.$.textCopy;
+    var outerHeight = textCopy.getBoundingClientRect().height;
+    var style = getComputedStyle( textCopy );
+    var paddingTop = parseFloat( style.paddingTop );
+    var paddingBottom = parseFloat( style.paddingBottom );
+    var innerHeight = textCopy.clientHeight - paddingTop - paddingBottom;
+    var bordersPlusPadding = outerHeight - innerHeight;
+    var minHeight = ( this.minimumLines * this._lineHeight ) + bordersPlusPadding;
+    textCopy.style.minHeight = minHeight + "px";
+  }
+
+});
+</script>
+
+</polymer-element>

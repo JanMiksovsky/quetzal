@@ -1,0 +1,14 @@
+{
+  "name": "quetzal-popup-source",
+  "description": "A component for an element whose content is associated with a popup",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "quetzal-element": "JanMiksovsky/quetzal-element#master",
+    "quetzal-popup": "JanMiksovsky/quetzal-popup#master"
+  },
+  "ignore": [
+    "**/.*"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "quetzal-list-combo-box",
+  "description": "A combo box component whose popup presents choices as a list box",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "quetzal-combo-box": "JanMiksovsky/quetzal-combo-box#master",
+    "quetzal-list-box": "JanMiksovsky/quetzal-list-box#master"
+  },
+  "ignore": [
+    "**/.*"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "quetzal-combo-box",
+  "description": "A component that allows by text input and selecting from a popup menu of choices",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "quetzal-toggle-button": "JanMiksovsky/quetzal-toggle-button#master",
+    "quetzal-popup-source": "JanMiksovsky/quetzal-popup-source#master"
+  },
+  "ignore": [
+    "**/.*"
+  ]
+}

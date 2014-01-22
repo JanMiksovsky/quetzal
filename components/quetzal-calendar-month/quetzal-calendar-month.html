@@ -1,0 +1,145 @@
+<!--
+Shows a single month on a calendar.
+-->
+
+<link rel="import" href="../quetzal-element/quetzal-element.html">
+<link rel="import" href="../quetzal-calendar-day/quetzal-calendar-day.html">
+<link rel="import" href="../quetzal-calendar-week/quetzal-calendar-week.html">
+
+<polymer-element name="quetzal-calendar-month" extends="quetzal-element" attributes="culture date dayElementTag">
+
+<template>
+
+  <style>
+  :host {
+    display: table-row-group;
+  }
+
+  quetzal-calendar-week.outsideMonth {
+    display: none;
+  }
+
+  quetzal-calendar-day.outsideMonth {
+    visibility: hidden;
+  }
+  </style>
+
+  <quetzal-calendar-week dayElementTag="{{dayElementTag}}"></quetzal-calendar-week>
+  <quetzal-calendar-week dayElementTag="{{dayElementTag}}"></quetzal-calendar-week>
+  <quetzal-calendar-week dayElementTag="{{dayElementTag}}"></quetzal-calendar-week>
+  <quetzal-calendar-week dayElementTag="{{dayElementTag}}"></quetzal-calendar-week>
+  <quetzal-calendar-week dayElementTag="{{dayElementTag}}"></quetzal-calendar-week>
+  <quetzal-calendar-week dayElementTag="{{dayElementTag}}"></quetzal-calendar-week>
+
+</template>
+
+<script>
+Polymer( "quetzal-calendar-month", {
+
+  applyAuthorStyles: true,
+
+  cultureChanged: function() {
+    var culture = this.culture;
+    this.weeks.forEach( function( week ) {
+      week.culture = culture;
+    });
+    this._refresh();
+  },
+
+  // The day elements in the month, returned as an array.
+  get days() {
+    var days = [];
+    this.weeks.forEach( function( week ) {
+      days = days.concat( week.days );
+    });
+    return days;
+  },
+
+  dateChanged: function() {
+    this._refresh();
+  },
+
+  dayElementForDate: function( date ) {
+    var week = this.weekElementForDate( date );
+    return week && week.dayElementForDate( date );
+  },
+
+  // Returns the first date of the indicated month. (Earlier dates may appear
+  // earlier in that week of the first date.)
+  get firstDateOfMonth() {
+    var date = QuetzalCalendarDay.midnightOnDate( this.date );
+    date.setDate( 1 );
+    return date;
+  },
+
+  // Returns true if the indicated date is within the element's month.
+  isDateInMonth: function( date ) {
+    var firstDateOfNextMonth = QuetzalCalendarDay.offsetDateByDays( this.lastDateOfMonth, 1 );
+    return ( date >= this.firstDateOfMonth && date < firstDateOfNextMonth );
+  },
+
+  // Returns the last date of the indicated month. (Later dates may appear later
+  // in that week of the last date.)
+  get lastDateOfMonth() {
+    // Get last day of month by going to first day of next month and backing up a day.
+    var date = this.firstDateOfMonth;
+    date.setMonth( date.getMonth() + 1 );
+    date.setDate( date.getDate() - 1 );
+    return date;
+  },
+
+  ready: function() {
+    this.super();
+    if ( !this.date && typeof QuetzalCalendarDay.today !== "undefined" ) {
+      // If no date is supplied, default to the current month.
+      this.date = QuetzalCalendarDay.today();
+    }
+  },
+
+  // Return the week element showing the given date.
+  // Note: this returns false for dates which are visible but outside of the
+  // element's month.
+  weekElementForDate: function( date ) {
+    if ( this.isDateInMonth( date ) ) {
+      var offset = QuetzalCalendarWeek.daysSinceFirstDayOfWeek( this.firstDateOfMonth, this.culture );
+      weekIndex = Math.floor( ( date.getDate() + offset - 1 ) / 7 );
+      return this.weeks[ weekIndex ];
+    } else {
+      // Date falls outside month.
+      return null;
+    }
+  },
+
+  // The elements for the weeks in the month, returned as an array.
+  get weeks() {
+    return this.shadowRoot.querySelectorAll( "quetzal-calendar-week" ).array();
+  },
+
+  // Fill in the weeks.
+  _refresh: function() {
+    var firstDateOfMonth = this.firstDateOfMonth;
+    var month = firstDateOfMonth.getMonth();
+    this.weeks.forEach( function( week, i ) {
+
+      var date = QuetzalCalendarDay.offsetDateByDays( firstDateOfMonth, 7 * i );
+      var firstDateOfWeek = QuetzalCalendarWeek.firstDateOfWeek( date, this.culture );
+      
+      // For the first week of the month, use the first of the month as the
+      // reference date of that week. For subsequent weeks, use the first of
+      // the given week.
+      week.date = ( i == 0 )
+        ? date
+        : QuetzalCalendarWeek.firstDateOfWeek( date, this.culture );
+
+      // Hide weeks completely in another month (i.e., the next month).
+      // Apply "hidden" class to preserve week's original "display" property.
+      var lastDateOfWeek = QuetzalCalendarDay.offsetDateByDays( firstDateOfWeek, 6 );
+      var isWeekInMonth = ( firstDateOfWeek.getMonth() === month || lastDateOfWeek.getMonth() === month );
+      week.classList.toggle( "outsideMonth", !isWeekInMonth );
+    });
+  }
+
+} );
+</script>
+
+</polymer-element>

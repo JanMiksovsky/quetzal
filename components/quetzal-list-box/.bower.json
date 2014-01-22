@@ -1,0 +1,22 @@
+{
+  "name": "quetzal-list-box",
+  "description": "A list box component that allows single selection",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "polymer-selector": "Polymer/polymer-selector#master"
+  },
+  "ignore": [
+    "**/.*"
+  ],
+  "homepage": "https://github.com/JanMiksovsky/quetzal-list-box",
+  "_release": "079ce6c1e4",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "079ce6c1e46b123d1c25f721135749aa435c3199"
+  },
+  "_source": "git://github.com/JanMiksovsky/quetzal-list-box.git",
+  "_target": "master",
+  "_originalSource": "JanMiksovsky/quetzal-list-box"
+}

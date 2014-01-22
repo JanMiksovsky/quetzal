@@ -1,0 +1,13 @@
+{
+  "name": "quetzal-auto-size-text-box",
+  "description": "A text box that makes itself big enough to show its content",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "quetzal-element": "JanMiksovsky/quetzal-element#master"
+  },
+  "ignore": [
+    "**/.*"
+  ]
+}

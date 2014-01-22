@@ -1,0 +1,13 @@
+{
+  "name": "quetzal-popup",
+  "description": "A component for a user interface element that appears temporarily over other things",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "polymer-overlay": "Polymer/polymer-overlay#master"
+  },
+  "ignore": [
+    "**/.*"
+  ]
+}

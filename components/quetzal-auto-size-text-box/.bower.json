@@ -1,0 +1,22 @@
+{
+  "name": "quetzal-auto-size-text-box",
+  "description": "A text box that makes itself big enough to show its content",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "quetzal-element": "JanMiksovsky/quetzal-element#master"
+  },
+  "ignore": [
+    "**/.*"
+  ],
+  "homepage": "https://github.com/JanMiksovsky/quetzal-auto-size-text-box",
+  "_release": "fe7b812a79",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "fe7b812a7993fb367df69882cb12bfa7da033f83"
+  },
+  "_source": "git://github.com/JanMiksovsky/quetzal-auto-size-text-box.git",
+  "_target": "master",
+  "_originalSource": "JanMiksovsky/quetzal-auto-size-text-box"
+}

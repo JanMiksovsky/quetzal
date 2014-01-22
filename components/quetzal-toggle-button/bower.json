@@ -1,0 +1,13 @@
+{
+  "name": "quetzal-toggle-button",
+  "description": "A button component with a selected state that can be toggled on and off",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "quetzal-button": "JanMiksovsky/quetzal-button#master"
+  },
+  "ignore": [
+    "**/.*"
+  ]
+}

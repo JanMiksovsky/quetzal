@@ -1,0 +1,29 @@
+<link rel="import" href="../quetzal-element/quetzal-element.html">
+<link rel="import" href="color-swatch.html">
+
+<polymer-element name="labeled-color-swatch" extends="quetzal-element" attributes="color">
+
+<template>
+
+<style>
+:host {
+  display: block;
+}
+</style>
+
+<color-swatch id="swatch"></color-swatch>
+<content></content>
+
+</template>
+
+<script>
+Polymer( "labeled-color-swatch", {
+
+  contentChangedCallback: function() {
+    this.$.swatch.color = this.textContent;
+  }
+
+});
+</script>
+
+</polymer-element>

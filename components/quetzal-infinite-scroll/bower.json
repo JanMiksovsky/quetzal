@@ -1,0 +1,13 @@
+{
+  "name": "quetzal-infinite-scroll",
+  "description": "An infinite surface that generates additional elements as necessary to always permit scrolling",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#master"
+  },
+  "ignore": [
+    "**/.*"
+  ]
+}

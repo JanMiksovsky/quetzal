@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8">
+
+<title>quetzal-popup</title>
+
+<script src="../platform/platform.js"></script>
+
+<link rel="import" href="../polymer-overlay/polymer-overlay.html">
+<link rel="import" href="../quetzal-popup/quetzal-popup.html">
+<link rel="import" href="../quetzal-button/quetzal-button.html">
+
+<style>
+body,
+button,
+input {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+}
+
+body {
+  margin: 0.5in;
+}
+</style>
+
+<script>
+window.addEventListener( "WebComponentsReady", function() {
+
+  var overlay = document.querySelector( "#overlay" );
+  overlay.target = document.querySelector( "#dialog" );
+  document.querySelector( "#toggleOverlay" ).addEventListener( "click", function() {
+    overlay.toggle();
+  });
+
+  var popup = document.querySelector( "#popup" );  
+  document.querySelector( "#togglePopup" ).addEventListener( "click", function() {
+    popup.toggle();
+  });
+
+});
+</script>
+
+</head>
+
+<body>
+ 
+  <quetzal-button id="toggleOverlay">Toggle overlay</quetzal-button>
+  <div id="dialog">
+    <polymer-overlay id="overlay"></polymer-overlay>
+    <div>Overlay content</div>
+  </div>
+
+  <quetzal-button id="togglePopup">Toggle popup</quetzal-button>
+  <quetzal-popup id="popup">Popup content</quetzal-popup>
+  
+</body>
+
+</html>

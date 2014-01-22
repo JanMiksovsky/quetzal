@@ -1,0 +1,60 @@
+<!--
+A button with a selected state that can be toggled on and off.
+
+TODO: This class can be used once https://github.com/Polymer/polymer/issues/347
+has been fixed.
+-->
+
+<link rel="import" href="quetzal-button2.html">
+
+<polymer-element name="quetzal-toggle-button2" extends="quetzal-button2" attributes="autoToggle generic selected">
+
+<template>
+
+<style>
+:host([generic][selected]:host) {
+  box-shadow: inset 0 1px 2px rgba( 0, 0, 0, .1 ) !important;
+  background-color: #eee !important;
+  background-image: -webkit-linear-gradient( top, #e0e0e0, #d8d8d8 ) !important;
+  background-image: linear-gradient( top, #e0e0e0, #d8d8d8 ) !important;
+  border-color: #ccc !important;
+}
+
+:host([generic][selected]:host:hover) {
+  background-color: #f0f0f0 !important;
+  background-image: -webkit-linear-gradient( top, #e8e8e8, #e0e0e0 ) !important;
+  background-image: linear-gradient( top, #e8e8e8, #e0e0e0 ) !important;
+}
+</style>
+
+<shadow>
+  <content></content>
+</shadow>
+
+</template>
+
+<script>
+Polymer( "quetzal-toggle-button2", {
+
+  autoToggle: true,
+
+  ready: function() {
+    this.super();
+    this.addEventListener( "tap", function() {
+      // TODO: if not disabled...
+      if ( this.autoToggle ) {
+        this.toggle();
+      }
+    }.bind( this ) );
+  },
+
+  selected: false,
+
+  toggle: function() {
+    this.selected = !this.selected;
+  }
+
+});
+</script>
+
+</polymer-element>

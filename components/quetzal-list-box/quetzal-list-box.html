@@ -1,0 +1,309 @@
+<!--
+A list box that allows single selection.
+
+The user can select an item with the mouse/touch or keyboard: Up/Down, Page
+Up/Down, Home/End.
+
+The selection behavior generally follows that of Microsoft Windows:
+* The Page Up/Down and Home/End keys actually move the selection, rather than
+  just scrolling the list. The former behavior seems more generally useful.
+* Pressing Page Up/Down will move the selection to the topmost/bottommost
+  visible item if the selection is not already there. Thereafter, the key will
+  move the selection up/down by a page, and (per the above point) make the
+  selected item visible.
+-->
+
+<link rel="import" href="../polymer-selector/polymer-selector.html">
+
+<polymer-element name="quetzal-list-box" extends="polymer-selector" attributes="generic">
+
+<template>
+
+<style>
+:host {
+  display: block;
+  outline: none;
+  overflow-y: auto;
+}
+
+/* Generic appearance */
+:host([generic]:host) {
+  border: 1px solid lightgray;
+  box-sizing: border-box;
+  cursor: default;
+}
+
+::content > * {
+  /* HACK: explicit background works around shadow reprojection rendering bug. */
+  background: white;
+  box-sizing: border-box;
+  display: block;
+  padding: 0.25em;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+::content > .polymer-selected {
+  background: highlight;
+  color: highlighttext;
+}
+</style>
+
+<shadow>
+  <content></content>
+</shadow>
+
+</template>
+
+<script>
+Polymer( "quetzal-list-box", {
+
+  pageDown: function() {
+    return this._scrollOnePage( true );
+  },
+
+  pageUp: function() {
+    return this._scrollOnePage( false );
+  },
+
+  ready: function() {
+    this.super();
+    if ( this.tabIndex == -1 /* Default value */ ) {
+      // Try to convince the browser that the list is focusable, but without
+      // forcing it into the tab order (as a positive tabindex would do).
+      // Firefox, Chrome, and IE seem to handle this as desired if tabindex is
+      // (explicitly) set to a negative number.
+      this.tabIndex = -1;
+    }
+    this.addEventListener( "keydown", function( event ) {
+      this._keydown( event );
+    }.bind( this ));
+    if ( this.generic == null ) {
+      this.generic = true;
+    }
+  },
+
+  // TODO: Handle valueattr: selected indicates a value, not the index.
+  get selectedIndex() {
+    var index = this.selected;
+    return ( index != null ) ? index : -1;
+  },
+  set selectedIndex( index ) {
+    this.selected = ( index >= 0 ) ? index : null;
+  },
+
+  // Override base implementation so we can ensure new item is in view.
+  selectedItemChanged: function() {
+    this.super();
+    if ( this.selectedItem ) {
+      this._scrollElementIntoView( this.selectedItem );
+    }
+  },
+
+  selectFirstItem: function() {
+    if ( this.items.length > 0 ) {
+      this.selectedIndex = 0;
+      // The list will have already scrolled the first element into view, but if
+      // the list has top padding, the scroll won't be all the way at the top.
+      // So, as a special case, force it to scroll to the top.
+      this.scrollTop = 0;
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  selectLastItem: function() {
+    if ( this.items.length > 0 ) {
+      this.selectedIndex = this.items.length - 1;
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  selectNextItem: function() {
+    var index = this.selectedIndex + 1;
+    if ( index < this.items.length ) {
+      this.selectedIndex = index;
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  selectPreviousItem: function() {
+    var index = this.selectedIndex - 1;
+    if ( index >= 0 && this.items.length > 0 ) {
+      this.selectedIndex = index;
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  // Return the item whose content spans the given y position (relative to the
+  // top of the list's scrolling client area), or null if not found.
+  //
+  // If downward is true, move down the list of items to find the first item
+  // found at the given y position; if downward is false, move up the list of
+  // items to find the last item at that position.
+  _getIndexOfItemAtY: function( y, downward ) {
+    var items = this.items;
+    var start = downward ? 0 : items.length - 1;
+    var end = downward ? items.length : 0;
+    var step = downward ? 1 : -1;
+    var topOfClientArea = this.offsetTop + this.clientTop;
+    var i = start;
+    var found = false;
+    while ( i !== end ) {
+      var item = items[i];
+      var itemTop = item.offsetTop - topOfClientArea;
+      var itemBottom = itemTop + item.offsetHeight;
+      if ( itemTop <= y && itemBottom >= y ) {
+        // Item spans the indicated y coordinate.
+        found = true;
+        break;
+      }
+      i += step;
+    }
+
+    if ( !found ) {
+      return null;
+    }
+
+    // We may have found an item whose padding spans the given y coordinate,
+    // but whose content is actually above/below that point.
+    // TODO: If the item has a border, then padding should be included in
+    // considering a hit.
+    var itemStyle = getComputedStyle( item );
+    var itemPaddingTop = parseFloat( itemStyle.paddingTop );
+    var itemPaddingBottom = parseFloat( itemStyle.paddingBottom );
+    var contentTop = itemTop + item.clientTop + itemPaddingTop;
+    var contentBottom = contentTop + item.clientHeight - itemPaddingTop - itemPaddingBottom;
+    if ( downward && contentTop <= y
+      || !downward && contentBottom >= y ) {
+      // The indicated coordinate hits the actual item content.
+      return i;
+    } else {
+      // The indicated coordinate falls within the item's padding. Back up to
+      // the item below/above the item we found and return that.
+      i -= step;
+      return i;
+    }
+  },
+
+  _keydown: function( event ) {
+    var handled = false;
+    switch ( event.keyCode ) {
+      case 33: // Page Up
+        handled = this.pageUp();
+        break;
+      case 34: // Page Down
+        handled = this.pageDown();
+        break;
+      case 35: // End
+        handled = this.selectLastItem();
+        break;
+      case 36: // Home
+        handled = this.selectFirstItem();
+        break;
+      case 37: // Left
+        if (this._selectedItemIsInline()) {
+          handled = this.selectPreviousItem();
+        }
+        break;
+      case 38: // Up
+        handled = event.altKey ? this.selectFirstItem() : this.selectPreviousItem();
+        break;
+      case 39: // Right
+        if (this._selectedItemIsInline()) {
+          handled = this.selectNextItem();
+        }
+        break;
+      case 40: // Down
+        handled = event.altKey ? this.selectLastItem() : this.selectNextItem();
+        break;
+      default:
+        handled = false;
+    }
+    if ( handled ) {
+      event.preventDefault();
+      return false;
+    }
+  },
+
+  // Scroll the given element completely into view, minimizing the degree of
+  // scrolling performed.
+  //
+  // Blink has a scrollIntoViewIfNeeded() function that almost does what we
+  // want, but unfortunately it's non-standard, and in any event often ends up
+  // scrolling more than is absolutely necessary.
+  _scrollElementIntoView: function( element ) {
+    // Get the relative position of the element with respect to the top of the
+    // list's scrollable canvas. An element at the top of the list will have a
+    // elementTop of 0.
+    var elementTop = element.offsetTop - this.offsetTop - this.clientTop;
+    var elementBottom = elementTop + element.offsetHeight;
+    // Determine the bottom of the scrollable canvas.
+    var scrollBottom = this.scrollTop + this.clientHeight;
+    if ( elementBottom > scrollBottom ) {
+      // Scroll up until element is entirely visible.
+      this.scrollTop += elementBottom - scrollBottom;
+    } else if ( elementTop < this.scrollTop ) {
+      // Scroll down until element is entirely visible.
+      this.scrollTop = elementTop;
+    }
+  },
+
+  // Move by one page downward ( if downward is true ), or upward (if false).
+  // Return true if we ended up changing the selection, false if not.
+  // TODO: Better support for horizontal lists.
+  _scrollOnePage: function( downward ) {
+    // Determine the item visible just at the edge of direction we're heading.
+    // We'll select that item if it's not already selected.
+    var edge = this.scrollTop + ( downward ? this.clientHeight : 0 );
+    var indexOfItemAtEdge = this._getIndexOfItemAtY( edge, downward );
+
+    var selectedIndex = this.selectedIndex;
+    var newIndex;
+    if ( indexOfItemAtEdge && selectedIndex === indexOfItemAtEdge ) {
+      // The item at the edge was already selected, so scroll in the indicated
+      // direction by one page. Leave the new item at that edge selected.
+      var delta = ( downward ? 1 : -1 ) * this.clientHeight;
+      newIndex = this._getIndexOfItemAtY( edge + delta, downward );
+    } else {
+      // The item at the edge wasn't selected yet. Instead of scrolling, we'll
+      // just select that item. That is, the first attempt to page up/down
+      // usually just moves the selection to the edge in that direction.
+      newIndex = indexOfItemAtEdge;
+    }
+
+    if ( !newIndex ) {
+      // We can't find an item in the direction we want to travel. Select the
+      // last item (if moving downward) or first item (if moving upward).
+      newIndex = ( downward ? this.items.length - 1 : 0 );
+    }
+
+    if ( newIndex !== selectedIndex ) {
+      this.selectedIndex = newIndex;
+      return true; // We handled the page up/down ourselves.
+    } else {
+      return false; // We didn't do anything.
+    }
+  },
+
+  // Return true if the selected control is displayed inline.
+  _selectedItemIsInline: function() {
+    if ( !this.selectedItem ) {
+      return false;
+    }
+    var style = getComputedStyle( this.selectedItem );
+    var inlineDisplayValues = [ "inline", "inline-block", "inline-table" ];
+    var itemIsInline = ( inlineDisplayValues.indexOf( style.display ) >= 0 );
+    return itemIsInline
+  }
+});
+</script>
+
+</polymer-element>

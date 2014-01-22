@@ -1,0 +1,25 @@
+{
+  "name": "quetzal-calendar-month-with-headings",
+  "description": "Component for a month calendar with headings for month name, year, and days of week",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "quetzal-calendar-month": "JanMiksovsky/quetzal-calendar-month#master",
+    "quetzal-days-of-week": "JanMiksovsky/quetzal-days-of-week#master",
+    "quetzal-element": "JanMiksovsky/quetzal-element#master",
+    "quetzal-month-and-year": "JanMiksovsky/quetzal-month-and-year#master"
+  },
+  "ignore": [
+    "**/.*"
+  ],
+  "homepage": "https://github.com/JanMiksovsky/quetzal-calendar-month-with-headings",
+  "_release": "ecfa94b18d",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "ecfa94b18dd4e20bc7fa7bb9e1b4a32e4deb4972"
+  },
+  "_source": "git://github.com/JanMiksovsky/quetzal-calendar-month-with-headings.git",
+  "_target": "master",
+  "_originalSource": "JanMiksovsky/quetzal-calendar-month-with-headings"
+}

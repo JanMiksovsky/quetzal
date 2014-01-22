@@ -1,0 +1,22 @@
+{
+  "name": "quetzal-fixed-aspect",
+  "description": "Shows its content at the largest size that maintains a specified aspect ratio",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "polymer": "Polymer/polymer#master"
+  },
+  "ignore": [
+    "**/.*"
+  ],
+  "homepage": "https://github.com/JanMiksovsky/quetzal-fixed-aspect",
+  "_release": "ab77569cd4",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "ab77569cd484e437cfd68f8ad8e51f63185fe0aa"
+  },
+  "_source": "git://github.com/JanMiksovsky/quetzal-fixed-aspect.git",
+  "_target": "master",
+  "_originalSource": "JanMiksovsky/quetzal-fixed-aspect"
+}

@@ -12,11 +12,11 @@
     "**/.*"
   ],
   "homepage": "https://github.com/JanMiksovsky/quetzal-calendar-month",
-  "_release": "543b07c9a4",
+  "_release": "5d6b2ff22f",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "543b07c9a4f63346ac2d229bc4a4e83c9f70565a"
+    "commit": "5d6b2ff22f6dda6455dfe1ca5902705f0184f966"
   },
   "_source": "git://github.com/JanMiksovsky/quetzal-calendar-month.git",
   "_target": "master",

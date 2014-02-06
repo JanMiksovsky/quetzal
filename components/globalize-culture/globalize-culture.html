@@ -17,6 +17,7 @@ This can be used as an invisible helper component, or as a UI component.
   }
 
   select {
+    margin: 0;
     max-width: 100%;
   }
   </style>
@@ -393,6 +394,12 @@ Polymer( "globalize-culture", {
   },
 
   ready: function() {
+    this.$.culturePicker.addEventListener( "change", function( event ) {
+      // The change event won't automatically be retargetted, so we have to
+      // raise it ourselves.
+      this.dispatchEvent( new CustomEvent( "change" ));
+    }.bind( this ));
+
     // Force retrieval of default culture.
     this.nameChanged();
   },

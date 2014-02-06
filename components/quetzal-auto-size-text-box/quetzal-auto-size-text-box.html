@@ -17,6 +17,10 @@
 <template>
 
   <style>
+  :host {
+    display: block;
+  }
+
   #container {
     position: relative;
   }
@@ -55,7 +59,7 @@
   </style>
 
   <div id="container">
-    <textarea id="textBox" on-change="{{autoSize}}" on-keypress="{{_keypress}}" on-keyup="{{autoSize}}" placeholder="{{placeholder}}" spellcheck="{{spellcheck}}"></textarea>
+    <textarea id="textBox" on-keypress="{{_keypress}}" on-keyup="{{autoSize}}" placeholder="{{placeholder}}" spellcheck="{{spellcheck}}"></textarea>
     <!--
     Use a pre element to hold the copied text in order to automatically convert
     breaks, etc.
@@ -100,16 +104,10 @@ Polymer( "quetzal-auto-size-text-box", {
     // amount of room as the same text in the text box. Updating the element's
     // content adjusts the element's size, which in turn will make the text box
     // the correct height.
-    this.innerHTML = this.$.textBox.value;
+    this.innerHTML = this._escapeHtml( this.$.textBox.value );
   },
 
-  contentChangedCallback: function() {
-    if ( this.innerHTML !== this.$.textBox.value ) {
-      this.$.textBox.value = this.innerHTML;
-    }
-  },
-
-  enteredView: function() {
+  attachedCallback: function() {
 
     // For auto-sizing to work, we need the text copy to have the same border,
     // padding, and other relevant characteristics as the original text area.
@@ -147,6 +145,12 @@ Polymer( "quetzal-auto-size-text-box", {
     this._setMinimumHeight();
   },
 
+  contentChangedCallback: function() {
+    if ( this.innerHTML !== this.$.textBox.value ) {
+      this.$.textBox.value = this._unescapeHtml( this.innerHTML );
+    }
+  },
+
   /**
    * Determines the minimum height of the text box in lines.
    *
@@ -162,6 +166,40 @@ Polymer( "quetzal-auto-size-text-box", {
     if ( this._lineHeight ) {
       this._setMinimumHeight();
     }
+  },
+
+  ready: function() {
+    this.super();
+    this.$.textBox.addEventListener( "change", function() {
+      console.log( "change" );
+      this.autoSize();
+      // Raise our own change event (since change events aren't automatically
+      // retargetted).
+      this.dispatchEvent( new CustomEvent( "change" ));
+    }.bind( this ));
+  },
+
+  get selectionEnd() {
+    return this.$.textBox.selectionEnd;
+  },
+  set selectionEnd( value ) {
+    this.$.textBox.selectionEnd = value;
+  },
+
+  get selectionStart() {
+    return this.$.textBox.selectionStart;
+  },
+  set selectionStart( value ) {
+    this.$.textBox.selectionStart = value;
+  },
+
+  _escapeHtml: function( html ) {
+    return html
+     .replace( /&/g, "&amp;" )
+     .replace( /</g, "&lt;" )
+     .replace( />/g, "&gt;" )
+     .replace( /"/g, "&quot;" )
+     .replace( /'/g, "&#039;" );
   },
 
   // Speculatively add a line to our copy of the text. We're not sure what the
@@ -193,8 +231,16 @@ Polymer( "quetzal-auto-size-text-box", {
     var bordersPlusPadding = outerHeight - innerHeight;
     var minHeight = ( this.minimumLines * this._lineHeight ) + bordersPlusPadding;
     textCopy.style.minHeight = minHeight + "px";
-  }
+  },
 
+  _unescapeHtml: function( html ) {
+    return html
+      .replace( /&amp;/g, "&" )
+      .replace( /&lt;/g, "<" )
+      .replace( /&gt;/g, ">" )
+      .replace( /&quot;/g, "\"" )
+      .replace( /&#039;/g, "'" );
+  }
 });
 </script>
 

@@ -10,11 +10,11 @@
     "**/.*"
   ],
   "homepage": "https://github.com/JanMiksovsky/quetzal-auto-size-text-box",
-  "_release": "fe7b812a79",
+  "_release": "d13373e158",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "fe7b812a7993fb367df69882cb12bfa7da033f83"
+    "commit": "d13373e1587e9f64c94e7a2c6113828c0d045fc2"
   },
   "_source": "git://github.com/JanMiksovsky/quetzal-auto-size-text-box.git",
   "_target": "master",
